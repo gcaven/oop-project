@@ -1,12 +1,11 @@
 #include <iostream>
 #include <string>
 #include <ncurses.h>
-
 using namespace std;
-//probably none of this works
+
 
 int main() {
-	Board board = Board.initialize(15,15);
+	Board board(15,15);
 	//base game loop
 	initscr();
 	refresh();
@@ -22,12 +21,20 @@ private:
 	int width;
 	int height;
 
+	void generate() {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				//make some logic for random tile types
+			}
+ 		}
+	}
+
 public:
-	void initialize(int width, int height) {
+	Board(int width, int height) {
 		this->width = width;
 		this->height = height;
 		tiles = new int[width * height];
-		//generate the board
+		generate();
 	}
 
 	Tile get(int x, int y) {
@@ -45,9 +52,48 @@ private:
 	Terrain type;
 	//These are bonuses when >0, maluses when <0.
 	int offenseBonus = 0;
+	int rangedOffenseBonus = 0;
 	int defenseBonus = 0;
+	int rangedDefenseBonus = 0;
 	int speedBonus = 0;
 	int navigable = true; //false for boulders
+	int rangedPossible = true;
+
+	void setType(Terrain type) {
+		switch(type) {
+			PLAIN:
+				break;
+			HILL:
+				defenseBonus = 2;
+				rangedOffenseBonus = 2;
+				rangedDefenseBonus = 1;
+				break;
+			TREES;
+				defenseBonus = 3;
+				rangedPossible = false;
+				rangedDefenseBonus = 3;
+				speedBonus = -1;
+				break;
+			DITCH;
+				defenseBonus = -2;
+				rangedDefenseBonus = -3;
+				break;
+			BOULDER;
+				navigable = false;
+				break;
+			WATER;
+				speedBonus = -3;
+				offenseBonus = -1;
+				rangedPossible = false;
+				rangedDefenseBonus = -2;
+				break;
+		}
+	}
+
+public:
+	Tile(Terrain type) {
+		setType(type);
+	} 
 };
 
 enum Terrain{
