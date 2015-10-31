@@ -1,8 +1,14 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include "baseobjects.h"
 using namespace std;
+
+Board::Board(int width, int height) {
+	this->width = width;
+	this->height = height;
+	Tile tiles[width * height];
+	generate();
+}
 
 Tile::Tile(Terrain type) {
 	setType(type);
@@ -48,13 +54,6 @@ void Tile::setType(Terrain type) {
 	return;
 }
 
-Board::Board(int width, int height) {
-	this->width = width;
-	this->height = height;
-	vector<Tile> tiles(width * height);
-	generate();
-}
-
 Terrain Tile::getType() {
 	return this->type;
 }
@@ -95,11 +94,11 @@ void Board::generate() {
 }
 
 Tile Board::get(int x, int y) {
-	return tiles.at(index(x,y));
+	return tiles[index(x,y)];
 }
 
 void Board::put(int x, int y, Tile tile) {
-	tiles.at(index(x,y)] = tile;
+	tiles[index(x,y)] = tile;
 	return;
 }
 
