@@ -1,3 +1,34 @@
+using namespace std;
+
+enum Terrain{
+	PLAIN = 'p',
+	HILL = 'h', //defensive bonus, ranged bonus
+	TREES = 't', //defensive bonus, no ranged attacks
+	DITCH = 'd', //defensive malus, especially ranged
+	BOULDER = 'b', //impassible
+	WATER = 'w', //speed, offensive malus, no ranged attacks. defensive malus to ranged
+};
+
+class Tile {
+private:
+	Terrain type;
+	//These are bonuses when >0, maluses when <0.
+	int offenseBonus;
+	int rangedOffenseBonus;
+	int defenseBonus;
+	int rangedDefenseBonus;
+	int speedBonus;
+	int navigable; //false for boulders
+	int rangedPossible;
+
+	void setType(Terrain type);
+
+public:
+	Tile(Terrain type);
+
+	Terrain getType();
+};
+
 class Board {
 private:
 	int* tiles;
@@ -15,33 +46,6 @@ public:
 
 	int index(int x, int y);
 
-};
-
-class Tile {
-private:
-	Terrain type;
-	//These are bonuses when >0, maluses when <0.
-	int offenseBonus = 0;
-	int rangedOffenseBonus = 0;
-	int defenseBonus = 0;
-	int rangedDefenseBonus = 0;
-	int speedBonus = 0;
-	int navigable = true; //false for boulders
-	int rangedPossible = true;
-
-	void setType(Terrain type);
-
-public:
-	Tile(Terrain type);
-};
-
-enum Terrain{
-	PLAIN = 'plain',
-	HILL = 'hill', //defensive bonus, ranged bonus
-	TREES = 'trees', //defensive bonus, no ranged attacks
-	DITCH = 'ditch', //defensive malus, especially ranged
-	BOULDER = 'boulder', //impassible
-	WATER = 'water', //speed, offensive malus, no ranged attacks. defensive malus to ranged
 };
 
 class Human {
@@ -63,7 +67,7 @@ class Ally : public Human {
 
 class Enemy : public Human {
 public:
-	makeAMove();
+	void makeAMove();
 };
 
 class Item {
@@ -75,5 +79,5 @@ private:
 	int attack;
 	int defense;
 	int dexterity;
-	int duration // length of effect in turns. if negative, is infinite
-}
+	int duration; // length of effect in turns. if negative, is infinite
+};
