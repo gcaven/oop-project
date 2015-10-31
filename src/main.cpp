@@ -24,7 +24,8 @@ private:
 	void generate() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				//make some logic for random tile types
+				Tile tile(PLAIN);
+				put(tile);
 			}
  		}
 	}
@@ -39,6 +40,10 @@ public:
 
 	Tile get(int x, int y) {
 		return tiles[index(x,y)];
+	}
+
+	Tile put(int x, int y, Tile tile) {
+		tiles[index(x,y)] = tile;
 	}
 
 	int index(int x, int y) const {
@@ -60,6 +65,7 @@ private:
 	int rangedPossible = true;
 
 	void setType(Terrain type) {
+		this->type = type;
 		switch(type) {
 			PLAIN:
 				break;
