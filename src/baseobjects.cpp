@@ -1,13 +1,18 @@
 #include <iostream>
 #include <string>
 #include "baseobjects.h"
-using namespace std;
 
 Board::Board(int width, int height) {
+	std::cout << "wowee" << "\n";
 	this->width = width;
 	this->height = height;
-	Tile tiles[width * height];
+	Tile *tiles = new Tile[width * height];
+	std::cout << width * height << "\n";
 	generate();
+}
+
+Tile::Tile() {
+	setType(PLAIN);
 }
 
 Tile::Tile(Terrain type) {
@@ -58,6 +63,23 @@ Terrain Tile::getType() {
 	return this->type;
 }
 
+std::string Tile::getTypeAsString() {
+	switch(this->type) {
+		case 0:
+			return "P";
+		case 1:
+			return "H";
+		case 2:
+			return "T";
+		case 3:
+			return "D";
+		case 4:
+			return "B";
+		case 5:
+			return "W";
+	}
+}
+
 void Board::generate() {
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
@@ -85,9 +107,9 @@ void Board::generate() {
 				case 6:
 					type = WATER;
 					break;
-				Tile tile(type);
-				put(x,y,tile);
 			}
+			Tile tile(type);
+			put(x,y,tile);
 		}
  	}
  	return;
@@ -104,6 +126,10 @@ void Board::put(int x, int y, Tile tile) {
 
 int Board::index(int x, int y) {
 	return x + width*y;
+}
+
+void Board::destroy() {
+	delete [] tiles;
 }
 
 int Human::initiativeRoll() {

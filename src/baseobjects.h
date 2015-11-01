@@ -1,12 +1,10 @@
-using namespace std;
-
 enum Terrain{
-	PLAIN = 'p',
-	HILL = 'h', //defensive bonus, ranged bonus
-	TREES = 't', //defensive bonus, no ranged attacks
-	DITCH = 'd', //defensive malus, especially ranged
-	BOULDER = 'b', //impassible
-	WATER = 'w', //speed, offensive malus, no ranged attacks. defensive malus to ranged
+	PLAIN = 0,
+	HILL = 1, //defensive bonus, ranged bonus
+	TREES = 2, //defensive bonus, no ranged attacks
+	DITCH = 3, //defensive malus, especially ranged
+	BOULDER = 4, //impassible
+	WATER = 5, //speed, offensive malus, no ranged attacks. defensive malus to ranged
 };
 
 class Tile {
@@ -21,36 +19,33 @@ private:
 	int navigable; //false for boulders
 	int rangedPossible;
 
+public:
+	Tile();
+	Tile(Terrain type);
 	void setType(Terrain type);
 
-public:
-	Tile(Terrain type);
-
 	Terrain getType();
+	std::string getTypeAsString();
 };
 
 class Board {
 private:
-	int* tiles;
+	Tile* tiles;
 	int width;
 	int height;
-
 	void generate();
 
 public:
 	Board(int width, int height);
-
 	Tile get(int x, int y);
-
 	void put(int x, int y, Tile tile);
-
 	int index(int x, int y);
-
+	void destroy();
 };
 
 class Human {
 private:
-	string name;
+	std::string name;
 	unsigned int health;
 	unsigned int speed;
 	unsigned int attack;
@@ -72,7 +67,7 @@ public:
 
 class Item {
 private:
-	string name;
+	std::string name;
 	//these describe the effects they have on characters
 	int health;
 	int speed;
