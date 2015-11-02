@@ -5,9 +5,7 @@
 
 //this is just testing logic and shit, we need to create a ui
 void game() {
-	std::cout << "gonna generate!" << "\n";
 	Board board = Board(15,15);
-	std::cout << "generated!" << "\n";
 	std::cout << "  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15";
 	for (int x=0; x<15; x++) {
 		std::cout << x << " ";
@@ -22,7 +20,6 @@ void game() {
 
 int main() {
 	//base game loop
-	std::cout << "broken?" << "\n";
 	game();
 	return 0;
 }

@@ -3,11 +3,9 @@
 #include "baseobjects.h"
 
 Board::Board(int width, int height) {
-	std::cout << "wowee" << "\n";
 	this->width = width;
 	this->height = height;
 	Tile *tiles = new Tile[width * height];
-	std::cout << width * height << "\n";
 	generate();
 }
 
