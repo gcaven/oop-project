@@ -1,11 +1,18 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "baseobjects.h"
 
 Board::Board(int width, int height) {
 	this->width = width;
 	this->height = height;
-	Tile *tiles = new Tile[width * height];
+	Tile **tiles = new Tile*[width];
+	for(int i = 0; i < width; ++i) {
+    	tiles[i] = new Tile[height];
+	}
+	//this works here
+	Tile tile(WATER);
+	tiles[0][0] = tile;
 	generate();
 }
 
@@ -79,8 +86,10 @@ std::string Tile::getTypeAsString() {
 }
 
 void Board::generate() {
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
+	for (int x = 0; x < width; ++x) {
+		std::cout << "x: " << x << "\n";
+		for (int y = 0; y < height; ++y) {
+			std::cout << "y: " << y << "\n";
 			int typenum = rand() % 6;
 			Terrain type;
 			switch(typenum) {
@@ -107,23 +116,21 @@ void Board::generate() {
 					break;
 			}
 			Tile tile(type);
-			put(x,y,tile);
+			//gives segmentation fault here
+			tiles[x][y] = tile;
 		}
  	}
  	return;
 }
 
+
 Tile Board::get(int x, int y) {
-	return tiles[index(x,y)];
+	return tiles[x][y];
 }
 
 void Board::put(int x, int y, Tile tile) {
-	tiles[index(x,y)] = tile;
+	tiles[x][y] = tile;
 	return;
-}
-
-int Board::index(int x, int y) {
-	return x + width*y;
 }
 
 void Board::destroy() {

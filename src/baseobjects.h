@@ -30,7 +30,7 @@ public:
 
 class Board {
 private:
-	Tile* tiles;
+	Tile** tiles;
 	int width;
 	int height;
 	void generate();
