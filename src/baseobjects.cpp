@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <random>
 #include "baseobjects.h"
 
 Board::Board(int width, int height) {
@@ -83,11 +84,12 @@ std::string Tile::getTypeAsString() {
 }
 
 void Board::generate() {
+	std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<> distr(0, 6);
 	for (int x = 0; x < width; ++x) {
-		std::cout << "x: " << x << "\n";
 		for (int y = 0; y < height; ++y) {
-			std::cout << "y: " << y << "\n";
-			int typenum = rand() % 6;
+			int typenum = distr(eng);
 			Terrain type;
 			switch(typenum) {
 				case 0:
@@ -134,7 +136,9 @@ void Board::destroy() {
 }
 
 int Human::initiativeRoll() {
-	return rand() % 20 + 1;
+	std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<> distr(0, 20);
 }
 
 void Enemy::makeAMove() {
