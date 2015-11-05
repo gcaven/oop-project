@@ -18,4 +18,4 @@ SOURCES += main.cpp\
 
 HEADERS  += baseobjects.h
 
-FORMS    += mainwindow.ui
+FORMS

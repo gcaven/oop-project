@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include <random>
+#include <qglobal.h>
 #include "baseobjects.h"
 
 Board::Board(int width, int height) {
@@ -84,12 +84,10 @@ std::string Tile::getTypeAsString() {
 }
 
 void Board::generate() {
-	std::random_device rd;
-    std::mt19937 eng(rd());
-    std::uniform_int_distribution<> distr(0, 6);
+    qsrand(qrand());
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
-			int typenum = distr(eng);
+            int typenum = qrand()%(6+1);
 			Terrain type;
 			switch(typenum) {
 				case 0:
@@ -136,10 +134,8 @@ void Board::destroy() {
 }
 
 int Human::initiativeRoll() {
-	std::random_device rd;
-    std::mt19937 eng(rd());
-    std::uniform_int_distribution<> distr(0, 20);
-    return distr(eng);
+    qsrand(qrand());
+    return qrand()%(20+1);
 }
 
 void Enemy::makeAMove() {
