@@ -6,13 +6,10 @@
 Board::Board(int width, int height) {
 	this->width = width;
 	this->height = height;
-	Tile **tiles = new Tile*[width];
+	this->tiles = new Tile*[width];
 	for(int i = 0; i < width; ++i) {
     	tiles[i] = new Tile[height];
 	}
-	//this works here
-	Tile tile(WATER);
-	tiles[0][0] = tile;
 	generate();
 }
 
@@ -116,7 +113,6 @@ void Board::generate() {
 					break;
 			}
 			Tile tile(type);
-			//gives segmentation fault here
 			tiles[x][y] = tile;
 		}
  	}
