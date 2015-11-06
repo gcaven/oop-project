@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[])
 {
+	//hahaaaaaaaaaaa
     QApplication app(argc, argv);
         QWidget window;
         window.setFixedSize(800,800);
