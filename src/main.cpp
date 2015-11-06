@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
         QWidget window;
-        window.resize(800,800);
+        window.setFixedSize(800,800);
 
         QLabel *thesitch = new QLabel("In WATER: ATK down, SPD down");
         QLabel *ranged = new QLabel("Ranged attacks not possible");
