@@ -5,11 +5,14 @@
 #include <QVBoxLayout>
 #include <QTableView>
 #include <QPushButton>
+#include <QTableWidget>
+#include <QHeaderView>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
         QWidget window;
+        window.resize(800,800);
 
         QLabel *thesitch = new QLabel("In WATER: ATK down, SPD down");
         QLabel *ranged = new QLabel("Ranged attacks not possible");
@@ -39,7 +42,11 @@ int main(int argc, char *argv[])
         layout->addLayout(stats);
         layout->addLayout(actions);
 
-        QTableView *table = new QTableView();
+        QTableWidget *table = new QTableWidget(15,15);
+        QHeaderView *header = table->horizontalHeader();
+        header->setResizeMode(QHeaderView::Stretch);
+        QHeaderView *verticalHeader = table->verticalHeader();
+		verticalHeader->setResizeMode(QHeaderView::Stretch);
 
         QVBoxLayout *layoutVert = new QVBoxLayout();
         layoutVert->addWidget(table);
