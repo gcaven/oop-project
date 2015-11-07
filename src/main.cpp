@@ -15,6 +15,56 @@
 #include "Board.h"
 #include "Human.h"
 
+void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
+    //generate board, fill the table
+    Board board = Board(width,height);
+    QTableWidgetItem curr;
+    int type;
+     for (int x=0; x<width; x++) {
+        for (int y=0; y<height; y++) {
+            Tile tile = board.get(x,y);
+            type = tile.getType();
+            QTableWidgetItem *item = new QTableWidgetItem( QString(""));                
+            item->setFlags(Qt::ItemIsEditable);
+            //tablewidget does things as row, column b/c fuck you
+            table->setItem(y,x,item);
+            switch(type) {
+                case PLAIN:
+                    item->setBackgroundColor(Qt::green);
+                    break;
+                case HILL:
+                    item->setBackgroundColor(Qt::yellow);
+                    break;
+                case TREES:
+                    item->setBackgroundColor(Qt::darkGreen);
+                    break;
+                case DITCH:
+                    item->setBackgroundColor(Qt::darkYellow);
+                    break;
+                case BOULDER:
+                    item->setBackgroundColor(Qt::gray);
+                    break;
+                case WATER:
+                    item->setBackgroundColor(Qt::blue);
+                    break;
+            }
+        }
+    }
+    Ally allies[3];
+    Enemy enemies[3];
+    for (int i=0; i < 3; i++) {
+        std::string name = allies[i].name;
+        QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
+        turnOrder->setItem(i,0,item);
+    }
+    for (int i=0; i < 3; i++) {
+        std::string name = enemies[i].name;
+        QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
+        turnOrder->setItem(i+3,0,item);
+    }
+return;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -45,7 +95,18 @@ int main(int argc, char *argv[])
         stats->addWidget(statsLabel);
         stats->addWidget(statsLabel2);
 
+        QTableWidget *turnOrder = new QTableWidget(6,1);
+        turnOrder->setFixedWidth(150);
+        turnOrder->setFixedHeight(180);
+        QHeaderView *header = turnOrder->horizontalHeader();
+        header->setResizeMode(QHeaderView::Stretch);
+        header->hide();
+        header = turnOrder->verticalHeader();
+        header->setResizeMode(QHeaderView::Stretch);
+        header->hide();
+        
         QHBoxLayout *layout = new QHBoxLayout();
+        layout->addWidget(turnOrder);
         layout->addLayout(stats);
         layout->addLayout(actions);
 
@@ -54,46 +115,14 @@ int main(int argc, char *argv[])
 
         QTableWidget *table = new QTableWidget(width,height);
         table->setShowGrid(false);
-        QHeaderView *header = table->horizontalHeader();
+        header = table->horizontalHeader();
         header->setResizeMode(QHeaderView::Stretch);
         header->hide();
-        QHeaderView *verticalHeader = table->verticalHeader();
-		verticalHeader->setResizeMode(QHeaderView::Stretch);
-        verticalHeader->hide();
+        header = table->verticalHeader();
+		header->setResizeMode(QHeaderView::Stretch);
+        header->hide();
 
-        Board board = Board(width,height);
-        QTableWidgetItem curr;
-        int type;
-        for (int x=0; x<width; x++) {
-            for (int y=0; y<height; y++) {
-                Tile tile = board.get(x,y);
-                type = tile.getType();
-                QTableWidgetItem *item = new QTableWidgetItem( QString(""));
-                item->setFlags(Qt::ItemIsEditable);
-                //tablewidget does things as row, column b/c fuck you
-                table->setItem(y,x,item);
-                switch(type) {
-                    case PLAIN:
-                        item->setBackgroundColor(Qt::green);
-                        break;
-                    case HILL:
-                        item->setBackgroundColor(Qt::yellow);
-                        break;
-                    case TREES:
-                        item->setBackgroundColor(Qt::darkGreen);
-                        break;
-                    case DITCH:
-                        item->setBackgroundColor(Qt::darkYellow);
-                        break;
-                    case BOULDER:
-                        item->setBackgroundColor(Qt::gray);
-                        break;
-                    case WATER:
-                        item->setBackgroundColor(Qt::blue);
-                        break;
-                }
-            }
-        }
+        game(table, width, height, turnOrder);
 
         QVBoxLayout *layoutVert = new QVBoxLayout();
         layoutVert->addWidget(table);
@@ -105,9 +134,3 @@ int main(int argc, char *argv[])
         window.show();
         return app.exec();
 }
-
-//idk
-void game() {
-    return;
-}
-
