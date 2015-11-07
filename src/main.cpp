@@ -49,7 +49,10 @@ int main(int argc, char *argv[])
         layout->addLayout(stats);
         layout->addLayout(actions);
 
-        QTableWidget *table = new QTableWidget(15,15);
+        int width = 10;
+        int height = 10;
+
+        QTableWidget *table = new QTableWidget(width,height);
         table->setShowGrid(false);
         QHeaderView *header = table->horizontalHeader();
         header->setResizeMode(QHeaderView::Stretch);
@@ -58,11 +61,11 @@ int main(int argc, char *argv[])
 		verticalHeader->setResizeMode(QHeaderView::Stretch);
         verticalHeader->hide();
 
-        Board board = Board(15,15);
+        Board board = Board(width,height);
         QTableWidgetItem curr;
         int type;
-        for (int x=0; x<15; x++) {
-            for (int y=0; y<15; y++) {
+        for (int x=0; x<width; x++) {
+            for (int y=0; y<height; y++) {
                 Tile tile = board.get(x,y);
                 type = tile.getType();
                 QTableWidgetItem *item = new QTableWidgetItem( QString(""));
