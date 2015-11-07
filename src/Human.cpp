@@ -8,12 +8,13 @@ Human::Human() {
 	while (std::getline(infile, line)) {
 		
 	}*/
-	this->name = "I. M. Aplaceholder" + std::to_string(qrand()%(100+1));
-	this->health = qrand()%(30+1);
+	this->health = qrand()%((30+1) - 5) + 5;
 	this->speed = qrand()%(3+1);
 	this->attack = qrand()%(10+1);
 	this->defense = qrand()%(10+1);
 	this->dexterity = qrand()%(10+1);
+	this->name = "I. M. Aplaceholder" + std::to_string(this->health);
+	
 }
 
 int Human::initiativeRoll() {
