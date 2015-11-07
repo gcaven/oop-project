@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
         QWidget window;
-        window.setFixedSize(800,800);
+        window.setFixedSize(600,750);
 
         QLabel *thesitch = new QLabel("In WATER: ATK down, SPD down");
         QLabel *ranged = new QLabel("Ranged attacks not possible");
@@ -50,23 +50,45 @@ int main(int argc, char *argv[])
         layout->addLayout(actions);
 
         QTableWidget *table = new QTableWidget(15,15);
+        table->setShowGrid(false);
         QHeaderView *header = table->horizontalHeader();
         header->setResizeMode(QHeaderView::Stretch);
+        header->hide();
         QHeaderView *verticalHeader = table->verticalHeader();
 		verticalHeader->setResizeMode(QHeaderView::Stretch);
+        verticalHeader->hide();
 
         Board board = Board(15,15);
         QTableWidgetItem curr;
         int type;
-        for (int y=0; y<15; y++) {
-            for (int x=0; x<15; x++) {
+        for (int x=0; x<15; x++) {
+            for (int y=0; y<15; y++) {
                 Tile tile = board.get(x,y);
                 type = tile.getType();
-                QTableWidgetItem *item = new QTableWidgetItem( QString("(%1)").arg(type));
-                table->setItem(x,y,item);
-                //if (type == 0) {
-                  //  table->item(x,y)->setData(Qt::BackgroundRole, Qt::green);
-                //}
+                QTableWidgetItem *item = new QTableWidgetItem( QString(""));
+                item->setFlags(Qt::ItemIsEditable);
+                //tablewidget does things as row, column b/c fuck you
+                table->setItem(y,x,item);
+                switch(type) {
+                    case PLAIN:
+                        item->setBackgroundColor(Qt::green);
+                        break;
+                    case HILL:
+                        item->setBackgroundColor(Qt::yellow);
+                        break;
+                    case TREES:
+                        item->setBackgroundColor(Qt::darkGreen);
+                        break;
+                    case DITCH:
+                        item->setBackgroundColor(Qt::darkYellow);
+                        break;
+                    case BOULDER:
+                        item->setBackgroundColor(Qt::gray);
+                        break;
+                    case WATER:
+                        item->setBackgroundColor(Qt::blue);
+                        break;
+                }
             }
         }
 
@@ -81,19 +103,8 @@ int main(int argc, char *argv[])
         return app.exec();
 }
 
-//this is just testing logic and shit, we need to create a ui
+//idk
 void game() {
-    Board board = Board(15,15);
-    std::cout << "  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14\n";
-    for (int x=0; x<15; x++) {
-        std::cout << x << ": ";
-        for (int y=0; y<15; y++) {
-            Tile tile = board.get(x,y);
-            std::cout << tile.getTypeAsString() << " ";
-        }
-        std::cout << "\n";
-    }
-    board.destroy();
     return;
 }
 

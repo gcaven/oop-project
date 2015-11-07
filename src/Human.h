@@ -1,4 +1,5 @@
 #include <string>
+#include <qglobal.h>
 
 class Human {
 private:
