@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <QApplication>
+#include <QApplication>
 #include <QLabel>
 #include <QLineEdit>
 #include <QHBoxLayout>
@@ -9,6 +10,8 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QTableWidgetItem>
+#include <QString>
 #include "Board.h"
 #include "Human.h"
 
@@ -52,12 +55,28 @@ int main(int argc, char *argv[])
         QHeaderView *verticalHeader = table->verticalHeader();
 		verticalHeader->setResizeMode(QHeaderView::Stretch);
 
+        Board board = Board(15,15);
+        QTableWidgetItem curr;
+        int type;
+        for (int y=0; y<15; y++) {
+            for (int x=0; x<15; x++) {
+                Tile tile = board.get(x,y);
+                type = tile.getType();
+                QTableWidgetItem *item = new QTableWidgetItem( QString("(%1)").arg(type));
+                table->setItem(x,y,item);
+                //if (type == 0) {
+                  //  table->item(x,y)->setData(Qt::BackgroundRole, Qt::green);
+                //}
+            }
+        }
+
         QVBoxLayout *layoutVert = new QVBoxLayout();
         layoutVert->addWidget(table);
         layoutVert->addLayout(layout);
 
         window.setLayout(layoutVert);
         window.setWindowTitle("Adventure Battle");
+
         window.show();
         return app.exec();
 }
