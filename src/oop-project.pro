@@ -13,8 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainold.cpp \
-        baseobjects.cpp
+        Board.cpp\
+        Human.cpp\
+        Tile.cpp
 
-HEADERS  += baseobjects.h
+HEADERS  += Board.h\
+			Human.h\
+			Item.h\
+			Tile.h\
+			Terrain.h\
 
