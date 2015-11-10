@@ -24,6 +24,7 @@ int Human::initiativeRoll() {
 }
 
 void Enemy::makeAMove() {
+	//enemy AI will live here
 	return;
 }
 

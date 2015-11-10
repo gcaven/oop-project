@@ -1,0 +1,18 @@
+Turn-based strategy game
+-Board of tiles, each tile has a terrain type
+-several player controllered characters and several AI enemies
+-turn-order decided randomly
+-characters can move, attack, use ranged attacks, use items
+-character stats randomly generated
+-stats can be affected by the terrain, see comments in Terrain.h
+-items are found randomly on the board
+
+Turns:
+	begin with first character in queue
+	if enemy, put stats on ui, show what they do on the board ui (disable buttons)
+	if player, put stats on ui, wait for button presses
+	turn ends when player takes 2 actions (1 move, 1 attack?)
+	movement distance determined by speed, can't move onto boulders
+	UI could offer buttons for all possible squares, or something not terrible
+
+game ends when all of one side is dead
