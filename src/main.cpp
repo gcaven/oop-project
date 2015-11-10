@@ -12,6 +12,7 @@
 #include <QHeaderView>
 #include <QTableWidgetItem>
 #include <QString>
+#include <QStringList>
 #include "Board.h"
 #include "Human.h"
 

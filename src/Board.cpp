@@ -15,7 +15,7 @@ Board::Board(int width, int height) {
 }
 
 void Board::generate() {
-    qsrand(time(NULL));
+	qsrand(time(NULL));
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
             int typenum = qrand()%(8+1);

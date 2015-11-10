@@ -1,7 +1,11 @@
 #include <string>
 #include <qglobal.h>
-#include <fstream>
-#include <string>
+#include <QFile>
+#include <QIODevice>
+#include <QTextStream>
+#include <QMessageBox>
+#include <QCoreApplication>
+#include <vector>
 
 class Human {
 public:
