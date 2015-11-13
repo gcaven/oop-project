@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 #include <vector>
+#include "Item.h"
 
 class Human {
 public:
@@ -17,6 +18,7 @@ public:
 	//dexterity describes range of ranged attacks
 	unsigned int dexterity;
 	Human();
+	void useItem(Item item);
 	int initiativeRoll();
 };
 

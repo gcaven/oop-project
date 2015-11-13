@@ -15,7 +15,6 @@ Human::Human() {
 		namesVector.push_back(line.toStdString());
 	}
 	file.close();
-	qsrand(time(NULL));
 	this->name = namesVector.at(qrand()%namesVector.size());
 	this->health = qrand()%((30+1) - 5) + 5;
 	this->speed = qrand()%(3+1);
@@ -28,6 +27,11 @@ int Human::initiativeRoll() {
 	qsrand(time(NULL));
     return qrand()%(20+1);
     return 0;
+}
+
+void Human::useItem(Item item) {
+	//do this
+	return;
 }
 
 void Enemy::makeAMove() {

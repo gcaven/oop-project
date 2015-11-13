@@ -53,6 +53,7 @@ void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
     }
     Ally allies[3];
     Enemy enemies[3];
+    qsrand(time(NULL));
     for (int i=0; i < 3; i++) {
         std::string name = allies[i].name;
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
