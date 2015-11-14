@@ -14,7 +14,7 @@
 #include <QString>
 #include <QStringList>
 #include "Board.h"
-#include "Human.h"
+#include "Queue.h"
 
 void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
     //generate board, fill the table
@@ -51,18 +51,23 @@ void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
             }
         }
     }
+    qsrand(time(NULL));
     Ally allies[3];
     Enemy enemies[3];
-    qsrand(time(NULL));
+    Queue turnQueue = Queue();
     for (int i=0; i < 3; i++) {
-        std::string name = allies[i].name;
-        QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
-        turnOrder->setItem(i,0,item);
+        turnQueue.enqueue(allies[i]);
     }
     for (int i=0; i < 3; i++) {
-        std::string name = enemies[i].name;
+        turnQueue.enqueue(enemies[i]);
+    }
+    for (int i=0; i < turnQueue.getSize(); i++) {
+        std::string name;
+        Human temp = turnQueue.dequeue();
+        name = temp.name;
+        turnQueue.enqueue(temp);
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
-        turnOrder->setItem(i+3,0,item);
+        turnOrder->setItem(i,0,item);
     }
 return;
 }

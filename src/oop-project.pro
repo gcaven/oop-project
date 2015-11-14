@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         Board.cpp\
         Human.cpp\
-        Tile.cpp
+        Tile.cpp\
+        Queue.cpp
 
 HEADERS  += Board.h\
 			Human.h\
 			Item.h\
 			Tile.h\
 			Terrain.h\
+			Queue.h
 
