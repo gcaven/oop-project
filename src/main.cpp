@@ -67,6 +67,7 @@ void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
         name = temp.name;
         turnQueue.enqueue(temp);
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
+        item->setFlags(Qt::ItemIsEditable);
         turnOrder->setItem(i,0,item);
     }
 return;
