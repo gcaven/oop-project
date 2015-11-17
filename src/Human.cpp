@@ -16,10 +16,10 @@ Human::Human() {
 	}
 	file.close();
 	this->name = namesVector.at(qrand()%namesVector.size());
-	this->health = qrand()%((30+1) - 5) + 5;
-	this->speed = qrand()%(3+1);
-	this->attack = qrand()%(10+1);
-	this->defense = qrand()%(10+1);
+	this->health = qrand()%((30+1) - 10) + 10;
+	this->speed = qrand()%((3+1) - 1) + 1;
+	this->attack = qrand()%((10+1) - 2) + 2;
+	this->defense = qrand()%((10+1) - 2) + 2;
 	this->dexterity = qrand()%(10+1);
 }
 

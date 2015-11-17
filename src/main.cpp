@@ -16,9 +16,8 @@
 #include "Board.h"
 #include "Queue.h"
 
-void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
+void generate(QTableWidget *table, int width, int height, Board board, QTableWidget *turnOrder, Queue *turnQueue) {
     //generate board, fill the table
-    Board board = Board(width,height);
     QTableWidgetItem curr;
     int type;
      for (int x=0; x<width; x++) {
@@ -54,18 +53,17 @@ void game(QTableWidget *table, int width, int height, QTableWidget *turnOrder) {
     qsrand(time(NULL));
     Ally allies[3];
     Enemy enemies[3];
-    Queue turnQueue = Queue();
     for (int i=0; i < 3; i++) {
-        turnQueue.enqueue(allies[i]);
+        turnQueue->enqueue(allies[i]);
     }
     for (int i=0; i < 3; i++) {
-        turnQueue.enqueue(enemies[i]);
+        turnQueue->enqueue(enemies[i]);
     }
-    for (int i=0; i < turnQueue.getSize(); i++) {
+    for (int i=0; i < turnQueue->getSize(); i++) {
         std::string name;
-        Human temp = turnQueue.dequeue();
+        Human temp = turnQueue->dequeue();
         name = temp.name;
-        turnQueue.enqueue(temp);
+        turnQueue->enqueue(temp);
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
         item->setFlags(Qt::ItemIsEditable);
         turnOrder->setItem(i,0,item);
@@ -93,12 +91,14 @@ int main(int argc, char *argv[])
         actions->addWidget(buttonM);
 
         QLabel *name = new QLabel("Sid the Rogue");
+        QLabel *allyOrEnemy = new QLabel("Indeterminate");
         QLabel *health = new QLabel("HP: 20/20");
         QLabel *statsLabel = new QLabel("ATK: 4, DEX: 7");
         QLabel *statsLabel2 = new QLabel("DEF: 7, SPD: 3");
 
         QVBoxLayout *stats = new QVBoxLayout();
         stats->addWidget(name);
+        stats->addWidget(allyOrEnemy);
         stats->addWidget(health);
         stats->addWidget(statsLabel);
         stats->addWidget(statsLabel2);
@@ -130,7 +130,18 @@ int main(int argc, char *argv[])
 		header->setResizeMode(QHeaderView::Stretch);
         header->hide();
 
-        game(table, width, height, turnOrder);
+        Board board = Board(width,height);
+        Queue turnQueue = Queue();
+        generate(table, width, height, board, turnOrder, &turnQueue);
+
+        Human curr = turnQueue.dequeue();
+        name->setText(QString::fromStdString(curr.name));
+        allyOrEnemy->setText(QString::fromStdString("Ally"));
+        health->setText(QString::fromStdString("HP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health)));
+        statsLabel->setText(QString::fromStdString("ATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity)));
+        statsLabel2->setText(QString::fromStdString("DEF: " + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed)));
+        thesitch->setText(QString::fromStdString("Nothing is happening"));
+        ranged->setText(QString::fromStdString("Because it hasn't been built yet"));
 
         QVBoxLayout *layoutVert = new QVBoxLayout();
         layoutVert->addWidget(table);
