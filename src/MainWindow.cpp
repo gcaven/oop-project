@@ -13,10 +13,10 @@ void MainWindow::decorate() {
 	QPushButton *buttonM = new QPushButton("Move");
 	QPushButton *buttonEnd = new QPushButton("End Turn");
 
-	QObject::connect(buttonA, SIGNAL(clicked()), this, SLOT(clickedSlot()));
-    QObject::connect(buttonR, SIGNAL(clicked()), this, SLOT(clickedSlot()));
-    QObject::connect(buttonM, SIGNAL(clicked()), this, SLOT(clickedSlot()));
-    QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(clickedSlot()));
+	QObject::connect(buttonA, SIGNAL(clicked()), this, SLOT(attackSlot()));
+    QObject::connect(buttonR, SIGNAL(clicked()), this, SLOT(rangedSlot()));
+    QObject::connect(buttonM, SIGNAL(clicked()), this, SLOT(moveSlot()));
+    QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(endTurnSlot()));
 
 	QVBoxLayout *actions = new QVBoxLayout();
 	actions->addWidget(thesitch);
@@ -149,10 +149,31 @@ void MainWindow::generate(QTableWidget *table, int width, int height, Board boar
 return;
 }
 
-void MainWindow::clickedSlot() {
+void MainWindow::attackSlot() {
 	QMessageBox msgBox;
 	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You Clicked A Button"/*+ ((QPushButton*)sender())->text()*/);
+	msgBox.setText("You are attacking! bro!");
+	msgBox.exec();
+}
+
+void MainWindow::rangedSlot() {
+	QMessageBox msgBox;
+	msgBox.setWindowTitle("Hello");
+	msgBox.setText("You are attacking from a distance! bruh!");
+	msgBox.exec();
+}
+
+void MainWindow::moveSlot() {
+	QMessageBox msgBox;
+	msgBox.setWindowTitle("Hello");
+	msgBox.setText("You are moving! wowee!");
+	msgBox.exec();
+}
+
+void MainWindow::endTurnSlot() {
+	QMessageBox msgBox;
+	msgBox.setWindowTitle("Hello");
+	msgBox.setText("You are ending your turn.");
 	msgBox.exec();
 }
 

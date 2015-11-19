@@ -25,5 +25,8 @@ public:
 	void generate(QTableWidget *table, int width, int height, Board board, QTableWidget *turnOrder, Queue *turnQueue);
 
 public slots:
-	void clickedSlot();
+	void attackSlot();
+	void rangedSlot();
+	void moveSlot();
+	void endTurnSlot();
 };
