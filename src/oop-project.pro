@@ -13,12 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+		MainWindow.cpp\
         Board.cpp\
         Human.cpp\
         Tile.cpp\
         Queue.cpp
 
-HEADERS  += Board.h\
+HEADERS  += MainWindow.h\
+			Board.h\
 			Human.h\
 			Item.h\
 			Tile.h\
