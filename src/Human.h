@@ -15,6 +15,8 @@ public:
 	unsigned int speed;
 	unsigned int attack;
 	unsigned int defense;
+	unsigned int x;
+	unsigned int y;
 	//dexterity describes range of ranged attacks
 	unsigned int dexterity;
 	Human();
