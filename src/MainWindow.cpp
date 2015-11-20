@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
-
 };
 
 void MainWindow::decorate() {
@@ -66,8 +65,6 @@ void MainWindow::decorate() {
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
 
-	Board board = Board(width,height);
-	Queue turnQueue = Queue();
 	generate(table, width, height, board, turnOrder, &turnQueue);
 
 	//setup initial state

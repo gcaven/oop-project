@@ -19,6 +19,10 @@
 class MainWindow: public QWidget {
 	Q_OBJECT
 
+private:
+	Board board;
+	Queue turnQueue;
+	
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
