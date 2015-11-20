@@ -150,6 +150,14 @@ void MainWindow::attackSlot() {
 	msgBox.setWindowTitle("Hello");
 	msgBox.setText("You are attacking! bro!");
 	msgBox.exec();
+
+	/*
+	Human current = currentplayer pointer;
+	Human target;
+	cout << "Enter the name of your target: " << end;
+	cin >> target;
+	
+	*/
 }
 
 void MainWindow::rangedSlot() {
