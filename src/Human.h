@@ -11,6 +11,7 @@
 class Human {
 public:
 	std::string name;
+	bool alive;
 	unsigned int health;
 	unsigned int speed;
 	unsigned int attack;

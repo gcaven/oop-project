@@ -161,6 +161,12 @@ void MainWindow::attackSlot() {
 				}
 				cout << "You have dealt " << damage << " to " << target.name << endl;
 				stop = true;
+
+				//if attack kills target
+				if(target.health <= 0){
+					target.alive = false;
+					cout << target.name << " has been felled." << endl;
+				}
 			}
 			else {
 				cout << "Cannot attack this player" << endl;
@@ -198,6 +204,12 @@ void MainWindow::rangedSlot() {
 					target.health -= damage;
 				}
 				cout << "You have dealt " << damage << " to " << target.name << endl;
+
+				//if attack kills target
+				if(target.health <= 0){
+					target.alive = false;
+					cout << target.name << " has been felled." << endl;
+				}
 				stop = true;
 			}
 			else {
