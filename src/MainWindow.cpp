@@ -23,18 +23,10 @@ void MainWindow::decorate() {
 	actions->addWidget(buttonM);
 	actions->addWidget(buttonEnd);
 
-	QLabel *name = new QLabel("Sid the Rogue");
-	QLabel *allyOrEnemy = new QLabel("Indeterminate");
-	QLabel *health = new QLabel("HP: 20/20");
-	QLabel *statsLabel = new QLabel("ATK: 4, DEX: 7");
-	QLabel *statsLabel2 = new QLabel("DEF: 7, SPD: 3");
+	QLabel *stats = new QLabel("Sid the Rogue\nIndeterminate\nHP: 20/20\nATK: 4, DEX: 7\nDEF: 7, SPD: 3");
 
-	QVBoxLayout *stats = new QVBoxLayout();
-	stats->addWidget(name);
-	stats->addWidget(allyOrEnemy);
-	stats->addWidget(health);
-	stats->addWidget(statsLabel);
-	stats->addWidget(statsLabel2);
+	QVBoxLayout *statsLayout = new QVBoxLayout();
+	statsLayout->addWidget(stats);
 	this->stats = stats;
 
 	QTableWidget *turnOrder = new QTableWidget(6,1);
@@ -50,7 +42,7 @@ void MainWindow::decorate() {
 	
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->addWidget(turnOrder);
-	layout->addLayout(stats);
+	layout->addLayout(statsLayout);
 	layout->addLayout(actions);
 
 	int width = 10;
@@ -68,15 +60,15 @@ void MainWindow::decorate() {
 
 	generate(table, width, height, board, turnOrder, &turnQueue);
 
-	//setup initial state
-    Human curr = turnQueue.dequeue();
+	Human curr = turnQueue.dequeue();
     this->currentCharacter = &curr;
-	name->setText(QString::fromStdString(curr.name));
-	allyOrEnemy->setText(QString::fromStdString("Ally"));
-	health->setText(QString::fromStdString("HP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health)));
-	statsLabel->setText(QString::fromStdString("ATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity)));
-	statsLabel2->setText(QString::fromStdString("DEF: " + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed)));
-	theSitch->setText(QString::fromStdString("Nothing is happening\nBecause it hasn't been built yet"));
+	std::string statsString = curr.name;
+	statsString += "\n\ndunno";
+	statsString += "\n\nHP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health);
+	statsString += "\n\nATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity);
+	statsString += "\n\nDEF" + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed);
+	stats->setText(QString::fromStdString(statsString));
+	theSitch->setText(QString::fromStdString("Nothing is happening\n\nBecause it hasn't been built yet"));
 
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
@@ -233,11 +225,15 @@ void MainWindow::moveSlot() {
 }
 
 void MainWindow::endTurnSlot() {
-	//how will we access turn queue, board, and active human here?
-	//should they be class variables?
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are ending your turn.");
-	msgBox.exec();
+	turnQueue.enqueue(*currentCharacter);
+	*currentCharacter = turnQueue.dequeue();
+	std::string kablam = "wowee";
+	std::string statsString = currentCharacter->name;
+	statsString += "\n\ndunno";
+	statsString += "\n\nHP: " + std::to_string(currentCharacter->health) + "/" + std::to_string(currentCharacter->health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
+	statsString += "\n\nDEFFF JAM" + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
+	stats->setText(QString::fromStdString(statsString));
+	show();
 }
 

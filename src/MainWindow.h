@@ -24,7 +24,7 @@ private:
 	Queue turnQueue;
 	QTableWidget *turnOrder;
 	QTableWidget *table;
-	QVBoxLayout *stats;
+	QLabel *stats;
 	Human *currentCharacter;
 	QLabel *theSitch;
 
