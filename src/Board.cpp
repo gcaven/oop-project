@@ -4,12 +4,12 @@
 #include <qglobal.h>
 #include "Board.h"
 
-Board::Board(int width, int height) {
-	this->width = width;
-	this->height = height;
-	this->tiles = new Tile*[width];
-	for(int i = 0; i < width; ++i) {
-    	tiles[i] = new Tile[height];
+Board::Board() {
+	this->width = 10;
+	this->height = 10;
+	this->tiles = new Tile*[10];
+	for(int i = 0; i < 10; ++i) {
+    	tiles[i] = new Tile[10];
 	}
 	generate();
 }
