@@ -22,7 +22,12 @@ class MainWindow: public QWidget {
 private:
 	Board board;
 	Queue turnQueue;
-	
+	QTableWidget *turnOrder;
+	QTableWidget *table;
+	QVBoxLayout *stats;
+	Human *currentCharacter;
+	QLabel *theSitch;
+
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();

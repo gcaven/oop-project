@@ -4,9 +4,8 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 };
 
 void MainWindow::decorate() {
-	QLabel *thesitch = new QLabel("In WATER: ATK down, SPD down");
-
-	QLabel *ranged = new QLabel("Ranged attacks not possible");
+	QLabel *theSitch = new QLabel("In WATER: ATK down, SPD down\nRanged attacks not possible");
+	this->theSitch = theSitch;
 	QPushButton *buttonA = new QPushButton("Attack");
 	QPushButton *buttonR = new QPushButton("Ranged");
 	QPushButton *buttonM = new QPushButton("Move");
@@ -18,8 +17,7 @@ void MainWindow::decorate() {
     QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(endTurnSlot()));
 
 	QVBoxLayout *actions = new QVBoxLayout();
-	actions->addWidget(thesitch);
-	actions->addWidget(ranged);
+	actions->addWidget(theSitch);
 	actions->addWidget(buttonA);
 	actions->addWidget(buttonR);
 	actions->addWidget(buttonM);
@@ -37,6 +35,7 @@ void MainWindow::decorate() {
 	stats->addWidget(health);
 	stats->addWidget(statsLabel);
 	stats->addWidget(statsLabel2);
+	this->stats = stats;
 
 	QTableWidget *turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
@@ -47,6 +46,7 @@ void MainWindow::decorate() {
 	header = turnOrder->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
+	this->turnOrder = turnOrder;
 	
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->addWidget(turnOrder);
@@ -64,18 +64,19 @@ void MainWindow::decorate() {
 	header = table->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
+	this->table = table;
 
 	generate(table, width, height, board, turnOrder, &turnQueue);
 
 	//setup initial state
     Human curr = turnQueue.dequeue();
+    this->currentCharacter = &curr;
 	name->setText(QString::fromStdString(curr.name));
 	allyOrEnemy->setText(QString::fromStdString("Ally"));
 	health->setText(QString::fromStdString("HP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health)));
 	statsLabel->setText(QString::fromStdString("ATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity)));
 	statsLabel2->setText(QString::fromStdString("DEF: " + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed)));
-	thesitch->setText(QString::fromStdString("Nothing is happening"));
-	ranged->setText(QString::fromStdString("Because it hasn't been built yet"));
+	theSitch->setText(QString::fromStdString("Nothing is happening\nBecause it hasn't been built yet"));
 
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
