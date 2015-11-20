@@ -70,19 +70,15 @@ void MainWindow::decorate() {
 	Queue turnQueue = Queue();
 	generate(table, width, height, board, turnOrder, &turnQueue);
 
-	//play = true;
-
-	//while(play) {
-	    Human curr = turnQueue.dequeue();
-	    name->setText(QString::fromStdString(curr.name));
-	    allyOrEnemy->setText(QString::fromStdString("Ally"));
-	    health->setText(QString::fromStdString("HP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health)));
-	    statsLabel->setText(QString::fromStdString("ATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity)));
-	    statsLabel2->setText(QString::fromStdString("DEF: " + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed)));
-	    thesitch->setText(QString::fromStdString("Nothing is happening"));
-	    ranged->setText(QString::fromStdString("Because it hasn't been built yet"));
-	    //when end turn button pressed, end turn
-	//}
+	//setup initial state
+    Human curr = turnQueue.dequeue();
+	name->setText(QString::fromStdString(curr.name));
+	allyOrEnemy->setText(QString::fromStdString("Ally"));
+	health->setText(QString::fromStdString("HP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health)));
+	statsLabel->setText(QString::fromStdString("ATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity)));
+	statsLabel2->setText(QString::fromStdString("DEF: " + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed)));
+	thesitch->setText(QString::fromStdString("Nothing is happening"));
+	ranged->setText(QString::fromStdString("Because it hasn't been built yet"));
 
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
@@ -171,6 +167,8 @@ void MainWindow::moveSlot() {
 }
 
 void MainWindow::endTurnSlot() {
+	//how will we access turn queue, board, and active human here?
+	//should they be class variables?
 	QMessageBox msgBox;
 	msgBox.setWindowTitle("Hello");
 	msgBox.setText("You are ending your turn.");
