@@ -20,7 +20,7 @@ Human::Human() {
 	this->speed = qrand()%((3+1) - 1) + 1;
 	this->attack = qrand()%((10+1) - 2) + 2;
 	this->defense = qrand()%((10+1) - 2) + 2;
-	this->dexterity = qrand()%(10+1);
+	this->dexterity = qrand()%(4+1);
 }
 
 int Human::initiativeRoll() {

@@ -33,10 +33,10 @@ void MainWindow::decorate() {
 	turnOrder->setFixedWidth(150);
 	turnOrder->setFixedHeight(180);
 	QHeaderView *header = turnOrder->horizontalHeader();
-	header->setResizeMode(QHeaderView::Stretch);
+	header->setSectionResizeMode(QHeaderView::Stretch);
 	header->hide();
 	header = turnOrder->verticalHeader();
-	header->setResizeMode(QHeaderView::Stretch);
+	header->setSectionResizeMode(QHeaderView::Stretch);
 	header->hide();
 	this->turnOrder = turnOrder;
 	
@@ -51,10 +51,10 @@ void MainWindow::decorate() {
 	QTableWidget *table = new QTableWidget(width,height);
 	table->setShowGrid(false);
 	header = table->horizontalHeader();
-	header->setResizeMode(QHeaderView::Stretch);
+	header->setSectionResizeMode(QHeaderView::Stretch);
 	header->hide();
 	header = table->verticalHeader();
-	header->setResizeMode(QHeaderView::Stretch);
+	header->setSectionResizeMode(QHeaderView::Stretch);
 	header->hide();
 	this->table = table;
 
