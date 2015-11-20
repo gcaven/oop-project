@@ -141,13 +141,42 @@ void MainWindow::attackSlot() {
 	msgBox.setText("You are attacking! bro!");
 	msgBox.exec();
 
-	/*
-	Human current = currentplayer pointer;
-	Human target;
-	cout << "Enter the name of your target: " << end;
-	cin >> target;
 	
-	*/
+	Human current = this->currentCharacter;
+	Human target;
+	
+	bool stop = false;
+	while(!stop) {
+		cout << "Enter the name of your target: " << end;
+		cin >> target;
+		
+		//if position of target is adjacent to current
+		if((target.x == current.x) || (target.y == current.y)) {
+			if((target.y == current.y - 1 || target.y == current.y + 1) || (target.x == current.x - 1 || target.x == current.x + 1)) {
+				int damage = current.attack - target.defense;
+				if(damage < 0)
+					damage = 0;
+				else{
+					target.health -= damage;
+				}
+				cout << "You have dealt " << damage << " to " << target.name << endl;
+				stop = true;
+
+				//if attack kills target
+				if(target.health <= 0){
+					target.alive = false;
+					cout << target.name << " has been felled." << endl;
+				}
+			}
+			else {
+				cout << "Cannot attack this player" << endl;
+			}
+		} 
+		//if not, current cannot attack the specified target
+		else {
+			cout << "Cannot attack this player" << endl;
+		}
+	}
 }
 
 void MainWindow::rangedSlot() {
@@ -155,6 +184,49 @@ void MainWindow::rangedSlot() {
 	msgBox.setWindowTitle("Hello");
 	msgBox.setText("You are attacking from a distance! bruh!");
 	msgBox.exec();
+
+	Human current = this->currentCharacter;
+	Human target;
+
+	bool stop = false;
+	while(!stop) {
+		cout << "Enter the name of your target: " << end;
+		cin >> target;
+		
+		//if position of target is on a straight x or y path to target
+		if(target.x == current.x || target.y == current.y) {
+			//if current can reach target with their dexterity stat
+			if((abs(target.x - current.x)) <= current.dexterity) || ((abs(target.y - current.y)) <= current.dexterity) {
+				int damage = current.attack - target.defense;
+				if(damage < 0)
+					damage = 0;
+				else{
+					target.health -= damage;
+				}
+				cout << "You have dealt " << damage << " to " << target.name << endl;
+
+				//if attack kills target
+				if(target.health <= 0){
+					target.alive = false;
+					cout << target.name << " has been felled." << endl;
+				}
+				stop = true;
+			}
+			else {
+				cout << "Cannot attack this player" << endl;
+			}
+		} 
+		
+		//if position of target is on a diagonal path from current
+		else if() {
+
+		}
+
+		//if not, current cannot attack the specified target
+		else {
+			cout << "Cannot attack this player" << endl;
+		}
+	}
 }
 
 void MainWindow::moveSlot() {

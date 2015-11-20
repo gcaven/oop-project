@@ -11,10 +11,13 @@
 class Human {
 public:
 	std::string name;
+	bool alive;
 	unsigned int health;
 	unsigned int speed;
 	unsigned int attack;
 	unsigned int defense;
+	unsigned int x;
+	unsigned int y;
 	//dexterity describes range of ranged attacks
 	unsigned int dexterity;
 	Human();
