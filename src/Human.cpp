@@ -16,11 +16,13 @@ Human::Human() {
 	}
 	file.close();
 	this->name = namesVector.at(qrand()%namesVector.size());
+	alive = true;
 	this->health = qrand()%((30+1) - 10) + 10;
+	this->currentHealth = health;
 	this->speed = qrand()%((3+1) - 1) + 1;
 	this->attack = qrand()%((10+1) - 2) + 2;
 	this->defense = qrand()%((10+1) - 2) + 2;
-	this->dexterity = qrand()%(10+1);
+	this->dexterity = qrand()%(3+1);
 }
 
 int Human::initiativeRoll() {
@@ -39,9 +41,9 @@ void Enemy::makeAMove() {
 }
 
 Ally::Ally() : Human() {
-
+	enemy = false;
 }
 
 Enemy::Enemy() : Human() {
-
+	enemy = true;
 }

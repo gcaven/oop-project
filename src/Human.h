@@ -12,7 +12,9 @@ class Human {
 public:
 	std::string name;
 	bool alive;
+	bool enemy;
 	unsigned int health;
+	unsigned int currentHealth;
 	unsigned int speed;
 	unsigned int attack;
 	unsigned int defense;

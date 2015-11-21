@@ -13,6 +13,8 @@
 #include <QTableWidgetItem>
 #include <QString>
 #include <QStringList>
+#include <QColor>
+#include <QLayoutItem>
 #include "Board.h"
 #include "Queue.h"
 
@@ -24,16 +26,23 @@ private:
 	Queue turnQueue;
 	QTableWidget *turnOrder;
 	QTableWidget *table;
+	QVBoxLayout *statsLayout;
 	QLabel *stats;
+	QPushButton *buttonStart;
+	QPushButton *buttonA;
+	QPushButton *buttonR;
+	QPushButton *buttonM;
+	QPushButton *buttonEnd;
 	Human *currentCharacter;
 	QLabel *theSitch;
 
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
-	void generate(QTableWidget *table, int width, int height, Board board, QTableWidget *turnOrder, Queue *turnQueue);
+	void generate(int width, int height);
 
 private slots:
+	void startGameSlot();
 	void attackSlot();
 	void rangedSlot();
 	void moveSlot();

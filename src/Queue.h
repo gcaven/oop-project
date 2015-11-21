@@ -15,4 +15,5 @@ public:
 	void enqueue(Human human);
 	Human dequeue();
 	int getSize();
+	std::string print();
 };
