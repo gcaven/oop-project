@@ -140,7 +140,7 @@ void MainWindow::startGameSlot() {
 		statsString += "\n\nBandit";
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
-	statsString += "\n\nDEF" + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
 	stats->setText(QString::fromStdString(statsString));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;
@@ -264,13 +264,14 @@ void MainWindow::endTurnSlot() {
 		statsString += "\n\nBandit";
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
-	statsString += "\n\nDEF" + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
 	stats->setText(QString::fromStdString(statsString));
-	QTableWidgetItem *old = turnOrder->item(0,0);
-	for (int i = 1; i < turnQueue.getSize()-1; i++) {
-		turnOrder->setItem(i,0,turnOrder->item(i+1,0));
+	QTableWidgetItem *old = turnOrder->takeItem(0,0);
+	for (int i = 1; i < turnQueue.getSize()+1; i++) {
+		QTableWidgetItem *pushup = turnOrder->takeItem(i,0);
+		turnOrder->setItem(i-1,0,pushup);
 	}
-	turnOrder->setItem(turnQueue.getSize()-1,0,old);
+	turnOrder->setItem(turnQueue.getSize(),0,old);
 	show();
 }
 
