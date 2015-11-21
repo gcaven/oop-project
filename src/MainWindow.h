@@ -33,7 +33,7 @@ public:
 	void decorate();
 	void generate(QTableWidget *table, int width, int height, Board board, QTableWidget *turnOrder, Queue *turnQueue);
 
-public slots:
+private slots:
 	void attackSlot();
 	void rangedSlot();
 	void moveSlot();
