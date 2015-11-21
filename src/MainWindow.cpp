@@ -142,10 +142,10 @@ void MainWindow::attackSlot() {
 	msgBox.exec();
 
 	
-	Human current = this->currentCharacter;
+	Human *current = this->currentCharacter;
 	Human target;
 	
-	bool stop = false;
+	/*bool stop = false;
 	while(!stop) {
 		cout << "Enter the name of your target: " << end;
 		cin >> target;
@@ -176,7 +176,7 @@ void MainWindow::attackSlot() {
 		else {
 			cout << "Cannot attack this player" << endl;
 		}
-	}
+	}*/
 }
 
 void MainWindow::rangedSlot() {
@@ -185,10 +185,10 @@ void MainWindow::rangedSlot() {
 	msgBox.setText("You are attacking from a distance! bruh!");
 	msgBox.exec();
 
-	Human current = this->currentCharacter;
+	Human *current = this->currentCharacter;
 	Human target;
 
-	bool stop = false;
+	/*bool stop = false;
 	while(!stop) {
 		cout << "Enter the name of your target: " << end;
 		cin >> target;
@@ -226,7 +226,7 @@ void MainWindow::rangedSlot() {
 		else {
 			cout << "Cannot attack this player" << endl;
 		}
-	}
+	}*/
 }
 
 void MainWindow::moveSlot() {
