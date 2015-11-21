@@ -132,7 +132,6 @@ void MainWindow::generate(int width, int height) {
 }
 
 void MainWindow::startGameSlot() {
-	//This is crashing it for some reason
 	currentCharacter = turnQueue.dequeue();
 	std::string statsString = currentCharacter.name;
 	if (!currentCharacter.enemy)
@@ -142,7 +141,7 @@ void MainWindow::startGameSlot() {
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF" + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
-	stats->setText(QString::fromStdString("wowee"));
+	stats->setText(QString::fromStdString(statsString));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;
 	statsLayout->addWidget(stats);
