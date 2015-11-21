@@ -133,16 +133,16 @@ void MainWindow::generate(int width, int height) {
 
 void MainWindow::startGameSlot() {
 	//This is crashing it for some reason
-	/**currentCharacter = turnQueue.dequeue();
-	std::string statsString = currentCharacter->name;
-	if (!currentCharacter->enemy)
+	currentCharacter = turnQueue.dequeue();
+	std::string statsString = currentCharacter.name;
+	if (!currentCharacter.enemy)
 		statsString += "\n\nAdventurer";
 	else 
 		statsString += "\n\nBandit";
-	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
-	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
-	statsString += "\n\nDEF" + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
-	*/stats->setText(QString::fromStdString("wowee"));
+	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
+	statsString += "\n\nDEF" + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	stats->setText(QString::fromStdString("wowee"));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;
 	statsLayout->addWidget(stats);
@@ -159,7 +159,7 @@ void MainWindow::attackSlot() {
 	msgBox.exec();
 
 	
-	Human *current = this->currentCharacter;
+	Human *current = &currentCharacter;
 	Human target;
 	
 	//why are you using cout and cin? that will do literally nothing, that is not how UIs work
@@ -204,7 +204,7 @@ void MainWindow::rangedSlot() {
 	msgBox.setText("You are attacking from a distance! bruh!");
 	msgBox.exec();
 
-	Human *current = this->currentCharacter;
+	Human *current = &currentCharacter;
 	Human target;
 
 	/*bool stop = false;
@@ -256,16 +256,16 @@ void MainWindow::moveSlot() {
 }
 
 void MainWindow::endTurnSlot() {
-	turnQueue.enqueue(*currentCharacter);
-	*currentCharacter = turnQueue.dequeue();
-	std::string statsString = currentCharacter->name;
-	if (!currentCharacter->enemy)
+	turnQueue.enqueue(currentCharacter);
+	currentCharacter = turnQueue.dequeue();
+	std::string statsString = currentCharacter.name;
+	if (!currentCharacter.enemy)
 		statsString += "\n\nAdventurer";
 	else 
 		statsString += "\n\nBandit";
-	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
-	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
-	statsString += "\n\nDEF" + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
+	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
+	statsString += "\n\nDEF" + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
 	stats->setText(QString::fromStdString(statsString));
 	QTableWidgetItem *old = turnOrder->item(0,0);
 	for (int i = 1; i < turnQueue.getSize()-1; i++) {

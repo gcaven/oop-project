@@ -33,7 +33,7 @@ private:
 	QPushButton *buttonR;
 	QPushButton *buttonM;
 	QPushButton *buttonEnd;
-	Human *currentCharacter;
+	Human currentCharacter;
 	QLabel *theSitch;
 
 public:
