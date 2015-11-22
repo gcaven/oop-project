@@ -138,11 +138,11 @@ void MainWindow::generate(int width, int height) {
     for (int i=0; i < 6; i++) {
     	int x = humans[i]->x;
     	int y = humans[i]->y;
-    	QTableWidgetItem *item = table->takeItem(y,x);
-    	item->setText("H");
-    	item->setTextAlignment(Qt::AlignCenter);
-    	item->setFont(font);
-    	table->setItem(y,x,item);
+    	//QTableWidgetItem *item = table->takeItem(y,x);
+    	//item->setText("H");
+    	//item->setTextAlignment(Qt::AlignCenter);
+    	//item->setFont(font);
+    	//table->setItem(y,x,item);
     }
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
