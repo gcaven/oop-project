@@ -15,14 +15,16 @@ Human::Human() {
 		namesVector.push_back(line.toStdString());
 	}
 	file.close();
-	this->name = namesVector.at(qrand()%namesVector.size());
+	name = namesVector.at(qrand()%namesVector.size());
 	alive = true;
-	this->health = qrand()%((30+1) - 10) + 10;
-	this->currentHealth = health;
-	this->speed = qrand()%((3+1) - 1) + 1;
-	this->attack = qrand()%((10+1) - 2) + 2;
-	this->defense = qrand()%((10+1) - 2) + 2;
-	this->dexterity = qrand()%(3+1);
+	health = qrand()%((30+1) - 10) + 10;
+	currentHealth = health;
+	speed = qrand()%((3+1) - 1) + 1;
+	attack = qrand()%((10+1) - 2) + 2;
+	defense = qrand()%((10+1) - 2) + 2;
+	dexterity = qrand()%(3+1);
+	x = -1;
+	y = -1;
 }
 
 int Human::initiativeRoll() {
@@ -39,7 +41,8 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-void Human::generateLocation(Board board) {
+//split the x/yGen bit into separate function
+void Human::generateLocation(Board board, Human *humans[]) {
 	int xGen = qrand()%(10+1);
 	int yGen;
 	if (enemy) {
@@ -47,6 +50,7 @@ void Human::generateLocation(Board board) {
 	} else {
 		yGen = qrand()%(2);
 	}
+	//gettin them memory errors
 	/*while (board.get(x,y).getType() == BOULDER) {
 		xGen = qrand()%(10+1);
 		int yGen;
@@ -56,6 +60,21 @@ void Human::generateLocation(Board board) {
 			yGen = qrand()%(2);
 		}	
 	}*/
+	for (int i = 0; i < 6; i++) {
+		if (humans[i] != nullptr)
+			//this could put it back on a spot taken by another
+			//need to track others all at once?
+			//idk
+			while (humans[i]->x == this->x && humans[i]->y == this->x) {
+				xGen = qrand()%(10+1);
+				int yGen;
+				if (enemy) {
+					yGen = qrand()%((11) - 8) + 8;
+				} else {
+					yGen = qrand()%(2);
+				}
+			}
+	}
 	x = xGen;
 	y = yGen;
 	return;

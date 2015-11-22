@@ -122,13 +122,13 @@ void MainWindow::generate(int width, int height) {
     Ally allies[3];
     Enemy enemies[3];
     for (int i=0; i < 3; i++) {
-    	allies[i].generateLocation(board);
+    	allies[i].generateLocation(board, humans);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
     for (int i=0; i < 3; i++) {
-    	enemies[i].generateLocation(board);
+    	enemies[i].generateLocation(board, humans);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
