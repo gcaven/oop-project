@@ -7,9 +7,11 @@
 #include <QCoreApplication>
 #include <vector>
 #include "Item.h"
+#include "Board.h"
 
 class Human {
 public:
+	unsigned int id;
 	std::string name;
 	bool alive;
 	bool enemy;
@@ -24,6 +26,8 @@ public:
 	unsigned int dexterity;
 	Human();
 	void useItem(Item item);
+	void setId(unsigned int id);
+	void generateLocation(Board board);
 	int initiativeRoll();
 };
 

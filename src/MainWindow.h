@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QLayoutItem>
+#include <QTextEdit>
 #include "Board.h"
 #include "Queue.h"
 
@@ -33,6 +34,7 @@ private:
 	QPushButton *buttonR;
 	QPushButton *buttonM;
 	QPushButton *buttonEnd;
+	Human *humans[6];
 	Human currentCharacter;
 	QLabel *theSitch;
 

@@ -54,6 +54,9 @@ void MainWindow::decorate() {
 	int height = 10;
 
 	table = new QTableWidget(width,height);
+	table->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    table->setMinimumWidth(500);
+    table->setMinimumHeight(500);
 	table->setShowGrid(false);
 	header = table->horizontalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
@@ -68,7 +71,14 @@ void MainWindow::decorate() {
 	layoutVert->addWidget(table);
 	layoutVert->addLayout(layout);
 
-	setLayout(layoutVert);
+	QTextEdit *console = new QTextEdit();
+	console->setReadOnly(true);
+
+	QHBoxLayout *topLevel = new QHBoxLayout();
+	topLevel->addLayout(layoutVert);
+	topLevel->addWidget(console);
+
+	setLayout(topLevel);
 	setWindowTitle("Adventure Battle");
 
 	show();
@@ -112,9 +122,15 @@ void MainWindow::generate(int width, int height) {
     Ally allies[3];
     Enemy enemies[3];
     for (int i=0; i < 3; i++) {
+    	allies[i].generateLocation(board);
+    	humans[i] = &allies[i];
+    	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
     for (int i=0; i < 3; i++) {
+    	enemies[i].generateLocation(board);
+    	humans[i+3] = &enemies[i];
+    	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
     }
     for (int i=0; i < turnQueue.getSize(); i++) {
@@ -265,6 +281,7 @@ void MainWindow::endTurnSlot() {
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
 	stats->setText(QString::fromStdString(statsString));
 	QTableWidgetItem *old = turnOrder->takeItem(0,0);
 	for (int i = 1; i < turnQueue.getSize()+1; i++) {

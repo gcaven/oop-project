@@ -35,6 +35,32 @@ void Human::useItem(Item item) {
 	return;
 }
 
+void Human::setId(unsigned int id) {
+	this->id = id;
+}
+
+void Human::generateLocation(Board board) {
+	int xGen = qrand()%(10+1);
+	int yGen;
+	if (enemy) {
+		yGen = qrand()%((11) - 8) + 8;
+	} else {
+		yGen = qrand()%(2);
+	}
+	/*while (board.get(x,y).getType() == BOULDER) {
+		xGen = qrand()%(10+1);
+		int yGen;
+		if (enemy) {
+			yGen = qrand()%((11) - 8) + 8;
+		} else {
+			yGen = qrand()%(2);
+		}	
+	}*/
+	x = xGen;
+	y = yGen;
+	return;
+}
+
 void Enemy::makeAMove() {
 	//enemy AI will live here
 	return;
