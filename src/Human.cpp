@@ -60,7 +60,7 @@ void Human::generateLocation(Board board, Human *humans[]) {
 			yGen = qrand()%(2);
 		}	
 	}*/
-	for (int i = 0; i < 6; i++) {
+	/*for (int i = 0; i < 6; i++) {
 		if (humans[i] != nullptr)
 			//this could put it back on a spot taken by another
 			//need to track others all at once?
@@ -74,7 +74,7 @@ void Human::generateLocation(Board board, Human *humans[]) {
 					yGen = qrand()%(2);
 				}
 			}
-	}
+	}*/
 	x = xGen;
 	y = yGen;
 	return;

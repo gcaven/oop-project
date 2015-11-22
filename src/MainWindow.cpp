@@ -133,6 +133,17 @@ void MainWindow::generate(int width, int height) {
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
     }
+    QFont font;
+	font.setBold(true);
+    for (int i=0; i < 6; i++) {
+    	int x = humans[i]->x;
+    	int y = humans[i]->y;
+    	QTableWidgetItem *item = table->takeItem(y,x);
+    	item->setText("H");
+    	item->setTextAlignment(Qt::AlignCenter);
+    	item->setFont(font);
+    	table->setItem(y,x,item);
+    }
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
         Human temp = turnQueue.dequeue();
@@ -177,7 +188,7 @@ void MainWindow::attackSlot() {
 	Human *current = &currentCharacter;
 	Human target;
 	
-	//why are you using cout and cin? that will do literally nothing, that is not how UIs work
+	//why are you using cout and cin? wont do anything. will need to add text to the console widget.
 
 	/*bool stop = false;
 	while(!stop) {
