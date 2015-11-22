@@ -98,22 +98,22 @@ void MainWindow::generate(int width, int height) {
             table->setItem(y,x,item);
             switch(type) {
                 case PLAIN:
-                    item->setBackgroundColor(Qt::green);
+                    item->setBackgroundColor(QColor(131,245,78));
                     break;
                 case HILL:
-                    item->setBackgroundColor(Qt::yellow);
+                    item->setBackgroundColor(QColor(170,245,132));
                     break;
                 case TREES:
-                    item->setBackgroundColor(Qt::darkGreen);
+                    item->setBackgroundColor(QColor(126,179,46));
                     break;
                 case DITCH:
-                    item->setBackgroundColor(Qt::darkYellow);
+                    item->setBackgroundColor(QColor(154,176,118));
                     break;
                 case BOULDER:
-                    item->setBackgroundColor(Qt::gray);
+                    item->setBackgroundColor(QColor(168,168,168));
                     break;
                 case WATER:
-                    item->setBackgroundColor(Qt::blue);
+                    item->setBackgroundColor(QColor(129,177,240));
                     break;
             }
         }
@@ -122,27 +122,33 @@ void MainWindow::generate(int width, int height) {
     Ally allies[3];
     Enemy enemies[3];
     for (int i=0; i < 3; i++) {
-    	allies[i].generateLocation(board, humans);
+    	allies[i].generateLocation(board, humans, i);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
     for (int i=0; i < 3; i++) {
-    	enemies[i].generateLocation(board, humans);
+    	enemies[i].generateLocation(board, humans, i+3);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
     }
     QFont font;
 	font.setBold(true);
+	font.setPointSize(18);
     for (int i=0; i < 6; i++) {
     	int x = humans[i]->x;
     	int y = humans[i]->y;
-    	//QTableWidgetItem *item = table->takeItem(y,x);
-    	//item->setText("H");
-    	//item->setTextAlignment(Qt::AlignCenter);
-    	//item->setFont(font);
-    	//table->setItem(y,x,item);
+    	QTableWidgetItem *item = table->takeItem(y,x);
+    	if (item != nullptr) {
+    		if (humans[i]->enemy)
+    			item->setText("B");
+    		else 
+    			item->setText("A");
+    		item->setTextAlignment(Qt::AlignCenter);
+    		item->setFont(font);
+    		table->setItem(y,x,item);
+    	}
     }
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
@@ -168,6 +174,7 @@ void MainWindow::startGameSlot() {
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
 	stats->setText(QString::fromStdString(statsString));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;

@@ -41,14 +41,14 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-//split the x/yGen bit into separate function
-void Human::generateLocation(Board board, Human *humans[]) {
-	int xGen = qrand()%(10+1);
+void Human::generateLocation(Board board, Human **humans, int size) {
+	//min + (rand() % (int)(max - min + 1))
+	int xGen = 0 + qrand()%(int)(9-0+1);
 	int yGen;
 	if (enemy) {
-		yGen = qrand()%((11) - 8) + 8;
+		yGen = 8 + qrand()%(int)(9-8+1);
 	} else {
-		yGen = qrand()%(2);
+		yGen = 0 + qrand()%(int)(1-0+1);
 	}
 	//gettin them memory errors
 	/*while (board.get(x,y).getType() == BOULDER) {
@@ -60,21 +60,23 @@ void Human::generateLocation(Board board, Human *humans[]) {
 			yGen = qrand()%(2);
 		}	
 	}*/
-	/*for (int i = 0; i < 6; i++) {
-		if (humans[i] != nullptr)
-			//this could put it back on a spot taken by another
-			//need to track others all at once?
-			//idk
-			while (humans[i]->x == this->x && humans[i]->y == this->x) {
-				xGen = qrand()%(10+1);
-				int yGen;
-				if (enemy) {
-					yGen = qrand()%((11) - 8) + 8;
-				} else {
-					yGen = qrand()%(2);
-				}
+	bool goodlocation = false;
+	while (!goodlocation) {
+		goodlocation = true;
+		for (int i = 0; i < size; i++) {
+			if (humans[i]->x == xGen && humans[i]->y == yGen) {
+				goodlocation = false;
 			}
-	}*/
+		}
+		if (!goodlocation) {
+			xGen = 0 + qrand()%(int)(9-0+1);
+			if (enemy) {
+				yGen = 8 + qrand()%(int)(9-8+1);
+			} else {
+				yGen = 0 + qrand()%(int)(1-0+1);
+			}
+		}
+	}
 	x = xGen;
 	y = yGen;
 	return;
