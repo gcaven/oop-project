@@ -1,4 +1,6 @@
 #include "Terrain.h"
+#ifndef TILE
+#define TILE
 
 class Tile {
 private:
@@ -20,3 +22,5 @@ public:
 	Terrain getType();
 	std::string getTypeAsString();
 };
+
+#endif

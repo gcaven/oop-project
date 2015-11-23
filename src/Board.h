@@ -1,4 +1,6 @@
 #include "Tile.h"
+#ifndef BOARD
+#define BOARD
 
 class Board {
 private:
@@ -14,3 +16,5 @@ public:
 	int index(int x, int y);
 	void destroy();
 };
+
+#endif

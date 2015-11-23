@@ -1,3 +1,6 @@
+#ifndef TERRAIN
+#define TERRAIN
+
 enum Terrain{
 	PLAIN = 0,
 	HILL = 1, //defensive bonus, ranged bonus
@@ -6,3 +9,5 @@ enum Terrain{
 	BOULDER = 4, //impassible
 	WATER = 5, //speed, offensive malus, no ranged attacks. defensive malus to ranged
 };
+
+#endif

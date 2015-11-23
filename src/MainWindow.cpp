@@ -6,10 +6,15 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 void MainWindow::decorate() {
 	QLabel *theSitch = new QLabel("In WATER: ATK down, SPD down\nRanged attacks not possible");
 	this->theSitch = theSitch;
-	QPushButton *buttonA = new QPushButton("Attack");
-	QPushButton *buttonR = new QPushButton("Ranged");
-	QPushButton *buttonM = new QPushButton("Move");
-	QPushButton *buttonEnd = new QPushButton("End Turn");
+	buttonA = new QPushButton("Attack");
+	buttonR = new QPushButton("Ranged");
+	buttonM = new QPushButton("Move");
+	buttonEnd = new QPushButton("End Turn");
+
+	buttonA->setEnabled(false);
+	buttonR->setEnabled(false);
+	buttonM->setEnabled(false);
+	buttonEnd->setEnabled(false);
 
 	QObject::connect(buttonA, SIGNAL(clicked()), this, SLOT(attackSlot()));
     QObject::connect(buttonR, SIGNAL(clicked()), this, SLOT(rangedSlot()));
@@ -23,13 +28,14 @@ void MainWindow::decorate() {
 	actions->addWidget(buttonM);
 	actions->addWidget(buttonEnd);
 
-	QLabel *stats = new QLabel("Sid the Rogue\nIndeterminate\nHP: 20/20\nATK: 4, DEX: 7\nDEF: 7, SPD: 3");
+	buttonStart = new QPushButton("Start");
+	QObject::connect(buttonStart, SIGNAL(clicked()), this, SLOT(startGameSlot()));
+	stats = new QLabel("");
 
-	QVBoxLayout *statsLayout = new QVBoxLayout();
-	statsLayout->addWidget(stats);
-	this->stats = stats;
+	statsLayout = new QVBoxLayout();
+	statsLayout->addWidget(buttonStart);
 
-	QTableWidget *turnOrder = new QTableWidget(6,1);
+	turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
 	turnOrder->setFixedHeight(180);
 	QHeaderView *header = turnOrder->horizontalHeader();
@@ -38,7 +44,6 @@ void MainWindow::decorate() {
 	header = turnOrder->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
-	this->turnOrder = turnOrder;
 	
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->addWidget(turnOrder);
@@ -48,7 +53,10 @@ void MainWindow::decorate() {
 	int width = 10;
 	int height = 10;
 
-	QTableWidget *table = new QTableWidget(width,height);
+	table = new QTableWidget(width,height);
+	table->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    table->setMinimumWidth(500);
+    table->setMinimumHeight(500);
 	table->setShowGrid(false);
 	header = table->horizontalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
@@ -56,31 +64,27 @@ void MainWindow::decorate() {
 	header = table->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
-	this->table = table;
 
-	generate(table, width, height, board, turnOrder, &turnQueue);
-
-	Human curr = turnQueue.dequeue();
-    this->currentCharacter = &curr;
-	std::string statsString = curr.name;
-	statsString += "\n\ndunno";
-	statsString += "\n\nHP: " + std::to_string(curr.health) + "/" + std::to_string(curr.health);
-	statsString += "\n\nATK: " + std::to_string(curr.attack) + ", DEX: " + std::to_string(curr.dexterity);
-	statsString += "\n\nDEF" + std::to_string(curr.defense) + ", SPD: " + std::to_string(curr.speed);
-	stats->setText(QString::fromStdString(statsString));
-	theSitch->setText(QString::fromStdString("Nothing is happening\n\nBecause it hasn't been built yet"));
+	generate(width, height);
 
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
 	layoutVert->addLayout(layout);
 
-	setLayout(layoutVert);
+	QTextEdit *console = new QTextEdit();
+	console->setReadOnly(true);
+
+	QHBoxLayout *topLevel = new QHBoxLayout();
+	topLevel->addLayout(layoutVert);
+	topLevel->addWidget(console);
+
+	setLayout(topLevel);
 	setWindowTitle("Adventure Battle");
 
 	show();
 }
 
-void MainWindow::generate(QTableWidget *table, int width, int height, Board board, QTableWidget *turnOrder, Queue *turnQueue) {
+void MainWindow::generate(int width, int height) {
 	//generate board, fill the table
     QTableWidgetItem curr;
     int type;
@@ -94,22 +98,22 @@ void MainWindow::generate(QTableWidget *table, int width, int height, Board boar
             table->setItem(y,x,item);
             switch(type) {
                 case PLAIN:
-                    item->setBackgroundColor(Qt::green);
+                    item->setBackgroundColor(QColor(131,245,78));
                     break;
                 case HILL:
-                    item->setBackgroundColor(Qt::yellow);
+                    item->setBackgroundColor(QColor(170,245,132));
                     break;
                 case TREES:
-                    item->setBackgroundColor(Qt::darkGreen);
+                    item->setBackgroundColor(QColor(126,179,46));
                     break;
                 case DITCH:
-                    item->setBackgroundColor(Qt::darkYellow);
+                    item->setBackgroundColor(QColor(154,176,118));
                     break;
                 case BOULDER:
-                    item->setBackgroundColor(Qt::gray);
+                    item->setBackgroundColor(QColor(168,168,168));
                     break;
                 case WATER:
-                    item->setBackgroundColor(Qt::blue);
+                    item->setBackgroundColor(QColor(129,177,240));
                     break;
             }
         }
@@ -119,22 +123,72 @@ void MainWindow::generate(QTableWidget *table, int width, int height, Board boar
     Ally allies[3];
     Enemy enemies[3];
     for (int i=0; i < 3; i++) {
+<<<<<<< HEAD
         turnQueue->enqueue(allies[i]);
         humans.add
+=======
+    	allies[i].generateLocation(board, humans, i);
+    	humans[i] = &allies[i];
+    	humans[i]->setId(i);
+        turnQueue.enqueue(allies[i]);
+>>>>>>> 5c4eb21f65d4904193dfe71cbfddf108ec1d11a1
     }
     for (int i=0; i < 3; i++) {
-        turnQueue->enqueue(enemies[i]);
+    	enemies[i].generateLocation(board, humans, i+3);
+    	humans[i+3] = &enemies[i];
+    	humans[i]->setId(i+3);
+        turnQueue.enqueue(enemies[i]);
     }
-    for (int i=0; i < turnQueue->getSize(); i++) {
+    QFont font;
+	font.setBold(true);
+	font.setPointSize(18);
+    for (int i=0; i < 6; i++) {
+    	int x = humans[i]->x;
+    	int y = humans[i]->y;
+    	QTableWidgetItem *item = table->takeItem(y,x);
+    	if (item != nullptr) {
+    		if (humans[i]->enemy)
+    			item->setText("B");
+    		else 
+    			item->setText("A");
+    		item->setTextAlignment(Qt::AlignCenter);
+    		item->setFont(font);
+    		table->setItem(y,x,item);
+    	}
+    }
+    for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
-        Human temp = turnQueue->dequeue();
+        Human temp = turnQueue.dequeue();
         name = temp.name;
-        turnQueue->enqueue(temp);
+        turnQueue.enqueue(temp);
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
+        if (temp.enemy)
+        	item->setBackgroundColor(QColor(255,128,100));
         item->setFlags(Qt::ItemIsEditable);
         turnOrder->setItem(i,0,item);
     }
-return;
+	return;
+}
+
+void MainWindow::startGameSlot() {
+	currentCharacter = turnQueue.dequeue();
+	std::string statsString = currentCharacter.name;
+	if (!currentCharacter.enemy)
+		statsString += "\n\nAdventurer";
+	else 
+		statsString += "\n\nBandit";
+	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
+	stats->setText(QString::fromStdString(statsString));
+	statsLayout->removeWidget(buttonStart);
+	delete buttonStart;
+	statsLayout->addWidget(stats);
+	buttonA->setEnabled(true);
+	buttonR->setEnabled(true);
+	buttonM->setEnabled(true);
+	buttonEnd->setEnabled(true);
 }
 
 void MainWindow::attackSlot() {
@@ -143,12 +197,13 @@ void MainWindow::attackSlot() {
 	msgBox.setText("You are attacking! bro!");
 	msgBox.exec();
 
-	
-	Human *current = this->currentCharacter;
+	Human *current = &currentCharacter;
 	Human target;
 	std::string targetname;
 	
-	bool stop = false;
+	//why are you using cout and cin? wont do anything. will need to add text to the console widget.
+
+	/*bool stop = false;
 	while(!stop) {
 		std::cout << "Enter the name of your target: " << endl;
 		std::cin >> targetname;
@@ -180,7 +235,7 @@ void MainWindow::attackSlot() {
 		else {
 			std::cout << "Cannot attack this player" << endl;
 		}
-	}
+	}*/
 }
 
 void MainWindow::rangedSlot() {
@@ -189,11 +244,11 @@ void MainWindow::rangedSlot() {
 	msgBox.setText("You are attacking from a distance! bruh!");
 	msgBox.exec();
 
-	Human *current = this->currentCharacter;
+	Human *current = &currentCharacter;
 	Human target;
-	std::string targtname;
+	std::string targetname;
 
-	bool stop = false;
+	/*bool stop = false;
 	while(!stop) {
 		std::cout << "Enter the name of your target: " << endl;
 		std::cin >> targetname;
@@ -230,7 +285,7 @@ void MainWindow::rangedSlot() {
 		else {
 			std::cout << "Cannot attack this player" << endl;
 		}
-	}
+	}*/
 }
 
 void MainWindow::moveSlot() {
@@ -251,15 +306,24 @@ void MainWindow::moveSlot() {
 }
 
 void MainWindow::endTurnSlot() {
-	turnQueue.enqueue(*currentCharacter);
-	*currentCharacter = turnQueue.dequeue();
-	std::string kablam = "wowee";
-	std::string statsString = currentCharacter->name;
-	statsString += "\n\ndunno";
-	statsString += "\n\nHP: " + std::to_string(currentCharacter->health) + "/" + std::to_string(currentCharacter->health);
-	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
-	statsString += "\n\nDEFFF JAM" + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
+	turnQueue.enqueue(currentCharacter);
+	currentCharacter = turnQueue.dequeue();
+	std::string statsString = currentCharacter.name;
+	if (!currentCharacter.enemy)
+		statsString += "\n\nAdventurer";
+	else 
+		statsString += "\n\nBandit";
+	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
 	stats->setText(QString::fromStdString(statsString));
+	QTableWidgetItem *old = turnOrder->takeItem(0,0);
+	for (int i = 1; i < turnQueue.getSize()+1; i++) {
+		QTableWidgetItem *pushup = turnOrder->takeItem(i,0);
+		turnOrder->setItem(i-1,0,pushup);
+	}
+	turnOrder->setItem(turnQueue.getSize(),0,old);
 	show();
 }
 

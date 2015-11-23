@@ -1,0 +1,8 @@
+src/Board.o
+src/Human.o
+src/main.o
+src/MainWindow.o
+src/moc_MainWindow.cpp
+src/moc_MainWindow.o
+src/Queue.o
+src/Tile.o

@@ -52,3 +52,14 @@ Human Queue::dequeue() {
 int Queue::getSize() {
 	return size;
 }
+std::string Queue::print() {
+	std::string string = "";
+	queueNode *tempPtr;
+	tempPtr = front;
+	while(tempPtr != nullptr) {
+		string += tempPtr->human.name;
+		string += "\n";
+		tempPtr = tempPtr->prevPtr;
+	}
+	return string;
+}
