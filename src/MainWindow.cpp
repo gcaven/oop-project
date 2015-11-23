@@ -114,11 +114,13 @@ void MainWindow::generate(QTableWidget *table, int width, int height, Board boar
             }
         }
     }
+
     qsrand(time(NULL));
     Ally allies[3];
     Enemy enemies[3];
     for (int i=0; i < 3; i++) {
         turnQueue->enqueue(allies[i]);
+        humans.add
     }
     for (int i=0; i < 3; i++) {
         turnQueue->enqueue(enemies[i]);
@@ -142,13 +144,15 @@ void MainWindow::attackSlot() {
 	msgBox.exec();
 
 	
-	Human current = this->currentCharacter;
+	Human *current = this->currentCharacter;
 	Human target;
+	std::string targetname;
 	
 	bool stop = false;
 	while(!stop) {
-		cout << "Enter the name of your target: " << end;
-		cin >> target;
+		std::cout << "Enter the name of your target: " << endl;
+		std::cin >> targetname;
+
 		
 		//if position of target is adjacent to current
 		if((target.x == current.x) || (target.y == current.y)) {
@@ -159,22 +163,22 @@ void MainWindow::attackSlot() {
 				else{
 					target.health -= damage;
 				}
-				cout << "You have dealt " << damage << " to " << target.name << endl;
+				std::cout << "You have dealt " << damage << " to " << target.name << endl;
 				stop = true;
 
 				//if attack kills target
 				if(target.health <= 0){
 					target.alive = false;
-					cout << target.name << " has been felled." << endl;
+					std::cout << target.name << " has been felled." << endl;
 				}
 			}
 			else {
-				cout << "Cannot attack this player" << endl;
+				std::cout << "Cannot attack this player" << endl;
 			}
 		} 
 		//if not, current cannot attack the specified target
 		else {
-			cout << "Cannot attack this player" << endl;
+			std::cout << "Cannot attack this player" << endl;
 		}
 	}
 }
@@ -185,46 +189,46 @@ void MainWindow::rangedSlot() {
 	msgBox.setText("You are attacking from a distance! bruh!");
 	msgBox.exec();
 
-	Human current = this->currentCharacter;
+	Human *current = this->currentCharacter;
 	Human target;
+	std::string targtname;
 
 	bool stop = false;
 	while(!stop) {
-		cout << "Enter the name of your target: " << end;
-		cin >> target;
+		std::cout << "Enter the name of your target: " << endl;
+		std::cin >> targetname;
 		
 		//if position of target is on a straight x or y path to target
 		if(target.x == current.x || target.y == current.y) {
 			//if current can reach target with their dexterity stat
-			if((abs(target.x - current.x)) <= current.dexterity) || ((abs(target.y - current.y)) <= current.dexterity) {
+			if( ((abs(target.x - current.x)) <= current.dexterity) || ((abs(target.y - current.y)) <= current.dexterity)) {
 				int damage = current.attack - target.defense;
 				if(damage < 0)
 					damage = 0;
 				else{
 					target.health -= damage;
 				}
-				cout << "You have dealt " << damage << " to " << target.name << endl;
+				std::cout << "You have dealt " << damage << " to " << target.name << endl;
 
 				//if attack kills target
 				if(target.health <= 0){
 					target.alive = false;
-					cout << target.name << " has been felled." << endl;
+					std::cout << target.name << " has been felled." << endl;
 				}
 				stop = true;
 			}
 			else {
-				cout << "Cannot attack this player" << endl;
+				std::cout << "Cannot attack this player" << endl;
 			}
 		} 
 		
 		//if position of target is on a diagonal path from current
-		else if() {
+		
 
-		}
 
 		//if not, current cannot attack the specified target
 		else {
-			cout << "Cannot attack this player" << endl;
+			std::cout << "Cannot attack this player" << endl;
 		}
 	}
 }
@@ -234,6 +238,16 @@ void MainWindow::moveSlot() {
 	msgBox.setWindowTitle("Hello");
 	msgBox.setText("You are moving! wowee!");
 	msgBox.exec();
+
+	Human current = this->currentCharacter;
+	int distance = current.speed;
+
+	//console input prompt for board coordinates
+	std::cout << "Where would you like to move? Ex. A0" << endl;
+	std::string xy;
+	std::cin << xy;
+
+
 }
 
 void MainWindow::endTurnSlot() {
