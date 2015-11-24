@@ -191,7 +191,6 @@ void MainWindow::startGameSlot() {
 }
 
 void MainWindow::attackSlot() {
-<<<<<<< HEAD
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is winding up for an attack.";
 	console->append(QString::fromStdString(consoleText));
