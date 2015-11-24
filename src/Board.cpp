@@ -18,7 +18,7 @@ void Board::generate() {
 	qsrand(time(NULL));
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
-            int typenum = qrand()%(8+1);
+            int typenum = qrand()%(5+1);
 			Terrain type;
 			switch(typenum) {
 				case 0:
@@ -31,21 +31,12 @@ void Board::generate() {
 					type = PLAIN;
 					break;
 				case 3:
-					type = HILL;
-					break;
-				case 4:
-					type = TREES;
-					break;
-				case 5:
-					type = DITCH;
-					break;
-				case 6:
 					type = BOULDER;
 					break;
-				case 7:
+				case 4:
 					type = WATER;
 					break;
-				case 8:
+				case 5:
 					type = WATER;
 					break;
 			}

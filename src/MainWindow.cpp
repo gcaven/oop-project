@@ -35,6 +35,20 @@ void MainWindow::decorate() {
 	statsLayout = new QVBoxLayout();
 	statsLayout->addWidget(buttonStart);
 
+	movementLayout = new QVBoxLayout();
+
+	QPushButton *buttonMoveUp = new QPushButton("Move Up");
+	QPushButton *buttonMoveRight = new QPushButton("Move Right");
+	QPushButton *buttonMoveDown = new QPushButton("Move Down");
+	QPushButton *buttonMoveLeft = new QPushButton("Move Left");
+	QPushButton *buttonMoveStop = new QPushButton("Stop Moving");
+
+	QObject::connect(buttonMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSlot()));
+	QObject::connect(buttonMoveRight, SIGNAL(clicked()), this, SLOT(moveRightSlot()));
+	QObject::connect(buttonMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSlot()));
+	QObject::connect(buttonMoveLeft, SIGNAL(clicked()), this, SLOT(moveLeftSlot()));
+	QObject::connect(buttonMoveStop, SIGNAL(clicked()), this, SLOT(moveStopSlot()));
+
 	turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
 	turnOrder->setFixedHeight(180);
@@ -99,15 +113,6 @@ void MainWindow::generate(int width, int height) {
             switch(type) {
                 case PLAIN:
                     item->setBackgroundColor(QColor(131,245,78));
-                    break;
-                case HILL:
-                    item->setBackgroundColor(QColor(170,245,132));
-                    break;
-                case TREES:
-                    item->setBackgroundColor(QColor(126,179,46));
-                    break;
-                case DITCH:
-                    item->setBackgroundColor(QColor(154,176,118));
                     break;
                 case BOULDER:
                     item->setBackgroundColor(QColor(168,168,168));
@@ -286,16 +291,55 @@ void MainWindow::rangedSlot() {
 }
 
 void MainWindow::moveSlot() {
-	console->append("Do the locomotion!");
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is getting ready to move.";
+	console->append(QString::fromStdString(consoleText));
+	
+	//remove actions layout
+	//add movement layout
+	moves = currentCharacter.speed;
+}
 
-	Human current = this->currentCharacter;
-	int distance = current.speed;
+void MainWindow::moveUpSlot() {
+	moves--;
+	//move character y+1;
+	if (moves <= 0) {
+		stopMoving();
+	}
+}
 
-	//console input prompt for board coordinates
-	/*std::cout << "Where would you like to move? Ex. A0" << endl;
-	std::string xy;
-	std::cin << xy;
-	*/
+void MainWindow::moveRightSlot() {
+	moves--;
+	//move character x+1;
+	if (moves <= 0) {
+		stopMoving();
+	}
+}
+
+void MainWindow::moveDownSlot() {
+	moves--;
+	//move character y-1;
+	if (moves <= 0) {
+		stopMoving();
+	}
+}
+
+void MainWindow::moveLeftSlot() {
+	moves--;
+	//move character x-1;
+	if (moves <= 0) {
+		stopMoving();
+	}
+}
+
+void MainWindow::moveStopSlot() {
+	stopMoving();
+}
+
+void MainWindow::stopMoving() {
+	//remove movement layout
+	//add action layout
+	buttonM->setEnabled(false);
 }
 
 void MainWindow::endTurnSlot() {
@@ -306,6 +350,9 @@ void MainWindow::endTurnSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
+	buttonA->setEnabled(true);
+	buttonR->setEnabled(true);
+	buttonM->setEnabled(true);
 	if (!currentCharacter.enemy)
 		statsString += "\n\nAdventurer";
 	else 

@@ -7,10 +7,7 @@ private:
 	Terrain type;
 	//These are bonuses when >0, maluses when <0.
 	int offenseBonus;
-	int rangedOffenseBonus;
 	int defenseBonus;
-	int rangedDefenseBonus;
-	int speedBonus;
 	int navigable; //false for boulders
 	int rangedPossible;
 

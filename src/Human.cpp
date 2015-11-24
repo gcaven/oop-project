@@ -49,23 +49,11 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 		yGen = 0 + qrand()%(int)(1-0+1);
 	}
 
-	Terrain rain = board->tiles[xGen][yGen].getType(); 
-	while (rain == BOULDER) {
-		int xGen = 0 + qrand()%(int)(9-0+1);
-		int yGen;
-		if (enemy) {
-			yGen = 8 + qrand()%(int)(9-8+1);
-		} else {
-			yGen = 0 + qrand()%(int)(1-0+1);
-		}
-		rain = board->tiles[xGen][yGen].getType(); 
-	}
-
 	bool goodlocation = false;
 	while (!goodlocation) {
 		goodlocation = true;
 		for (int i = 0; i < size; i++) {
-			if (humans[i]->x == xGen && humans[i]->y == yGen) {
+			if ((humans[i]->x == xGen && humans[i]->y == yGen) || (board->tiles[xGen][yGen].getType() == BOULDER)) {
 				goodlocation = false;
 			}
 		}

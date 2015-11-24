@@ -28,6 +28,7 @@ private:
 	QTableWidget *turnOrder;
 	QTableWidget *table;
 	QVBoxLayout *statsLayout;
+	QVBoxLayout *movementLayout;
 	QLabel *stats;
 	QPushButton *buttonStart;
 	QPushButton *buttonA;
@@ -39,16 +40,23 @@ private:
 	Human *humans[6];
 	Human currentCharacter;
 	QLabel *theSitch;
+	int moves;
 
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
+	void stopMoving();
 
 private slots:
 	void startGameSlot();
 	void attackSlot();
 	void rangedSlot();
 	void moveSlot();
+	void moveUpSlot();
+	void moveRightSlot();
+	void moveDownSlot();
+	void moveLeftSlot();
+	void moveStopSlot();
 	void endTurnSlot();
 };
