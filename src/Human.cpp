@@ -53,7 +53,10 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 	while (!goodlocation) {
 		goodlocation = true;
 		for (int i = 0; i < size; i++) {
-			if ((humans[i]->x == xGen && humans[i]->y == yGen) || (board->tiles[xGen][yGen].getType() == BOULDER)) {
+			if (humans[i]->x == xGen && humans[i]->y == yGen) {
+				goodlocation = false;
+			}
+			if (board->tiles[xGen][yGen].getType() == BOULDER) {
 				goodlocation = false;
 			}
 		}
