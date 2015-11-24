@@ -71,7 +71,7 @@ void MainWindow::decorate() {
 	layoutVert->addWidget(table);
 	layoutVert->addLayout(layout);
 
-	QTextEdit *console = new QTextEdit();
+	console = new QTextEdit();
 	console->setReadOnly(true);
 
 	QHBoxLayout *topLevel = new QHBoxLayout();
@@ -183,22 +183,24 @@ void MainWindow::startGameSlot() {
 	buttonR->setEnabled(true);
 	buttonM->setEnabled(true);
 	buttonEnd->setEnabled(true);
+	console->append("Let the Adventure Begin!<br>");
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is getting ready to act!";
+	console->append(QString::fromStdString(consoleText));
 }
 
 void MainWindow::attackSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are attacking! bro!");
-	msgBox.exec();
-
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is winding up for an attack.";
+	console->append(QString::fromStdString(consoleText));
 	
 	Human *current = &currentCharacter;
 	Human target;
 	
-	//why are you using cout and cin? wont do anything. will need to add text to the console widget.
-
 	/*bool stop = false;
 	while(!stop) {
+		//dont do this, add buttons to the UI.
+		//we shouldn't take any input from the console
 		cout << "Enter the name of your target: " << end;
 		cin >> target;
 		
@@ -232,10 +234,9 @@ void MainWindow::attackSlot() {
 }
 
 void MainWindow::rangedSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are attacking from a distance! bruh!");
-	msgBox.exec();
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is readying their bow.";
+	console->append(QString::fromStdString(consoleText));
 
 	Human *current = &currentCharacter;
 	Human target;
@@ -282,16 +283,17 @@ void MainWindow::rangedSlot() {
 }
 
 void MainWindow::moveSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are moving! wowee!");
-	msgBox.exec();
+	console->append("Do the locomotion!");
 }
 
 void MainWindow::endTurnSlot() {
 	turnQueue.enqueue(currentCharacter);
+	console->append("");
 	currentCharacter = turnQueue.dequeue();
 	std::string statsString = currentCharacter.name;
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is getting ready to act!";
+	console->append(QString::fromStdString(consoleText));
 	if (!currentCharacter.enemy)
 		statsString += "\n\nAdventurer";
 	else 

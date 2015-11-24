@@ -34,6 +34,8 @@ private:
 	QPushButton *buttonR;
 	QPushButton *buttonM;
 	QPushButton *buttonEnd;
+	//the console is just an html display
+	QTextEdit *console;
 	Human *humans[6];
 	Human currentCharacter;
 	QLabel *theSitch;
