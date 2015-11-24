@@ -53,11 +53,11 @@ void Tile::setType(Terrain type) {
 }
 
 Terrain Tile::getType() {
-	return this->type;
+	return type;
 }
 
 std::string Tile::getTypeAsString() {
-	switch(this->type) {
+	switch(type) {
 		case 0:
 			return "P";
 		case 1:

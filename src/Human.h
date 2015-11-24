@@ -27,7 +27,7 @@ public:
 	Human();
 	void useItem(Item item);
 	void setId(unsigned int id);
-	void generateLocation(Board board, Human **humans, int size);
+	void generateLocation(Board *board, Human **humans, int size);
 	int initiativeRoll();
 };
 
