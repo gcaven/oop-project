@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <qglobal.h>
 #include "Terrain.h"
 #ifndef TILE
 #define TILE

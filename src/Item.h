@@ -1,3 +1,6 @@
+#ifndef ITEM
+#define ITEM
+
 class Item {
 private:
 	std::string name;
@@ -9,3 +12,5 @@ private:
 	int dexterity;
 	int duration; // length of effect in turns. if negative, is infinite
 };
+
+#endif

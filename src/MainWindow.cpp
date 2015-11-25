@@ -328,8 +328,7 @@ void MainWindow::moveSlot() {
 
 //move character y+1;
 void MainWindow::moveUpSlot() {
-	//board UI reverses y, we reverse it here to match what players would expect
-	move(0,-1);
+	move(0,1);
 }
 
 //move character x+1;
@@ -339,8 +338,8 @@ void MainWindow::moveRightSlot() {
 
 //move character y-1;
 void MainWindow::moveDownSlot() {
-	//board UI reverses y, we reverse it here to match what players would expect
-	move(0,1);
+	
+	move(0,-1);
 }
 
 //move character x-1;
@@ -353,34 +352,38 @@ void MainWindow::moveStopSlot() {
 }
 
 void MainWindow::move(int x,int y) {
-	//need to check for boulders, other humans, edges of board
-	//probably could share code with generateLocation()
-	//helper function file?
-	int xOld = currentCharacter.x;
-	int yOld = currentCharacter.y;
-	currentCharacter.x += x;
-	currentCharacter.y += y;
-	int xNew = currentCharacter.x;
-	int yNew = currentCharacter.y;
-    QTableWidgetItem *item = table->takeItem(yOld,xOld);
-    item->setText("");
-    table->setItem(yOld,xOld,item);
-    item = table->takeItem(yNew,xNew);
-    QFont font;
-	font.setBold(true);
-	font.setPointSize(18);
-    if (item != nullptr) {
-    	if (currentCharacter.enemy)
-    		item->setText("B");
-    	else 
-    		item->setText("A");
-    	item->setTextAlignment(Qt::AlignCenter);
-    	item->setFont(font);
-    	table->setItem(yNew,xNew,item);
-    }
-    moves--;
-    if (moves <= 0) {
-		stopMoving();
+	int xNew = currentCharacter.x + x;
+	//board UI reverses y, we reverse it here to match what players would expect
+	int yNew = currentCharacter.y - y;
+	if (checkLocation(&board,humans,6,xNew,yNew)) {
+		int xOld = currentCharacter.x;
+		int yOld = currentCharacter.y;
+		currentCharacter.x += x;
+		currentCharacter.y -= y;
+	    QTableWidgetItem *item = table->takeItem(yOld,xOld);
+	    item->setText("");
+	    table->setItem(yOld,xOld,item);
+	    item = table->takeItem(yNew,xNew);
+	    QFont font;
+		font.setBold(true);
+		font.setPointSize(18);
+	    if (item != nullptr) {
+	    	if (currentCharacter.enemy)
+	    		item->setText("B");
+	    	else 
+	    		item->setText("A");
+	    	item->setTextAlignment(Qt::AlignCenter);
+	    	item->setFont(font);
+	    	table->setItem(yNew,xNew,item);
+	    }
+	    moves--;
+	    if (moves <= 0) {
+			stopMoving();
+		}
+	} else {
+		std::string consoleText = currentCharacter.name;
+		consoleText += " cannot move there!";
+		console->append(QString::fromStdString(consoleText));
 	}
 }
 

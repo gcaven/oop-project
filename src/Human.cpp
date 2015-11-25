@@ -23,7 +23,7 @@ Human::Human() {
 	//change this to min + (rand() % (int)(max - min + 1)) for more even distribution
 	health = qrand()%((30+1) - 10) + 10;
 	currentHealth = health;
-	speed = qrand()%((3+1) - 1) + 1;
+	speed = qrand()%((3+1) - 2) + 2;
 	attack = qrand()%((10+1) - 2) + 2;
 	defense = qrand()%((10+1) - 2) + 2;
 	dexterity = qrand()%(3+1);
@@ -57,15 +57,7 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 	//make sure there are no other humans or boulders on the tile
 	//if there is, choose another one
 	while (!goodlocation) {
-		goodlocation = true;
-		for (int i = 0; i < size; i++) {
-			if (humans[i]->x == xGen && humans[i]->y == yGen) {
-				goodlocation = false;
-			}
-			if (board->tiles[xGen][yGen].getType() == BOULDER) {
-				goodlocation = false;
-			}
-		}
+		goodlocation = checkLocation(board,humans,size,xGen,yGen);
 		if (!goodlocation) {
 			xGen = 0 + qrand()%(int)(9-0+1);
 			if (enemy) {
@@ -91,4 +83,19 @@ Ally::Ally() : Human() {
 
 Enemy::Enemy() : Human() {
 	enemy = true;
+}
+
+bool checkLocation(Board *board, Human **humans, int size, int x, int y) {
+	bool goodlocation = true;
+	if (x < 0 || x > 9 || y < 0 || y > 9) {
+			goodlocation = false;
+	} else if (board->tiles[x][y].getType() == BOULDER) {
+			goodlocation = false;
+	}
+	for (int i = 0; i < size; i++) {
+		if (humans[i]->x == x && humans[i]->y == y) {
+			goodlocation = false;
+		}
+	}
+	return goodlocation;
 }
