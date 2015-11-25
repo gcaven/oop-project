@@ -33,23 +33,27 @@ void MainWindow::decorate() {
 	statsLayout = new QVBoxLayout();
 	statsLayout->addWidget(buttonStart);
 
-	//movement panel
-	movementLayout = new QVBoxLayout();
-	QPushButton *buttonMoveUp = new QPushButton("Move Up");
-	QPushButton *buttonMoveRight = new QPushButton("Move Right");
-	QPushButton *buttonMoveDown = new QPushButton("Move Down");
-	QPushButton *buttonMoveLeft = new QPushButton("Move Left");
-	QPushButton *buttonMoveStop = new QPushButton("Stop Moving");
+	//movement buttons
+	buttonMoveUp = new QPushButton("Move Up");
+	buttonMoveRight = new QPushButton("Move Right");
+	buttonMoveDown = new QPushButton("Move Down");
+	buttonMoveLeft = new QPushButton("Move Left");
+	buttonMoveStop = new QPushButton("Stop Moving");
 	QObject::connect(buttonMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSlot()));
 	QObject::connect(buttonMoveRight, SIGNAL(clicked()), this, SLOT(moveRightSlot()));
 	QObject::connect(buttonMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSlot()));
 	QObject::connect(buttonMoveLeft, SIGNAL(clicked()), this, SLOT(moveLeftSlot()));
 	QObject::connect(buttonMoveStop, SIGNAL(clicked()), this, SLOT(moveStopSlot()));
-	movementLayout->addWidget(buttonMoveUp);
-	movementLayout->addWidget(buttonMoveRight);
-	movementLayout->addWidget(buttonMoveDown);
-	movementLayout->addWidget(buttonMoveLeft);
-	movementLayout->addWidget(buttonMoveStop);
+	actionsLayout->addWidget(buttonMoveUp);
+	actionsLayout->addWidget(buttonMoveRight);
+	actionsLayout->addWidget(buttonMoveDown);
+	actionsLayout->addWidget(buttonMoveLeft);
+	actionsLayout->addWidget(buttonMoveStop);
+	buttonMoveUp->hide();
+	buttonMoveRight->hide();
+	buttonMoveDown->hide();
+	buttonMoveLeft->hide();
+	buttonMoveStop->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -304,11 +308,21 @@ void MainWindow::rangedSlot() {
 
 void MainWindow::moveSlot() {
 	std::string consoleText = currentCharacter.name;
-	consoleText += " is getting ready to move.";
+	consoleText += " is on the move.";
 	console->append(QString::fromStdString(consoleText));
 	
-	//remove actions layout
-	//add movement layout
+	//hide action buttons
+	theSitch->hide();
+	buttonA->hide();
+	buttonR->hide();
+	buttonM->hide();
+	buttonEnd->hide();
+	//show movement buttons
+	buttonMoveUp->show();
+	buttonMoveRight->show();
+	buttonMoveDown->show();
+	buttonMoveLeft->show();
+	buttonMoveStop->show();
 	moves = currentCharacter.speed;
 }
 
@@ -349,8 +363,19 @@ void MainWindow::moveStopSlot() {
 }
 
 void MainWindow::stopMoving() {
-	//remove movement layout
-	//add action layout
+	//hide movement buttons
+	buttonMoveUp->hide();
+	buttonMoveRight->hide();
+	buttonMoveDown->hide();
+	buttonMoveLeft->hide();
+	buttonMoveStop->hide();
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+	//disable move button
 	buttonM->setEnabled(false);
 }
 

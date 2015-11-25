@@ -27,22 +27,30 @@ private:
 	Queue turnQueue;
 	QTableWidget *turnOrder;
 	QTableWidget *table;
+	QTextEdit *console;
+
+	Human *humans[6];
+	Human currentCharacter;
+	int moves;
+
 	QVBoxLayout *statsLayout;
-	QVBoxLayout *movementLayout;
 	QVBoxLayout *actionsLayout;
 	QHBoxLayout *bottomLayout;
+
 	QLabel *stats;
+	QLabel *theSitch;
+
 	QPushButton *buttonStart;
 	QPushButton *buttonA;
 	QPushButton *buttonR;
 	QPushButton *buttonM;
 	QPushButton *buttonEnd;
-	//the console is just an html display
-	QTextEdit *console;
-	Human *humans[6];
-	Human currentCharacter;
-	QLabel *theSitch;
-	int moves;
+
+	QPushButton *buttonMoveUp;
+	QPushButton *buttonMoveRight;
+	QPushButton *buttonMoveDown;
+	QPushButton *buttonMoveLeft;
+	QPushButton *buttonMoveStop;
 
 public:
 	MainWindow(QWidget *parent = 0);
