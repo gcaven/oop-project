@@ -29,6 +29,8 @@ private:
 	QTableWidget *table;
 	QVBoxLayout *statsLayout;
 	QVBoxLayout *movementLayout;
+	QVBoxLayout *actionsLayout;
+	QHBoxLayout *bottomLayout;
 	QLabel *stats;
 	QPushButton *buttonStart;
 	QPushButton *buttonA;

@@ -4,51 +4,54 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 };
 
 void MainWindow::decorate() {
+	//actions panel
 	QLabel *theSitch = new QLabel("In WATER: ATK down, SPD down\nRanged attacks not possible");
 	this->theSitch = theSitch;
 	buttonA = new QPushButton("Attack");
 	buttonR = new QPushButton("Ranged");
 	buttonM = new QPushButton("Move");
 	buttonEnd = new QPushButton("End Turn");
-
 	buttonA->setEnabled(false);
 	buttonR->setEnabled(false);
 	buttonM->setEnabled(false);
 	buttonEnd->setEnabled(false);
-
 	QObject::connect(buttonA, SIGNAL(clicked()), this, SLOT(attackSlot()));
     QObject::connect(buttonR, SIGNAL(clicked()), this, SLOT(rangedSlot()));
     QObject::connect(buttonM, SIGNAL(clicked()), this, SLOT(moveSlot()));
     QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(endTurnSlot()));
+	actionsLayout = new QVBoxLayout();
+	actionsLayout->addWidget(theSitch);
+	actionsLayout->addWidget(buttonA);
+	actionsLayout->addWidget(buttonR);
+	actionsLayout->addWidget(buttonM);
+	actionsLayout->addWidget(buttonEnd);
 
-	QVBoxLayout *actions = new QVBoxLayout();
-	actions->addWidget(theSitch);
-	actions->addWidget(buttonA);
-	actions->addWidget(buttonR);
-	actions->addWidget(buttonM);
-	actions->addWidget(buttonEnd);
-
+	//start game panel
 	buttonStart = new QPushButton("Start");
 	QObject::connect(buttonStart, SIGNAL(clicked()), this, SLOT(startGameSlot()));
 	stats = new QLabel("");
-
 	statsLayout = new QVBoxLayout();
 	statsLayout->addWidget(buttonStart);
 
+	//movement panel
 	movementLayout = new QVBoxLayout();
-
 	QPushButton *buttonMoveUp = new QPushButton("Move Up");
 	QPushButton *buttonMoveRight = new QPushButton("Move Right");
 	QPushButton *buttonMoveDown = new QPushButton("Move Down");
 	QPushButton *buttonMoveLeft = new QPushButton("Move Left");
 	QPushButton *buttonMoveStop = new QPushButton("Stop Moving");
-
 	QObject::connect(buttonMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSlot()));
 	QObject::connect(buttonMoveRight, SIGNAL(clicked()), this, SLOT(moveRightSlot()));
 	QObject::connect(buttonMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSlot()));
 	QObject::connect(buttonMoveLeft, SIGNAL(clicked()), this, SLOT(moveLeftSlot()));
 	QObject::connect(buttonMoveStop, SIGNAL(clicked()), this, SLOT(moveStopSlot()));
+	movementLayout->addWidget(buttonMoveUp);
+	movementLayout->addWidget(buttonMoveRight);
+	movementLayout->addWidget(buttonMoveDown);
+	movementLayout->addWidget(buttonMoveLeft);
+	movementLayout->addWidget(buttonMoveStop);
 
+	//turn order panel
 	turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
 	turnOrder->setFixedHeight(180);
@@ -58,15 +61,16 @@ void MainWindow::decorate() {
 	header = turnOrder->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
-	
-	QHBoxLayout *layout = new QHBoxLayout();
-	layout->addWidget(turnOrder);
-	layout->addLayout(statsLayout);
-	layout->addLayout(actions);
 
+	//put bottom stuff together
+	bottomLayout = new QHBoxLayout();
+	bottomLayout->addWidget(turnOrder);
+	bottomLayout->addLayout(statsLayout);
+	bottomLayout->addLayout(actionsLayout);
+
+	//build the board
 	int width = 10;
 	int height = 10;
-
 	table = new QTableWidget(width,height);
 	table->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     table->setMinimumWidth(500);
@@ -79,19 +83,22 @@ void MainWindow::decorate() {
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
 
+	//make it happen
 	generate(width, height);
 
+	//put left half together
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
-	layoutVert->addLayout(layout);
+	layoutVert->addLayout(bottomLayout);
 
+	//console
 	console = new QTextEdit();
 	console->setReadOnly(true);
 
+	//put left half and console together
 	QHBoxLayout *topLevel = new QHBoxLayout();
 	topLevel->addLayout(layoutVert);
 	topLevel->addWidget(console);
-
 	setLayout(topLevel);
 	setWindowTitle("Adventure Battle");
 
@@ -125,20 +132,24 @@ void MainWindow::generate(int width, int height) {
     }
 
     qsrand(time(NULL));
+    //generate some humans
     Ally allies[3];
     Enemy enemies[3];
+    //place allies(adventurers) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
     	allies[i].generateLocation(&board, humans, i);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
+    //place enemies(bandits) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
     	enemies[i].generateLocation(&board, humans, i+3);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
     }
+    //show human locations on the board UI
     QFont font;
 	font.setBold(true);
 	font.setPointSize(18);
@@ -156,6 +167,7 @@ void MainWindow::generate(int width, int height) {
     		table->setItem(y,x,item);
     	}
     }
+    //fill in the turn queue UI
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
         Human temp = turnQueue.dequeue();

@@ -1,7 +1,9 @@
 #include "Human.h"
 
 Human::Human() {
-	//figure out name picking logic
+	//pick random name
+	//this file lives in the .app
+	//don't know where it goes in windows, prob in the same folder as the .exe
 	QMessageBox error;
 	QString filename = QCoreApplication::applicationDirPath() + "/names.txt";
 	QFile file(filename);
@@ -17,6 +19,8 @@ Human::Human() {
 	file.close();
 	name = namesVector.at(qrand()%namesVector.size());
 	alive = true;
+	//generate stuff ((max+1)-min)+min)
+	//change this to min + (rand() % (int)(max - min + 1)) for more even distribution
 	health = qrand()%((30+1) - 10) + 10;
 	currentHealth = health;
 	speed = qrand()%((3+1) - 1) + 1;
@@ -50,6 +54,8 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 	}
 
 	bool goodlocation = false;
+	//make sure there are no other humans or boulders on the tile
+	//if there is, choose another one
 	while (!goodlocation) {
 		goodlocation = true;
 		for (int i = 0; i < size; i++) {
