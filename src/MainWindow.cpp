@@ -326,40 +326,62 @@ void MainWindow::moveSlot() {
 	moves = currentCharacter.speed;
 }
 
+//move character y+1;
 void MainWindow::moveUpSlot() {
-	moves--;
-	//move character y+1;
-	if (moves <= 0) {
-		stopMoving();
-	}
+	//board UI reverses y, we reverse it here to match what players would expect
+	move(0,-1);
 }
 
+//move character x+1;
 void MainWindow::moveRightSlot() {
-	moves--;
-	//move character x+1;
-	if (moves <= 0) {
-		stopMoving();
-	}
+	move(1,0);
 }
 
+//move character y-1;
 void MainWindow::moveDownSlot() {
-	moves--;
-	//move character y-1;
-	if (moves <= 0) {
-		stopMoving();
-	}
+	//board UI reverses y, we reverse it here to match what players would expect
+	move(0,1);
 }
 
+//move character x-1;
 void MainWindow::moveLeftSlot() {
-	moves--;
-	//move character x-1;
-	if (moves <= 0) {
-		stopMoving();
-	}
+	move(-1,0);
 }
 
 void MainWindow::moveStopSlot() {
 	stopMoving();
+}
+
+void MainWindow::move(int x,int y) {
+	//need to check for boulders, other humans, edges of board
+	//probably could share code with generateLocation()
+	//helper function file?
+	int xOld = currentCharacter.x;
+	int yOld = currentCharacter.y;
+	currentCharacter.x += x;
+	currentCharacter.y += y;
+	int xNew = currentCharacter.x;
+	int yNew = currentCharacter.y;
+    QTableWidgetItem *item = table->takeItem(yOld,xOld);
+    item->setText("");
+    table->setItem(yOld,xOld,item);
+    item = table->takeItem(yNew,xNew);
+    QFont font;
+	font.setBold(true);
+	font.setPointSize(18);
+    if (item != nullptr) {
+    	if (currentCharacter.enemy)
+    		item->setText("B");
+    	else 
+    		item->setText("A");
+    	item->setTextAlignment(Qt::AlignCenter);
+    	item->setFont(font);
+    	table->setItem(yNew,xNew,item);
+    }
+    moves--;
+    if (moves <= 0) {
+		stopMoving();
+	}
 }
 
 void MainWindow::stopMoving() {

@@ -56,6 +56,7 @@ public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
+	void move(int x, int y);
 	void stopMoving();
 
 private slots:
