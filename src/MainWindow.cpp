@@ -56,14 +56,22 @@ void MainWindow::decorate() {
 	buttonMoveStop->hide();
 
 	//attack buttons
-	attackA = new QPushButton("targetA");
-	attackB = new QPushButton("targetB");
-	QObject::connect(attackA, SIGNAL(clicked()), this, SLOT(attackSlot()));
-	QObject::connect(attackB, SIGNAL(clicked()), this, SLOT(attackSlot()));
-	actionsLayout->addWidget(buttonMoveUp);
-	actionsLayout->addWidget(buttonMoveRight);
-	attackA->hide();
-	attackB->hide();
+	targetA = new QPushButton("targetA");
+	targetB = new QPushButton("targetB");
+	targetC = new QPushButton("targetC");
+	targetD = new QPushButton("targetD");
+	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	QObject::connect(targetD, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	actionsLayout->addWidget(targetA);
+	actionsLayout->addWidget(targetB);
+	actionsLayout->addWidget(targetC);
+	actionsLayout->addWidget(targetD);
+	targetA->hide();
+	targetB->hide();
+	targetC->hide();
+	targetD->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -235,45 +243,60 @@ void MainWindow::attackSlot() {
 	buttonM->hide();
 	buttonEnd->hide();
 	//show targets within range
-	attackA->show();
-	attackB->show();
-	
+	targetA->show();
+	targetB->show();
+	targetC->show();
+	targetD->show();
 
-	bool stop = false;
-	while(!stop) {
+	/*
+	//if there are players adjacent to character
+	if(!checkLocation(&board,humans,6,currentCharacter.x + 1,currentCharacter.y)) {
+
+	}
+	else if(!checkLocation(&board,humans,6,currentCharacter.x - 1,currentCharacter.y)) {
+
+	}
+	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y + 1)) {
+
+	} 
+	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y - 1)) {
+
+	}
 		
-		//if position of target is adjacent to current
-		if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
-			if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
-				int damage = currentCharacter.attack - target.defense;
-				if(damage < 0)
-					damage = 0;
-				else{
-					target.health -= damage;
-				}
+	//if position of target is adjacent to current
+	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
+		if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
+			int damage = currentCharacter.attack - target.defense;
+			if(damage < 0)
+				damage = 0;
+			else{
+				target.health -= damage;
+			}
 
-				consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target.name + ".";
-				console->append(QString::fromStdString(consoleText));
-				
-				//if attack kills target
-				if(target.health <= 0){
-					target.alive = false;
-					consoleText = currentCharacter.name + " has been felled.";
-					console->append(QString::fromStdString(consoleText));
-				}
-				stop = true;
-			}
-			else {
-				consoleText = "Cannot attack this player.";
+			consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target.name + ".";
+			console->append(QString::fromStdString(consoleText));
+			
+			//if attack kills target
+			if(target.health <= 0){
+				target.alive = false;
+				consoleText = currentCharacter.name + " has been felled.";
 				console->append(QString::fromStdString(consoleText));
 			}
-		} 
-		//if not, current cannot attack the specified target
+			stopAttacking();
+		}
 		else {
 			consoleText = "Cannot attack this player.";
 			console->append(QString::fromStdString(consoleText));
+			attackSlot();
 		}
-	}
+	} 
+	//if not, current cannot attack the specified target
+	else {
+		consoleText = "Cannot attack this player.";
+		console->append(QString::fromStdString(consoleText));
+		attackSlot();
+	}*/
+
 }
 
 void MainWindow::rangedSlot() {
@@ -327,6 +350,23 @@ void MainWindow::rangedSlot() {
 			console->append(QString::fromStdString(consoleText));
 		}
 	}
+}
+
+void MainWindow::stopAttacking() {
+	//hide attack buttons
+	targetA->hide();
+	targetB->hide();
+	targetC->hide();
+	targetD->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+	//disable move button
+	buttonM->setEnabled(false);
 }
 
 void MainWindow::moveSlot() {
