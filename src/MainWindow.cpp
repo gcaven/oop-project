@@ -251,17 +251,17 @@ void MainWindow::attackSlot() {
 	targetD->show();
 
 	//if there are players adjacent to character
-	if(!checkLocation(&board,currentCharacter.x + 1,currentCharacter.y)) {
+	if(board.tiles[currentCharacter.x + 1][currentCharacter.y].isOccupied()) {
 		//set this enemy at targetA
 		
 	}
-	else if(!checkLocation(&board,currentCharacter.x - 1,currentCharacter.y)) {
+	else if(board.tiles[currentCharacter.x - 1][currentCharacter.y].isOccupied()) {
 		//set this enemy at targetB
 	}
-	else if(!checkLocation(&board,currentCharacter.x,currentCharacter.y + 1)) {
+	else if(board.tiles[currentCharacter.x][currentCharacter.y + 1].isOccupied()) {
 		//set this enemy at targetC
 	} 
-	else if(!checkLocation(&board,currentCharacter.x,currentCharacter.y - 1)) {
+	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
 		//set this enemy at targetD
 
 	}
