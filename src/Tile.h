@@ -12,9 +12,8 @@ private:
 	//These are bonuses when >0, maluses when <0.
 	int offenseBonus;
 	int defenseBonus;
-	int navigable; //false for boulders
 	int rangedPossible;
-	bool occupado;
+	Human character=nullptr;
 
 public:
 	Tile();
@@ -22,7 +21,8 @@ public:
 	void setType(Terrain type);
 	Terrain getType();
 	std::string getTypeAsString();
-	bool isOccupado();
+	bool isOccupied();
+	Human getCharacter();
 };
 
 #endif

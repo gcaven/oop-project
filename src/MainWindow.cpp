@@ -248,21 +248,23 @@ void MainWindow::attackSlot() {
 	targetC->show();
 	targetD->show();
 
-	/*
 	//if there are players adjacent to character
 	if(!checkLocation(&board,humans,6,currentCharacter.x + 1,currentCharacter.y)) {
-
+		//set this enemy at targetA
+		
 	}
 	else if(!checkLocation(&board,humans,6,currentCharacter.x - 1,currentCharacter.y)) {
-
+		//set this enemy at targetB
 	}
 	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y + 1)) {
-
+		//set this enemy at targetC
 	} 
 	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y - 1)) {
+		//set this enemy at targetD
 
 	}
-		
+	
+	/*
 	//if position of target is adjacent to current
 	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
 		if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
@@ -285,17 +287,18 @@ void MainWindow::attackSlot() {
 			stopAttacking();
 		}
 		else {
-			consoleText = "Cannot attack this player.";
+			consoleText = "Cannot attack.";
 			console->append(QString::fromStdString(consoleText));
 			attackSlot();
 		}
 	} 
 	//if not, current cannot attack the specified target
 	else {
-		consoleText = "Cannot attack this player.";
+		consoleText = "Cannot attack.";
 		console->append(QString::fromStdString(consoleText));
 		attackSlot();
 	}*/
+	stopAttacking();
 
 }
 

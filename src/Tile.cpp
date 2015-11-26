@@ -44,6 +44,22 @@ std::string Tile::getTypeAsString() {
 	}
 }
 
-bool Tile::isOccupado() {
-	return occupado;
+bool Tile::isOccupied() {
+	if(character != nullptr) {
+		return true;
+	}
+	return false;
 }
+
+Human Tile::getCharacter() {
+	if(isOccupied()) {
+		return character;
+	}
+}
+
+void Tile::setCharacter(Human guy) {
+	character = guy;
+}
+
+
+
