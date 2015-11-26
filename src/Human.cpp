@@ -69,6 +69,7 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 	}
 	x = xGen;
 	y = yGen;
+	board->tiles[x][y].setCharacter(this);
 	return;
 }
 
@@ -91,15 +92,8 @@ bool checkLocation(Board *board, Human **humans, int size, int x, int y) {
 			goodlocation = false;
 	} else if (board->tiles[x][y].getType() == BOULDER) {
 			goodlocation = false;
-	}
-	if (goodlocation) {
-		for (int i = 0; i < size; i++) {
-			int xHum = humans[i]->x;
-			int yHum = humans[i]->y;
-			if (xHum == x && yHum == y) {
-				goodlocation = false;
-			}
-		}
+	} else if (board->tiles[x][y].isOccupied()) {
+		goodlocation = false;
 	}
 	return goodlocation;
 }

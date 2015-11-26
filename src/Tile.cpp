@@ -2,10 +2,12 @@
 
 Tile::Tile() {
 	setType(PLAIN);
+	character = nullptr;
 }
 
 Tile::Tile(Terrain type) {
 	setType(type);
+	character = nullptr;
 }
 
 void Tile::setType(Terrain type) {

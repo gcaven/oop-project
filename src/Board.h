@@ -1,6 +1,7 @@
-#include "Tile.h"
 #ifndef BOARD
 #define BOARD
+
+#include "Tile.h"
 
 class Board {
 private:

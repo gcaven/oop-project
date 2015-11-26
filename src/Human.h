@@ -1,3 +1,6 @@
+#ifndef HUMAN
+#define HUMAN
+
 #include <string>
 #include <qglobal.h>
 #include <QFile>
@@ -8,8 +11,6 @@
 #include <vector>
 #include "Item.h"
 #include "Board.h"
-#ifndef HUMAN
-#define HUMAN
 
 class Human {
 public:
