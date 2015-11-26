@@ -48,9 +48,9 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 	int xGen = 0 + qrand()%(int)(9-0+1);
 	int yGen;
 	if (enemy) {
-		yGen = 8 + qrand()%(int)(9-8+1);
-	} else {
 		yGen = 0 + qrand()%(int)(1-0+1);
+	} else {
+		yGen = 8 + qrand()%(int)(9-8+1);
 	}
 
 	bool goodlocation = false;
@@ -61,9 +61,9 @@ void Human::generateLocation(Board *board, Human **humans, int size) {
 		if (!goodlocation) {
 			xGen = 0 + qrand()%(int)(9-0+1);
 			if (enemy) {
-				yGen = 8 + qrand()%(int)(9-8+1);
-			} else {
 				yGen = 0 + qrand()%(int)(1-0+1);
+			} else {
+				yGen = 8 + qrand()%(int)(9-8+1);
 			}
 		}
 	}
