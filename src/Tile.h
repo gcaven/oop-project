@@ -6,9 +6,7 @@
 #include <cstdlib>
 #include <qglobal.h>
 #include "Terrain.h"
-#include "Board.h"
-
-class Human;
+#include "Human.h"
 
 class Tile {
 private:

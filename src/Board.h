@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdlib>
 #include <qglobal.h>
+#include "Human.h"
 #include "Tile.h"
 
 class Board {
@@ -21,5 +22,8 @@ public:
 	int index(int x, int y);
 	void destroy();
 };
+
+void generateLocation(Board *board, Human *human);
+bool checkLocation(Board *board, int x, int y);
 
 #endif

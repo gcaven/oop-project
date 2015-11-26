@@ -1,5 +1,4 @@
 #include "Tile.h"
-#include "Human.h"
 
 Tile::Tile() {
 	setType(PLAIN);

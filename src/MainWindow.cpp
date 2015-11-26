@@ -159,14 +159,14 @@ void MainWindow::generate(int width, int height) {
     Enemy enemies[3];
     //place allies(adventurers) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	allies[i].generateLocation(&board, humans, i);
+    	generateLocation(&board, &allies[i]);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
     //place enemies(bandits) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	enemies[i].generateLocation(&board, humans, i+3);
+    	generateLocation(&board, &enemies[i]);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
@@ -251,17 +251,17 @@ void MainWindow::attackSlot() {
 	targetD->show();
 
 	//if there are players adjacent to character
-	if(!checkLocation(&board,humans,6,currentCharacter.x + 1,currentCharacter.y)) {
+	if(!checkLocation(&board,currentCharacter.x + 1,currentCharacter.y)) {
 		//set this enemy at targetA
 		
 	}
-	else if(!checkLocation(&board,humans,6,currentCharacter.x - 1,currentCharacter.y)) {
+	else if(!checkLocation(&board,currentCharacter.x - 1,currentCharacter.y)) {
 		//set this enemy at targetB
 	}
-	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y + 1)) {
+	else if(!checkLocation(&board,currentCharacter.x,currentCharacter.y + 1)) {
 		//set this enemy at targetC
 	} 
-	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y - 1)) {
+	else if(!checkLocation(&board,currentCharacter.x,currentCharacter.y - 1)) {
 		//set this enemy at targetD
 
 	}
@@ -422,7 +422,7 @@ void MainWindow::move(int x,int y) {
 	int xNew = currentCharacter.x + x;
 	//board UI reverses y, we reverse it here to match what players would expect
 	int yNew = currentCharacter.y - y;
-	if (checkLocation(&board,humans,6,xNew,yNew)) {
+	if (checkLocation(&board,xNew,yNew)) {
 		int xOld = currentCharacter.x;
 		int yOld = currentCharacter.y;
 		currentCharacter.x += x;
