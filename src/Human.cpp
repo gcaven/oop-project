@@ -92,9 +92,13 @@ bool checkLocation(Board *board, Human **humans, int size, int x, int y) {
 	} else if (board->tiles[x][y].getType() == BOULDER) {
 			goodlocation = false;
 	}
-	for (int i = 0; i < size; i++) {
-		if (humans[i]->x == x && humans[i]->y == y) {
-			goodlocation = false;
+	if (goodlocation) {
+		for (int i = 0; i < size; i++) {
+			int xHum = humans[i]->x;
+			int yHum = humans[i]->y;
+			if (xHum == x && yHum == y) {
+				goodlocation = false;
+			}
 		}
 	}
 	return goodlocation;

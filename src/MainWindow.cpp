@@ -180,10 +180,12 @@ void MainWindow::generate(int width, int height) {
     	int y = humans[i]->y;
     	QTableWidgetItem *item = table->takeItem(y,x);
     	if (item != nullptr) {
-    		if (humans[i]->enemy)
-    			item->setText("B");
-    		else 
-    			item->setText("A");
+    		std::string boardName = humans[i]->name.substr(0,2);
+    		item->setText(QString::fromStdString(boardName));
+	    	if (humans[i]->enemy)
+	    		item->setForeground(QColor(250, 107, 107));
+	    	else 
+	    		item->setForeground(QColor(0,0,0));
     		item->setTextAlignment(Qt::AlignCenter);
     		item->setFont(font);
     		table->setItem(y,x,item);
@@ -299,7 +301,6 @@ void MainWindow::attackSlot() {
 		attackSlot();
 	}*/
 	stopAttacking();
-
 }
 
 void MainWindow::rangedSlot() {
@@ -312,7 +313,7 @@ void MainWindow::rangedSlot() {
 	Human target;
 	std::string targetname;
 
-	bool stop = false;
+	/*bool stop = false;
 	while(!stop) {
 		
 		//if position of target is on a straight x or y path to target
@@ -352,7 +353,7 @@ void MainWindow::rangedSlot() {
 			consoleText = "Cannot attack this player.";
 			console->append(QString::fromStdString(consoleText));
 		}
-	}
+	}*/
 }
 
 void MainWindow::stopAttacking() {
@@ -434,10 +435,12 @@ void MainWindow::move(int x,int y) {
 		font.setBold(true);
 		font.setPointSize(18);
 	    if (item != nullptr) {
+	    	std::string boardName = currentCharacter.name.substr(0,2);
+	    	item->setText(QString::fromStdString(boardName));
 	    	if (currentCharacter.enemy)
-	    		item->setText("B");
+	    		item->setForeground(QColor(250, 107, 107));
 	    	else 
-	    		item->setText("A");
+	    		item->setForeground(QColor(0,0,0));
 	    	item->setTextAlignment(Qt::AlignCenter);
 	    	item->setFont(font);
 	    	table->setItem(yNew,xNew,item);
@@ -497,5 +500,6 @@ void MainWindow::endTurnSlot() {
 	}
 	turnOrder->setItem(turnQueue.getSize(),0,old);
 	show();
+	//if enemy, makeAmove, disable buttons
 }
 
