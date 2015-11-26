@@ -52,12 +52,18 @@ private:
 	QPushButton *buttonMoveLeft;
 	QPushButton *buttonMoveStop;
 
+	QPushButton *targetA;
+	QPushButton *targetB;
+	QPushButton *targetC;
+	QPushButton *targetD;
+
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
 	void move(int x, int y);
 	void stopMoving();
+	void stopAttacking();
 
 private slots:
 	void startGameSlot();
