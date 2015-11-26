@@ -4,37 +4,58 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 };
 
 void MainWindow::decorate() {
+	//actions panel
 	QLabel *theSitch = new QLabel("In WATER: ATK down, SPD down\nRanged attacks not possible");
 	this->theSitch = theSitch;
 	buttonA = new QPushButton("Attack");
 	buttonR = new QPushButton("Ranged");
 	buttonM = new QPushButton("Move");
 	buttonEnd = new QPushButton("End Turn");
-
 	buttonA->setEnabled(false);
 	buttonR->setEnabled(false);
 	buttonM->setEnabled(false);
 	buttonEnd->setEnabled(false);
-
 	QObject::connect(buttonA, SIGNAL(clicked()), this, SLOT(attackSlot()));
     QObject::connect(buttonR, SIGNAL(clicked()), this, SLOT(rangedSlot()));
     QObject::connect(buttonM, SIGNAL(clicked()), this, SLOT(moveSlot()));
     QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(endTurnSlot()));
+	actionsLayout = new QVBoxLayout();
+	actionsLayout->addWidget(theSitch);
+	actionsLayout->addWidget(buttonA);
+	actionsLayout->addWidget(buttonR);
+	actionsLayout->addWidget(buttonM);
+	actionsLayout->addWidget(buttonEnd);
 
-	QVBoxLayout *actions = new QVBoxLayout();
-	actions->addWidget(theSitch);
-	actions->addWidget(buttonA);
-	actions->addWidget(buttonR);
-	actions->addWidget(buttonM);
-	actions->addWidget(buttonEnd);
-
+	//start game panel
 	buttonStart = new QPushButton("Start");
 	QObject::connect(buttonStart, SIGNAL(clicked()), this, SLOT(startGameSlot()));
 	stats = new QLabel("");
-
 	statsLayout = new QVBoxLayout();
 	statsLayout->addWidget(buttonStart);
 
+	//movement buttons
+	buttonMoveUp = new QPushButton("Move Up");
+	buttonMoveRight = new QPushButton("Move Right");
+	buttonMoveDown = new QPushButton("Move Down");
+	buttonMoveLeft = new QPushButton("Move Left");
+	buttonMoveStop = new QPushButton("Stop Moving");
+	QObject::connect(buttonMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSlot()));
+	QObject::connect(buttonMoveRight, SIGNAL(clicked()), this, SLOT(moveRightSlot()));
+	QObject::connect(buttonMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSlot()));
+	QObject::connect(buttonMoveLeft, SIGNAL(clicked()), this, SLOT(moveLeftSlot()));
+	QObject::connect(buttonMoveStop, SIGNAL(clicked()), this, SLOT(moveStopSlot()));
+	actionsLayout->addWidget(buttonMoveUp);
+	actionsLayout->addWidget(buttonMoveRight);
+	actionsLayout->addWidget(buttonMoveDown);
+	actionsLayout->addWidget(buttonMoveLeft);
+	actionsLayout->addWidget(buttonMoveStop);
+	buttonMoveUp->hide();
+	buttonMoveRight->hide();
+	buttonMoveDown->hide();
+	buttonMoveLeft->hide();
+	buttonMoveStop->hide();
+
+	//turn order panel
 	turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
 	turnOrder->setFixedHeight(180);
@@ -44,15 +65,16 @@ void MainWindow::decorate() {
 	header = turnOrder->verticalHeader();
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
-	
-	QHBoxLayout *layout = new QHBoxLayout();
-	layout->addWidget(turnOrder);
-	layout->addLayout(statsLayout);
-	layout->addLayout(actions);
 
+	//put bottom stuff together
+	bottomLayout = new QHBoxLayout();
+	bottomLayout->addWidget(turnOrder);
+	bottomLayout->addLayout(statsLayout);
+	bottomLayout->addLayout(actionsLayout);
+
+	//build the board
 	int width = 10;
 	int height = 10;
-
 	table = new QTableWidget(width,height);
 	table->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     table->setMinimumWidth(500);
@@ -65,19 +87,22 @@ void MainWindow::decorate() {
 	header->setResizeMode(QHeaderView::Stretch);
 	header->hide();
 
+	//make it happen
 	generate(width, height);
 
+	//put left half together
 	QVBoxLayout *layoutVert = new QVBoxLayout();
 	layoutVert->addWidget(table);
-	layoutVert->addLayout(layout);
+	layoutVert->addLayout(bottomLayout);
 
-	QTextEdit *console = new QTextEdit();
+	//console
+	console = new QTextEdit();
 	console->setReadOnly(true);
 
+	//put left half and console together
 	QHBoxLayout *topLevel = new QHBoxLayout();
 	topLevel->addLayout(layoutVert);
 	topLevel->addWidget(console);
-
 	setLayout(topLevel);
 	setWindowTitle("Adventure Battle");
 
@@ -100,15 +125,6 @@ void MainWindow::generate(int width, int height) {
                 case PLAIN:
                     item->setBackgroundColor(QColor(131,245,78));
                     break;
-                case HILL:
-                    item->setBackgroundColor(QColor(170,245,132));
-                    break;
-                case TREES:
-                    item->setBackgroundColor(QColor(126,179,46));
-                    break;
-                case DITCH:
-                    item->setBackgroundColor(QColor(154,176,118));
-                    break;
                 case BOULDER:
                     item->setBackgroundColor(QColor(168,168,168));
                     break;
@@ -120,20 +136,24 @@ void MainWindow::generate(int width, int height) {
     }
 
     qsrand(time(NULL));
+    //generate some humans
     Ally allies[3];
     Enemy enemies[3];
+    //place allies(adventurers) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	allies[i].generateLocation(board, humans, i);
+    	allies[i].generateLocation(&board, humans, i);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
+    //place enemies(bandits) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	enemies[i].generateLocation(board, humans, i+3);
+    	enemies[i].generateLocation(&board, humans, i+3);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
     }
+    //show human locations on the board UI
     QFont font;
 	font.setBold(true);
 	font.setPointSize(18);
@@ -151,6 +171,7 @@ void MainWindow::generate(int width, int height) {
     		table->setItem(y,x,item);
     	}
     }
+    //fill in the turn queue UI
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
         Human temp = turnQueue.dequeue();
@@ -184,25 +205,24 @@ void MainWindow::startGameSlot() {
 	buttonR->setEnabled(true);
 	buttonM->setEnabled(true);
 	buttonEnd->setEnabled(true);
+	console->append("Let the Adventure Begin!<br>");
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is getting ready to act!";
+	console->append(QString::fromStdString(consoleText));
 }
 
 void MainWindow::attackSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are attacking! bro!");
-	msgBox.exec();
-
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is winding up for an attack.";
+	console->append(QString::fromStdString(consoleText));
+	
+	//button stuff to aquire target is needed
 	Human *current = &currentCharacter;
 	Human target;
 	std::string targetname;
 	
-	//why are you using cout and cin? wont do anything. will need to add text to the console widget.
-
-	/*bool stop = false;
+	bool stop = false;
 	while(!stop) {
-		std::cout << "Enter the name of your target: " << endl;
-		std::cin >> targetname;
-
 		
 		//if position of target is adjacent to current
 		if((target.x == current.x) || (target.y == current.y)) {
@@ -213,40 +233,43 @@ void MainWindow::attackSlot() {
 				else{
 					target.health -= damage;
 				}
-				std::cout << "You have dealt " << damage << " to " << target.name << endl;
+
+				consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target.name + ".";
+				console->append(QString::fromStdString(consoleText));
 				stop = true;
 
 				//if attack kills target
 				if(target.health <= 0){
 					target.alive = false;
-					std::cout << target.name << " has been felled." << endl;
+					consoleText = currentCharacter.name + " has been felled.";
+					console->append(QString::fromStdString(consoleText));
 				}
 			}
 			else {
-				std::cout << "Cannot attack this player" << endl;
+				consoleText = "Cannot attack this player."
+				console->append(QString::fromStdString(consoleText));
 			}
 		} 
 		//if not, current cannot attack the specified target
 		else {
-			std::cout << "Cannot attack this player" << endl;
+			consoleText = "Cannot attack this player."
+			console->append(QString::fromStdString(consoleText));
 		}
-	}*/
+	}
 }
 
 void MainWindow::rangedSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are attacking from a distance! bruh!");
-	msgBox.exec();
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is readying their bow.";
+	console->append(QString::fromStdString(consoleText));
 
+	//button stuff to get target
 	Human *current = &currentCharacter;
 	Human target;
 	std::string targetname;
 
-	/*bool stop = false;
+	bool stop = false;
 	while(!stop) {
-		std::cout << "Enter the name of your target: " << endl;
-		std::cin >> targetname;
 		
 		//if position of target is on a straight x or y path to target
 		if(target.x == current.x || target.y == current.y) {
@@ -258,17 +281,21 @@ void MainWindow::rangedSlot() {
 				else{
 					target.health -= damage;
 				}
-				std::cout << "You have dealt " << damage << " to " << target.name << endl;
+
+				consoleText = currentCharacter.name + " has dealt " +  std::to_string(damage) + " to " + target.name + ".";
+				console->append(QString::fromStdString(consoleText));
 
 				//if attack kills target
 				if(target.health <= 0){
 					target.alive = false;
-					std::cout << target.name << " has been felled." << endl;
+					consoleText = currentCharacter.name + " has been felled.";
+					console->append(QString::fromStdString(consoleText));
 				}
 				stop = true;
 			}
-			else {
-				std::cout << "Cannot attack this player" << endl;
+			else {			
+				consoleText = "Cannot attack this player.";
+				console->append(QString::fromStdString(consoleText));
 			}
 		} 
 		
@@ -278,32 +305,121 @@ void MainWindow::rangedSlot() {
 
 		//if not, current cannot attack the specified target
 		else {
-			std::cout << "Cannot attack this player" << endl;
+			consoleText = "Cannot attack this player.";
+			console->append(QString::fromStdString(consoleText));
 		}
-	}*/
+	}
 }
 
 void MainWindow::moveSlot() {
-	QMessageBox msgBox;
-	msgBox.setWindowTitle("Hello");
-	msgBox.setText("You are moving! wowee!");
-	msgBox.exec();
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is on the move.";
+	console->append(QString::fromStdString(consoleText));
+	
+	//hide action buttons
+	theSitch->hide();
+	buttonA->hide();
+	buttonR->hide();
+	buttonM->hide();
+	buttonEnd->hide();
+	//show movement buttons
+	buttonMoveUp->show();
+	buttonMoveRight->show();
+	buttonMoveDown->show();
+	buttonMoveLeft->show();
+	buttonMoveStop->show();
+	moves = currentCharacter.speed;
+}
 
-	Human current = this->currentCharacter;
-	int distance = current.speed;
+//move character y+1;
+void MainWindow::moveUpSlot() {
+	move(0,1);
+}
 
-	//console input prompt for board coordinates
-	std::cout << "Where would you like to move? Ex. A0" << endl;
-	std::string xy;
-	std::cin << xy;
+//move character x+1;
+void MainWindow::moveRightSlot() {
+	move(1,0);
+}
 
+//move character y-1;
+void MainWindow::moveDownSlot() {
+	
+	move(0,-1);
+}
 
+//move character x-1;
+void MainWindow::moveLeftSlot() {
+	move(-1,0);
+}
+
+void MainWindow::moveStopSlot() {
+	stopMoving();
+}
+
+void MainWindow::move(int x,int y) {
+	int xNew = currentCharacter.x + x;
+	//board UI reverses y, we reverse it here to match what players would expect
+	int yNew = currentCharacter.y - y;
+	if (checkLocation(&board,humans,6,xNew,yNew)) {
+		int xOld = currentCharacter.x;
+		int yOld = currentCharacter.y;
+		currentCharacter.x += x;
+		currentCharacter.y -= y;
+	    QTableWidgetItem *item = table->takeItem(yOld,xOld);
+	    item->setText("");
+	    table->setItem(yOld,xOld,item);
+	    item = table->takeItem(yNew,xNew);
+	    QFont font;
+		font.setBold(true);
+		font.setPointSize(18);
+	    if (item != nullptr) {
+	    	if (currentCharacter.enemy)
+	    		item->setText("B");
+	    	else 
+	    		item->setText("A");
+	    	item->setTextAlignment(Qt::AlignCenter);
+	    	item->setFont(font);
+	    	table->setItem(yNew,xNew,item);
+	    }
+	    moves--;
+	    if (moves <= 0) {
+			stopMoving();
+		}
+	} else {
+		std::string consoleText = currentCharacter.name;
+		consoleText += " cannot move there!";
+		console->append(QString::fromStdString(consoleText));
+	}
+}
+
+void MainWindow::stopMoving() {
+	//hide movement buttons
+	buttonMoveUp->hide();
+	buttonMoveRight->hide();
+	buttonMoveDown->hide();
+	buttonMoveLeft->hide();
+	buttonMoveStop->hide();
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+	//disable move button
+	buttonM->setEnabled(false);
 }
 
 void MainWindow::endTurnSlot() {
 	turnQueue.enqueue(currentCharacter);
+	console->append("");
 	currentCharacter = turnQueue.dequeue();
 	std::string statsString = currentCharacter.name;
+	std::string consoleText = currentCharacter.name;
+	consoleText += " is getting ready to act!";
+	console->append(QString::fromStdString(consoleText));
+	buttonA->setEnabled(true);
+	buttonR->setEnabled(true);
+	buttonM->setEnabled(true);
 	if (!currentCharacter.enemy)
 		statsString += "\n\nAdventurer";
 	else 

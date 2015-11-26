@@ -27,26 +27,47 @@ private:
 	Queue turnQueue;
 	QTableWidget *turnOrder;
 	QTableWidget *table;
+	QTextEdit *console;
+
+	Human *humans[6];
+	Human currentCharacter;
+	int moves;
+
 	QVBoxLayout *statsLayout;
+	QVBoxLayout *actionsLayout;
+	QHBoxLayout *bottomLayout;
+
 	QLabel *stats;
+	QLabel *theSitch;
+
 	QPushButton *buttonStart;
 	QPushButton *buttonA;
 	QPushButton *buttonR;
 	QPushButton *buttonM;
 	QPushButton *buttonEnd;
-	Human *humans[6];
-	Human currentCharacter;
-	QLabel *theSitch;
+
+	QPushButton *buttonMoveUp;
+	QPushButton *buttonMoveRight;
+	QPushButton *buttonMoveDown;
+	QPushButton *buttonMoveLeft;
+	QPushButton *buttonMoveStop;
 
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
+	void move(int x, int y);
+	void stopMoving();
 
 private slots:
 	void startGameSlot();
 	void attackSlot();
 	void rangedSlot();
 	void moveSlot();
+	void moveUpSlot();
+	void moveRightSlot();
+	void moveDownSlot();
+	void moveLeftSlot();
+	void moveStopSlot();
 	void endTurnSlot();
 };

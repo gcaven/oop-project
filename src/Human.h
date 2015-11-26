@@ -8,6 +8,8 @@
 #include <vector>
 #include "Item.h"
 #include "Board.h"
+#ifndef HUMAN
+#define HUMAN
 
 class Human {
 public:
@@ -27,7 +29,7 @@ public:
 	Human();
 	void useItem(Item item);
 	void setId(unsigned int id);
-	void generateLocation(Board board, Human **humans, int size);
+	void generateLocation(Board *board, Human **humans, int size);
 	int initiativeRoll();
 };
 
@@ -41,3 +43,7 @@ public:
 	Enemy();
 	void makeAMove();
 };
+
+bool checkLocation(Board *board, Human **humans, int size, int x, int y);
+
+#endif
