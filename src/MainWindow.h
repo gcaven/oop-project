@@ -52,6 +52,9 @@ private:
 	QPushButton *buttonMoveLeft;
 	QPushButton *buttonMoveStop;
 
+	QPushButton *attackA;
+	QPushButton *attackB;
+
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();

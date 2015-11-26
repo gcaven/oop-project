@@ -55,6 +55,16 @@ void MainWindow::decorate() {
 	buttonMoveLeft->hide();
 	buttonMoveStop->hide();
 
+	//attack buttons
+	attackA = new QPushButton("targetA");
+	attackB = new QPushButton("targetB");
+	QObject::connect(attackA, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	QObject::connect(attackB, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	actionsLayout->addWidget(buttonMoveUp);
+	actionsLayout->addWidget(buttonMoveRight);
+	attackA->hide();
+	attackB->hide();
+
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
 	turnOrder->setFixedWidth(150);
@@ -215,19 +225,27 @@ void MainWindow::attackSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is winding up for an attack.";
 	console->append(QString::fromStdString(consoleText));
-	
-	//button stuff to aquire target is needed
-	Human *current = &currentCharacter;
+
 	Human target;
-	std::string targetname;
 	
+	//hide actions buttons
+	theSitch->hide();
+	buttonA->hide();
+	buttonR->hide();
+	buttonM->hide();
+	buttonEnd->hide();
+	//show targets within range
+	attackA->show();
+	attackB->show();
+	
+
 	bool stop = false;
 	while(!stop) {
 		
 		//if position of target is adjacent to current
-		if((target.x == current.x) || (target.y == current.y)) {
-			if((target.y == current.y - 1 || target.y == current.y + 1) || (target.x == current.x - 1 || target.x == current.x + 1)) {
-				int damage = current.attack - target.defense;
+		if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
+			if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
+				int damage = currentCharacter.attack - target.defense;
 				if(damage < 0)
 					damage = 0;
 				else{
@@ -236,23 +254,23 @@ void MainWindow::attackSlot() {
 
 				consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target.name + ".";
 				console->append(QString::fromStdString(consoleText));
-				stop = true;
-
+				
 				//if attack kills target
 				if(target.health <= 0){
 					target.alive = false;
 					consoleText = currentCharacter.name + " has been felled.";
 					console->append(QString::fromStdString(consoleText));
 				}
+				stop = true;
 			}
 			else {
-				consoleText = "Cannot attack this player."
+				consoleText = "Cannot attack this player.";
 				console->append(QString::fromStdString(consoleText));
 			}
 		} 
 		//if not, current cannot attack the specified target
 		else {
-			consoleText = "Cannot attack this player."
+			consoleText = "Cannot attack this player.";
 			console->append(QString::fromStdString(consoleText));
 		}
 	}
@@ -272,10 +290,10 @@ void MainWindow::rangedSlot() {
 	while(!stop) {
 		
 		//if position of target is on a straight x or y path to target
-		if(target.x == current.x || target.y == current.y) {
+		if(target.x == currentCharacter.x || target.y == currentCharacter.y) {
 			//if current can reach target with their dexterity stat
-			if( ((abs(target.x - current.x)) <= current.dexterity) || ((abs(target.y - current.y)) <= current.dexterity)) {
-				int damage = current.attack - target.defense;
+			if( ((abs(target.x - currentCharacter.x)) <= currentCharacter.dexterity) || ((abs(target.y - currentCharacter.y)) <= currentCharacter.dexterity)) {
+				int damage = currentCharacter.attack - target.defense;
 				if(damage < 0)
 					damage = 0;
 				else{
