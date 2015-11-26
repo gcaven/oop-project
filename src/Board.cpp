@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <qglobal.h>
 #include "Board.h"
 
 Board::Board() {

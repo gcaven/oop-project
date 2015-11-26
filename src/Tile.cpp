@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "Human.h"
 
 Tile::Tile() {
 	setType(PLAIN);
@@ -14,13 +15,11 @@ void Tile::setType(Terrain type) {
 	this->type = type;
 	offenseBonus = 0;
 	defenseBonus = 0;
-	navigable = true;
 	rangedPossible = true;
 	switch(type) {
 		case PLAIN:
 			break;
 		case BOULDER:
-			navigable = false;
 			break;
 		case WATER:
 			offenseBonus = -1;
@@ -53,13 +52,13 @@ bool Tile::isOccupied() {
 	return false;
 }
 
-Human Tile::getCharacter() {
+Human* Tile::getCharacter() {
 	if(isOccupied()) {
 		return character;
 	}
 }
 
-void Tile::setCharacter(Human guy) {
+void Tile::setCharacter(Human *guy) {
 	character = guy;
 }
 

@@ -7,7 +7,8 @@
 #include <qglobal.h>
 #include "Terrain.h"
 #include "Board.h"
-#include "Human.h"
+
+class Human;
 
 class Tile {
 private:
@@ -25,7 +26,8 @@ public:
 	Terrain getType();
 	std::string getTypeAsString();
 	bool isOccupied();
-	Human getCharacter();
+	Human* getCharacter();
+	void setCharacter(Human *guy);
 };
 
 #endif

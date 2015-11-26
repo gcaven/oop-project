@@ -1,6 +1,10 @@
 #ifndef BOARD
 #define BOARD
 
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <qglobal.h>
 #include "Tile.h"
 
 class Board {

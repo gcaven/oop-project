@@ -428,7 +428,7 @@ void MainWindow::move(int x,int y) {
 		currentCharacter.x += x;
 		currentCharacter.y -= y;
 		board.tiles[xOld][yOld].setCharacter(nullptr);
-		board.tiles[xNew][yNew].setCharacter(currentCharacter);
+		board.tiles[xNew][yNew].setCharacter(&currentCharacter);
 	    QTableWidgetItem *item = table->takeItem(yOld,xOld);
 	    item->setText("");
 	    table->setItem(yOld,xOld,item);
