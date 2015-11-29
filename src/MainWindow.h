@@ -55,7 +55,6 @@ private:
 	QPushButton *targetA;
 	QPushButton *targetB;
 	QPushButton *targetC;
-	QPushButton *targetD;
 
 public:
 	MainWindow(QWidget *parent = 0);
