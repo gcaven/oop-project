@@ -1,10 +1,12 @@
+#ifndef TILE
+#define TILE
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <qglobal.h>
 #include "Terrain.h"
-#ifndef TILE
-#define TILE
+#include "Human.h"
 
 class Tile {
 private:
@@ -13,7 +15,7 @@ private:
 	int offenseBonus;
 	int defenseBonus;
 	int rangedPossible;
-	Human character=nullptr;
+	Human *character;
 
 public:
 	Tile();
@@ -22,7 +24,8 @@ public:
 	Terrain getType();
 	std::string getTypeAsString();
 	bool isOccupied();
-	Human getCharacter();
+	Human* getCharacter();
+	void setCharacter(Human *guy);
 };
 
 #endif

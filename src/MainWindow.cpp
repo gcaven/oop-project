@@ -155,14 +155,14 @@ void MainWindow::generate(int width, int height) {
     Enemy enemies[3];
     //place allies(adventurers) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	allies[i].generateLocation(&board, humans, i);
+    	generateLocation(&board, &allies[i]);
     	humans[i] = &allies[i];
     	humans[i]->setId(i);
         turnQueue.enqueue(allies[i]);
     }
     //place enemies(bandits) on the board, put them into the humans array and the turnqueue
     for (int i=0; i < 3; i++) {
-    	enemies[i].generateLocation(&board, humans, i+3);
+    	generateLocation(&board, &enemies[i]);
     	humans[i+3] = &enemies[i];
     	humans[i]->setId(i+3);
         turnQueue.enqueue(enemies[i]);
@@ -244,6 +244,21 @@ void MainWindow::attackSlot() {
 	targetA->show();
 	targetB->show();
 	targetC->show();
+
+	//if there are players adjacent to character
+	if(board.tiles[currentCharacter.x + 1][currentCharacter.y].isOccupied()) {
+		//set this enemy at targetA
+		
+	}
+	else if(board.tiles[currentCharacter.x - 1][currentCharacter.y].isOccupied()) {
+		//set this enemy at targetB
+	}
+	else if(board.tiles[currentCharacter.x][currentCharacter.y + 1].isOccupied()) {
+		//set this enemy at targetC
+	} 
+	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
+		//set this enemy at targetD
+>>>>>>> 2fa76110b0aee76ed65eec0d714f641b55ebc97f
 
 	
 	
@@ -350,8 +365,8 @@ void MainWindow::stopAttacking() {
 	buttonR->show();
 	buttonM->show();
 	buttonEnd->show();
-	//disable move button
-	buttonM->setEnabled(false);
+	//disable attack button
+	buttonA->setEnabled(false);
 }
 
 void MainWindow::moveSlot() {
@@ -403,11 +418,13 @@ void MainWindow::move(int x,int y) {
 	int xNew = currentCharacter.x + x;
 	//board UI reverses y, we reverse it here to match what players would expect
 	int yNew = currentCharacter.y - y;
-	if (checkLocation(&board,humans,6,xNew,yNew)) {
+	if (checkLocation(&board,xNew,yNew)) {
 		int xOld = currentCharacter.x;
 		int yOld = currentCharacter.y;
 		currentCharacter.x += x;
 		currentCharacter.y -= y;
+		board.tiles[xOld][yOld].setCharacter(nullptr);
+		board.tiles[xNew][yNew].setCharacter(&currentCharacter);
 	    QTableWidgetItem *item = table->takeItem(yOld,xOld);
 	    item->setText("");
 	    table->setItem(yOld,xOld,item);

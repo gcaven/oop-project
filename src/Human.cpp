@@ -43,35 +43,6 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-void Human::generateLocation(Board *board, Human **humans, int size) {
-	//min + (rand() % (int)(max - min + 1))
-	int xGen = 0 + qrand()%(int)(9-0+1);
-	int yGen;
-	if (enemy) {
-		yGen = 0 + qrand()%(int)(1-0+1);
-	} else {
-		yGen = 8 + qrand()%(int)(9-8+1);
-	}
-
-	bool goodlocation = false;
-	//make sure there are no other humans or boulders on the tile
-	//if there is, choose another one
-	while (!goodlocation) {
-		goodlocation = checkLocation(board,humans,size,xGen,yGen);
-		if (!goodlocation) {
-			xGen = 0 + qrand()%(int)(9-0+1);
-			if (enemy) {
-				yGen = 0 + qrand()%(int)(1-0+1);
-			} else {
-				yGen = 8 + qrand()%(int)(9-8+1);
-			}
-		}
-	}
-	x = xGen;
-	y = yGen;
-	return;
-}
-
 void Enemy::makeAMove() {
 	//enemy AI will live here
 	return;
@@ -85,21 +56,4 @@ Enemy::Enemy() : Human() {
 	enemy = true;
 }
 
-bool checkLocation(Board *board, Human **humans, int size, int x, int y) {
-	bool goodlocation = true;
-	if (x < 0 || x > 9 || y < 0 || y > 9) {
-			goodlocation = false;
-	} else if (board->tiles[x][y].getType() == BOULDER) {
-			goodlocation = false;
-	}
-	if (goodlocation) {
-		for (int i = 0; i < size; i++) {
-			int xHum = humans[i]->x;
-			int yHum = humans[i]->y;
-			if (xHum == x && yHum == y) {
-				goodlocation = false;
-			}
-		}
-	}
-	return goodlocation;
-}
+

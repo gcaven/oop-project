@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <qglobal.h>
 #include "Board.h"
 
 Board::Board() {
@@ -59,4 +55,46 @@ void Board::put(int x, int y, Tile tile) {
 
 void Board::destroy() {
 	delete [] tiles;
+}
+
+void generateLocation(Board *board, Human *human) {
+	//min + (rand() % (int)(max - min + 1))
+	int xGen = 0 + qrand()%(int)(9-0+1);
+	int yGen;
+	if (human->enemy) {
+		yGen = 0 + qrand()%(int)(1-0+1);
+	} else {
+		yGen = 8 + qrand()%(int)(9-8+1);
+	}
+
+	bool goodlocation = false;
+	//make sure there are no other humans or boulders on the tile
+	//if there is, choose another one
+	while (!goodlocation) {
+		goodlocation = checkLocation(board,xGen,yGen);
+		if (!goodlocation) {
+			xGen = 0 + qrand()%(int)(9-0+1);
+			if (human->enemy) {
+				yGen = 0 + qrand()%(int)(1-0+1);
+			} else {
+				yGen = 8 + qrand()%(int)(9-8+1);
+			}
+		}
+	}
+	human->x = xGen;
+	human->y = yGen;
+	board->tiles[xGen][yGen].setCharacter(human);
+	return;
+}
+
+bool checkLocation(Board *board, int x, int y) {
+	bool goodlocation = true;
+	if (x < 0 || x > 9 || y < 0 || y > 9) {
+			goodlocation = false;
+	} else if (board->tiles[x][y].getType() == BOULDER) {
+			goodlocation = false;
+	} else if (board->tiles[x][y].isOccupied()) {
+		goodlocation = false;
+	}
+	return goodlocation;
 }
