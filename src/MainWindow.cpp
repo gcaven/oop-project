@@ -279,6 +279,7 @@ void MainWindow::attackSlot() {
 	targetA->show();
 	targetB->show();
 	targetC->show();
+	attackStop->show();
 }
 
 void MainWindow::attackTargetASlot() {
@@ -320,13 +321,13 @@ void MainWindow::attack(int index) {
 	if(damage < 0)
 		damage = 0;
 	else 
-		target->health -= damage;
+		target->currentHealth -= damage;
 
 	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
 	//if attack kills target
-	if(target->health <= 0){
+	if(target->currentHealth <= 0){
 		target->alive = false;
 		consoleText = currentCharacter->name + " has been felled.";
 		console->append(QString::fromStdString(consoleText));
@@ -639,6 +640,6 @@ void MainWindow::endTurnSlot() {
 	show();
 	//if enemy, makeAmove, disable buttons
 
-    Human::makeAmove(&board);
+    //Human::makeAmove();
 }
 
