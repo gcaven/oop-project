@@ -59,19 +59,15 @@ void MainWindow::decorate() {
 	targetA = new QPushButton("targetA");
 	targetB = new QPushButton("targetB");
 	targetC = new QPushButton("targetC");
-	targetD = new QPushButton("targetD");
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackSlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackSlot()));
-	QObject::connect(targetD, SIGNAL(clicked()), this, SLOT(attackSlot()));
 	actionsLayout->addWidget(targetA);
 	actionsLayout->addWidget(targetB);
 	actionsLayout->addWidget(targetC);
-	actionsLayout->addWidget(targetD);
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
-	targetD->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -248,23 +244,8 @@ void MainWindow::attackSlot() {
 	targetA->show();
 	targetB->show();
 	targetC->show();
-	targetD->show();
 
-	//if there are players adjacent to character
-	if(!checkLocation(&board,humans,6,currentCharacter.x + 1,currentCharacter.y)) {
-		//set this enemy at targetA
-		
-	}
-	else if(!checkLocation(&board,humans,6,currentCharacter.x - 1,currentCharacter.y)) {
-		//set this enemy at targetB
-	}
-	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y + 1)) {
-		//set this enemy at targetC
-	} 
-	else if(!checkLocation(&board,humans,6,currentCharacter.x,currentCharacter.y - 1)) {
-		//set this enemy at targetD
-
-	}
+	
 	
 	/*
 	//if position of target is adjacent to current
