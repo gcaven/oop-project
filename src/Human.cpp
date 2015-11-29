@@ -25,8 +25,11 @@ Human::Human() {
 	currentHealth = health;
 	speed = randomInt(3,2);
 	attack = randomInt(10,5);
-	defense = randomInt(10,5);
+	defense = randomInt(9,5);
 	dexterity = randomInt(3,0);
+	if (dexterity == 1) {
+		dexterity = 0;
+	}
 	x = -1;
 	y = -1;
 }
@@ -38,7 +41,6 @@ void Human::useItem(Item item) {
 void Human::setId(unsigned int id) {
 	this->id = id;
 }
-
 
 void Enemy::makeAMove(int r,Human *h) {
 	//enemy AI will live here
@@ -66,19 +68,7 @@ void Enemy::makeAMove(int r,Human *h) {
 
         }
 
-    }
-
-    else if()
-    {
-        //do ranged attack on player
-    }
-
-    else
-    {
-        //move towards closest player
-    }
-
-	return;
+    }	
 }
 
 Ally::Ally() : Human() {

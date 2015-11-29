@@ -59,7 +59,7 @@ void MainWindow::decorate() {
 	targetA = new QPushButton();
 	targetB = new QPushButton();
 	targetC = new QPushButton();
-	attackStop = new QPushButton("Stop Attacking");
+	attackStop = new QPushButton("Return");
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackTargetASlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackTargetBSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackTargetCSlot()));
@@ -77,15 +77,19 @@ void MainWindow::decorate() {
 	rangedTargetA = new QPushButton();
 	rangedTargetB = new QPushButton();
 	rangedTargetC = new QPushButton();
+	rangedStop = new QPushButton("Return");
 	QObject::connect(rangedTargetA, SIGNAL(clicked()), this, SLOT(attackRangedTargetASlot()));
 	QObject::connect(rangedTargetB, SIGNAL(clicked()), this, SLOT(attackRangedTargetBSlot()));
 	QObject::connect(rangedTargetC, SIGNAL(clicked()), this, SLOT(attackRangedTargetCSlot()));
+	QObject::connect(rangedStop, SIGNAL(clicked()), this, SLOT(stopRangedSlot()));
 	actionsLayout->addWidget(rangedTargetA);
 	actionsLayout->addWidget(rangedTargetB);
 	actionsLayout->addWidget(rangedTargetC);
+	actionsLayout->addWidget(rangedStop);
 	rangedTargetA->hide();
 	rangedTargetB->hide();
 	rangedTargetC->hide();
+	rangedStop->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -175,15 +179,15 @@ void MainWindow::generate(int width, int height) {
     for (int i=0; i < 6; i++) {
     	if (i%2) {
     		generateLocation(&board, &enemies[k]);
-    		humans[i] = &enemies[k];
-    		humans[i]->setId(i);
-        	turnQueue.enqueue(enemies[k]);
+    		humans[i] = enemies[k];
+    		humans[i].setId(i);
+        	turnQueue.enqueue(i);
         	k++;
     	} else {
     		generateLocation(&board, &allies[j]);
-    		humans[i] = &allies[j];
-    		humans[i]->setId(i);
-        	turnQueue.enqueue(allies[j]);
+    		humans[i] = allies[j];
+    		humans[i].setId(i);
+        	turnQueue.enqueue(i);
         	j++;
     	}
     	
@@ -193,13 +197,13 @@ void MainWindow::generate(int width, int height) {
 	font.setBold(true);
 	font.setPointSize(18);
     for (int i=0; i < 6; i++) {
-    	int x = humans[i]->x;
-    	int y = humans[i]->y;
+    	int x = humans[i].x;
+    	int y = humans[i].y;
     	QTableWidgetItem *item = table->takeItem(y,x);
     	if (item != nullptr) {
-    		std::string boardName = humans[i]->name.substr(0,2);
+    		std::string boardName = humans[i].name.substr(0,2);
     		item->setText(QString::fromStdString(boardName));
-	    	if (humans[i]->enemy)
+	    	if (humans[i].enemy)
 	    		item->setForeground(QColor(250, 107, 107));
 	    	else 
 	    		item->setForeground(QColor(0,0,0));
@@ -211,11 +215,12 @@ void MainWindow::generate(int width, int height) {
     //fill in the turn queue UI
     for (int i=0; i < turnQueue.getSize(); i++) {
         std::string name;
-        Human temp = turnQueue.dequeue();
-        name = temp.name;
-        turnQueue.enqueue(temp);
+        int index = turnQueue.dequeue();
+        Human *temp = &humans[index];
+        name = temp->name;
+        turnQueue.enqueue(index);
         QTableWidgetItem *item = new QTableWidgetItem(QString::fromStdString(name));
-        if (temp.enemy)
+        if (temp->enemy)
         	item->setBackgroundColor(QColor(255,128,100));
         item->setFlags(Qt::ItemIsEditable);
         turnOrder->setItem(i,0,item);
@@ -224,16 +229,17 @@ void MainWindow::generate(int width, int height) {
 }
 
 void MainWindow::startGameSlot() {
-	currentCharacter = turnQueue.dequeue();
-	std::string statsString = currentCharacter.name;
-	if (!currentCharacter.enemy)
+	int index = turnQueue.dequeue();
+	currentCharacter = &humans[index];
+	std::string statsString = currentCharacter->name;
+	if (!currentCharacter->enemy)
 		statsString += "\n\nAdventurer";
 	else 
 		statsString += "\n\nBandit";
-	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
-	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
-	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
-	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
+	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter->x) + ", Y: " + std::to_string(currentCharacter->y);
 	stats->setText(QString::fromStdString(statsString));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;
@@ -243,21 +249,21 @@ void MainWindow::startGameSlot() {
 	buttonM->setEnabled(true);
 	buttonEnd->setEnabled(true);
 	console->append("Let the Adventure Begin!<br>");
-	std::string consoleText = currentCharacter.name;
+	std::string consoleText = currentCharacter->name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
 	//highlight current player on board
-	if (!currentCharacter.enemy) {
-		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+	if (!currentCharacter->enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter->y,currentCharacter->x);
 		if (item != nullptr) {
 			item->setForeground(QColor(255,77,234));
-			table->setItem(currentCharacter.y,currentCharacter.x,item);
+			table->setItem(currentCharacter->y,currentCharacter->x,item);
 		}
 	}
 }
 
 void MainWindow::attackSlot() {
-	std::string consoleText = currentCharacter.name;
+	std::string consoleText = currentCharacter->name;
 	consoleText += " is winding up for an attack.";
 	console->append(QString::fromStdString(consoleText));
 	
@@ -268,75 +274,76 @@ void MainWindow::attackSlot() {
 	buttonM->hide();
 	buttonEnd->hide();
 	//show targets buttons
-	QString name1 = QString::fromStdString(humans[0]->name);
-	QString name2 = QString::fromStdString(humans[2]->name);
-	QString name3 = QString::fromStdString(humans[4]->name);
+	QString name1 = QString::fromStdString(humans[1].name);
+	QString name2 = QString::fromStdString(humans[3].name);
+	QString name3 = QString::fromStdString(humans[5].name);
 	targetA->setText(name1);
 	targetB->setText(name2);
 	targetC->setText(name3);
 	targetA->show();
 	targetB->show();
 	targetC->show();
+	attackStop->show();
 }
 
 void MainWindow::attackTargetASlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	if ((humans[0]->x == x+1 || humans[0]->x == x-1) && (humans[0]->y == y+1 || humans[0]->y == y-1)) {
-		attack(0);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	if ((humans[1].x == x+1 || humans[1].x == x-1 || humans[1].x == x) && (humans[1].y == y+1 || humans[1].y == y-1 || humans[1].y == y)) {
+		attack(1);
 	} else {
-		std::string consoleText = humans[0]->name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attackTargetBSlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	if ((humans[2]->x == x+1 || humans[2]->x == x-1) && (humans[2]->y == y+1 || humans[2]->y == y-1)) {
-		attack(2);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	if ((humans[3].x == x+1 || humans[3].x == x-1 || humans[3].x == x) && (humans[3].y == y+1 || humans[3].y == y-1 || humans[3].y == y)) {
+		attack(3);
 	} else {
-		std::string consoleText = humans[2]->name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attackTargetCSlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	if ((humans[4]->x == x+1 || humans[4]->x == x-1) && (humans[4]->y == y+1 || humans[4]->y == y-1)) {
-		attack(4);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	if ((humans[5].x == x+1 || humans[5].x == x-1 || humans[5].x == x) && (humans[5].y == y+1 || humans[5].y == y-1 || humans[5].y == y)) {
+		attack(5);
 	} else {
-		std::string consoleText = humans[4]->name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attack(int index) {
-	Human *target = humans[index];
-	int damage = currentCharacter.attack - target->defense;
+	Human *target = &humans[index];
+	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
 	if(damage < 0)
 		damage = 0;
 	else 
-		target->health -= damage;
+		target->currentHealth -= damage;
 
-	std::string consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target->name + ".";
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
 	//if attack kills target
-	if(target->health <= 0){
+	if(target->currentHealth <= 0){
 		target->alive = false;
-		consoleText = currentCharacter.name + " has been felled.";
+		consoleText = currentCharacter->name + " has been felled.";
 		console->append(QString::fromStdString(consoleText));
 	}
 	stopAttacking();
 }
 
 void MainWindow::rangedSlot() {
-	if (board.tiles[currentCharacter.x][currentCharacter.y].getType() == WATER) {
+	if (board.tiles[currentCharacter->x][currentCharacter->y].getType() == WATER) {
 		console->append("Cannot use ranged attacks from water!");
 	} else {
-		std::string consoleText = currentCharacter.name;
+		std::string consoleText = currentCharacter->name;
 		consoleText += " is readying their bow.";
 		console->append(QString::fromStdString(consoleText));
 
@@ -347,38 +354,39 @@ void MainWindow::rangedSlot() {
 		buttonM->hide();
 		buttonEnd->hide();
 		//show targets buttons
-		QString name1 = QString::fromStdString(humans[0]->name);
-		QString name2 = QString::fromStdString(humans[2]->name);
-		QString name3 = QString::fromStdString(humans[4]->name);
+		QString name1 = QString::fromStdString(humans[1].name);
+		QString name2 = QString::fromStdString(humans[3].name);
+		QString name3 = QString::fromStdString(humans[5].name);
 		rangedTargetA->setText(name1);
 		rangedTargetB->setText(name2);
 		rangedTargetC->setText(name3);
 		rangedTargetA->show();
 		rangedTargetB->show();
 		rangedTargetC->show();
+		rangedStop->show();
 	}
 
 		/*bool stop = false;
 		while(!stop) {
 			
 			//if position of target is on a straight x or y path to target
-			if(target.x == currentCharacter.x || target.y == currentCharacter.y) {
+			if(target.x == currentCharacter->x || target.y == currentCharacter->y) {
 				//if current can reach target with their dexterity stat
-				if( ((abs(target.x - currentCharacter.x)) <= currentCharacter.dexterity) || ((abs(target.y - currentCharacter.y)) <= currentCharacter.dexterity)) {
-					int damage = currentCharacter.attack - target.defense;
+				if( ((abs(target.x - currentCharacter->x)) <= currentCharacter->dexterity) || ((abs(target.y - currentCharacter->y)) <= currentCharacter->dexterity)) {
+					int damage = currentCharacter->attack - target.defense;
 					if(damage < 0)
 						damage = 0;
 					else{
 						target.health -= damage;
 					}
 
-					consoleText = currentCharacter.name + " has dealt " +  std::to_string(damage) + " to " + target.name + ".";
+					consoleText = currentCharacter->name + " has dealt " +  std::to_string(damage) + " to " + target.name + ".";
 					console->append(QString::fromStdString(consoleText));
 
 					//if attack kills target
 					if(target.health <= 0){
 						target.alive = false;
-						consoleText = currentCharacter.name + " has been felled.";
+						consoleText = currentCharacter->name + " has been felled.";
 						console->append(QString::fromStdString(consoleText));
 					}
 					stop = true;
@@ -402,46 +410,93 @@ void MainWindow::rangedSlot() {
 }
 
 void MainWindow::attackRangedTargetASlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	int dexterity = currentCharacter.dexterity;
-	if (((humans[0]->x > x && humans[0]->x <= x+dexterity) || (humans[0]->x < x && humans[0]->x >= x-dexterity)) 
-		&& ((humans[0]->y > y && humans[0]->x <= y+dexterity) || (humans[0]->y < x && humans[0]->y >= y-dexterity))) {
-			attackRanged(0);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	int dexterity = currentCharacter->dexterity;
+	if (((humans[1].x > x && humans[1].x <= x+dexterity && humans[1].y == y) || (humans[1].x < x && humans[1].x >= x-dexterity && humans[1].y == y)) 
+		|| ((humans[1].y > y && humans[1].x <= y+dexterity && humans[1].x == x) || (humans[1].y < x && humans[1].y >= y-dexterity && humans[1].x == x))) {
+			attack(1);
 	} else {
-		std::string consoleText = humans[0]->name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attackRangedTargetBSlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	int dexterity = currentCharacter.dexterity;
-	if (((humans[2]->x > x && humans[2]->x <= x+dexterity) || (humans[2]->x < x && humans[2]->x >= x-dexterity)) 
-		&& ((humans[2]->y > y && humans[2]->x <= y+dexterity) || (humans[2]->y < x && humans[2]->y >= y-dexterity))) {
-			attackRanged(2);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	int dexterity = currentCharacter->dexterity;
+	if (((humans[3].x > x && humans[3].x <= x+dexterity && humans[3].y == y) || (humans[3].x < x && humans[3].x >= x-dexterity && humans[3].y == y)) 
+		|| ((humans[3].y > y && humans[3].x <= y+dexterity && humans[3].x == x) || (humans[3].y < x && humans[3].y >= y-dexterity && humans[3].x == x))) {
+			attack(3);
 	} else {
-		std::string consoleText = humans[2]->name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attackRangedTargetCSlot() {
-	int x = currentCharacter.x;
-	int y = currentCharacter.y;
-	int dexterity = currentCharacter.dexterity;
-	if (((humans[4]->x > x && humans[4]->x <= x+dexterity) || (humans[4]->x < x && humans[4]->x >= x-dexterity)) 
-		&& ((humans[4]->y > y && humans[4]->x <= y+dexterity) || (humans[4]->y < x && humans[4]->y >= y-dexterity))) {
-			attackRanged(4);
+	int x = currentCharacter->x;
+	int y = currentCharacter->y;
+	int dexterity = currentCharacter->dexterity;
+	if (((humans[5].x > x && humans[5].x <= x+dexterity && humans[5].y == y) || (humans[5].x < x && humans[5].x >= x-dexterity && humans[5].y == y)) 
+		|| ((humans[5].y > y && humans[5].x <= y+dexterity && humans[5].x == x) || (humans[5].y < x && humans[5].y >= y-dexterity && humans[5].x == x))) {
+			attack(5);
 	} else {
-		std::string consoleText = humans[4]->name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
 
 void MainWindow::attackRanged(int index) {
+	Human *target = &humans[index];
+	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
+	if(damage < 0)
+		damage = 0;
+	else 
+		target->currentHealth -= damage;
 
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
+	console->append(QString::fromStdString(consoleText));
+	
+	//if attack kills target
+	if(target->currentHealth <= 0){
+		target->alive = false;
+		consoleText = currentCharacter->name + " has been felled.";
+		console->append(QString::fromStdString(consoleText));
+	}
+	stopRanged();
+}
+
+void MainWindow::stopRangedSlot() {
+	//hide attack buttons
+	rangedTargetA->hide();
+	rangedTargetB->hide();
+	rangedTargetC->hide();
+	rangedStop->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+}
+
+void MainWindow::stopRanged() {
+	//hide attack buttons
+	rangedTargetA->hide();
+	rangedTargetB->hide();
+	rangedTargetC->hide();
+	rangedStop->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+	buttonR->setEnabled(false);
 }
 
 void MainWindow::stopAttacking() {
@@ -476,7 +531,7 @@ void MainWindow::stopAttackingSlot() {
 }
 
 void MainWindow::moveSlot() {
-	std::string consoleText = currentCharacter.name;
+	std::string consoleText = currentCharacter->name;
 	consoleText += " is on the move.";
 	console->append(QString::fromStdString(consoleText));
 	
@@ -492,7 +547,7 @@ void MainWindow::moveSlot() {
 	buttonMoveDown->show();
 	buttonMoveLeft->show();
 	buttonMoveStop->show();
-	moves = currentCharacter.speed;
+	moves = currentCharacter->speed;
 }
 
 //move character y+1;
@@ -521,16 +576,16 @@ void MainWindow::moveStopSlot() {
 }
 
 void MainWindow::move(int x,int y) {
-	int xNew = currentCharacter.x + x;
+	int xNew = currentCharacter->x + x;
 	//board UI reverses y, we reverse it here to match what players would expect
-	int yNew = currentCharacter.y - y;
+	int yNew = currentCharacter->y - y;
 	if (checkLocation(&board,xNew,yNew)) {
-		int xOld = currentCharacter.x;
-		int yOld = currentCharacter.y;
-		currentCharacter.x += x;
-		currentCharacter.y -= y;
+		int xOld = currentCharacter->x;
+		int yOld = currentCharacter->y;
+		currentCharacter->x += x;
+		currentCharacter->y -= y;
 		board.tiles[xOld][yOld].setCharacter(nullptr);
-		board.tiles[xNew][yNew].setCharacter(&currentCharacter);
+		board.tiles[xNew][yNew].setCharacter(currentCharacter);
 	    QTableWidgetItem *item = table->takeItem(yOld,xOld);
 	    item->setText("");
 	    table->setItem(yOld,xOld,item);
@@ -539,9 +594,9 @@ void MainWindow::move(int x,int y) {
 		font.setBold(true);
 		font.setPointSize(18);
 	    if (item != nullptr) {
-	    	std::string boardName = currentCharacter.name.substr(0,2);
+	    	std::string boardName = currentCharacter->name.substr(0,2);
 	    	item->setText(QString::fromStdString(boardName));
-	    	if (currentCharacter.enemy)
+	    	if (currentCharacter->enemy)
 	    		item->setForeground(QColor(250, 107, 107));
 	    	else 
 	    		item->setForeground(QColor(0,0,0));
@@ -554,7 +609,7 @@ void MainWindow::move(int x,int y) {
 			stopMoving();
 		}
 	} else {
-		std::string consoleText = currentCharacter.name;
+		std::string consoleText = currentCharacter->name;
 		consoleText += " cannot move there!";
 		console->append(QString::fromStdString(consoleText));
 	}
@@ -579,23 +634,25 @@ void MainWindow::stopMoving() {
 
 void MainWindow::endTurnSlot() {
 	//put current character back in queue
-	if (!currentCharacter.enemy) {
-		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+	if (!currentCharacter->enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter->y,currentCharacter->x);
 		if (item != nullptr) {
 			item->setForeground(QColor(0,0,0));
-			table->setItem(currentCharacter.y,currentCharacter.x,item);
+			table->setItem(currentCharacter->y,currentCharacter->x,item);
 		}	
 	}
-	turnQueue.enqueue(currentCharacter);
+	turnQueue.enqueue(currentCharacter->id);
 	console->append("");
 	//get the new guy
-	currentCharacter = turnQueue.dequeue();
-	std::string statsString = currentCharacter.name;
-	std::string consoleText = currentCharacter.name;
+	int index = turnQueue.dequeue();
+	currentCharacter = &humans[index];
+
+	std::string statsString = currentCharacter->name;
+	std::string consoleText = currentCharacter->name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
 	//if enemy, disable buttons
-	if (!currentCharacter.enemy) {
+	if (!currentCharacter->enemy) {
 		statsString += "\n\nAdventurer";
 		buttonA->setEnabled(true);
 		buttonR->setEnabled(true);
@@ -607,10 +664,10 @@ void MainWindow::endTurnSlot() {
 		buttonM->setEnabled(false);
 	}
 	//show current stats on UI
-	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
-	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
-	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
-	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
+	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
+	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
+	statsString += "\n\nDEF: " + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
+	statsString += "\n\nX: " + std::to_string(currentCharacter->x) + ", Y: " + std::to_string(currentCharacter->y);
 	stats->setText(QString::fromStdString(statsString));
 	//increment the turn order UI
 	QTableWidgetItem *old = turnOrder->takeItem(0,0);
@@ -620,23 +677,19 @@ void MainWindow::endTurnSlot() {
 	}
 	turnOrder->setItem(turnQueue.getSize(),0,old);
 	//hook for enemy AI
-	if (currentCharacter.enemy) {
+	if (currentCharacter->enemy) {
 		Enemy *currentEnemy = (Enemy*) &currentCharacter;
         currentEnemy->makeAMove(board.adjPlayer(currentEnemy->x,currentEnemy->y),&humans);
 		endTurnSlot();
 	} else {
 		//hightlight current player on board
-		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		QTableWidgetItem *item = table->takeItem(currentCharacter->y,currentCharacter->x);
 		if (item != nullptr) {
 			item->setForeground(QColor(255,77,234));
-			table->setItem(currentCharacter.y,currentCharacter.x,item);
+			table->setItem(currentCharacter->y,currentCharacter->x,item);
 		}	
 	}
 	show();
-
 	//if enemy, makeAmove, disable buttons
-
-
-
 }
 

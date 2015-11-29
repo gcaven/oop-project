@@ -13,11 +13,11 @@ bool Queue::emptyQueue() {
 	}
 }
 
-void Queue::enqueue(Human human) {
+void Queue::enqueue(int index) {
 	queueNode *tempPtr;
 	tempPtr = new (queueNode);
 	if (tempPtr != nullptr) {
-		tempPtr->human = human;
+		tempPtr->index = index;
 		tempPtr->prevPtr = nullptr;
 		if (emptyQueue()) {
 			front=rear=tempPtr;
@@ -31,21 +31,21 @@ void Queue::enqueue(Human human) {
 	}
 }
 
-Human Queue::dequeue() {
-	Human x;
+int Queue::dequeue() {
+	int index;
 	queueNode *tempPtr;
 	if (emptyQueue()) {
 		exit(EXIT_FAILURE);
 	} else {
 		tempPtr = front;
-		x = front->human;
+		index = front->index;
 		front = front->prevPtr;
 		if (front == nullptr) 
 			rear = nullptr;
 		else
 			delete tempPtr;
 		size--;
-		return x;
+		return index;
 	}
 }
 
@@ -57,7 +57,7 @@ std::string Queue::print() {
 	queueNode *tempPtr;
 	tempPtr = front;
 	while(tempPtr != nullptr) {
-		string += tempPtr->human.name;
+		string += std::to_string(tempPtr->index);
 		string += "\n";
 		tempPtr = tempPtr->prevPtr;
 	}

@@ -29,8 +29,8 @@ private:
 	QTableWidget *table;
 	QTextEdit *console;
 
-	Human *humans[6];
-	Human currentCharacter;
+	Human humans[6];
+	Human *currentCharacter;
 	int moves;
 
 	QVBoxLayout *statsLayout;
@@ -60,6 +60,7 @@ private:
 	QPushButton *rangedTargetA;
 	QPushButton *rangedTargetB;
 	QPushButton *rangedTargetC;
+	QPushButton *rangedStop;
 
 public:
 	MainWindow(QWidget *parent = 0);
@@ -70,6 +71,7 @@ public:
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();
+	void stopRanged();
 
 private slots:
 	void startGameSlot();
@@ -92,5 +94,6 @@ private slots:
 	void moveStopSlot();
 
 	void endTurnSlot();
-	void stopAttackingSlot();
+	void stopAttackingSlot();	
+	void stopRangedSlot();
 };
