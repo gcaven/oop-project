@@ -17,7 +17,7 @@ Human::Human() {
 		namesVector.push_back(line.toStdString());
 	}
 	file.close();
-	name = namesVector.at(randomInt(%namesVector.size(),0));
+	name = namesVector.at(randomInt(namesVector.size()-1,0));
 	alive = true;
 	//generate stuff ((max+1)-min)+min)
 	//change this to min + (rand() % (int)(max - min + 1)) for more even distribution
@@ -50,6 +50,12 @@ Ally::Ally() : Human() {
 
 Enemy::Enemy() : Human() {
 	enemy = true;
+}
+
+int randomInt(int max, int min) {
+	int rando = (min + (qrand() % (int)(max - min + 1)));
+	//classic rando
+	return rando;
 }
 
 

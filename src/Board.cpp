@@ -61,9 +61,9 @@ void generateLocation(Board *board, Human *human) {
 	int xGen = randomInt(9,0);
 	int yGen;
 	if (human->enemy) {
-		yGen = randomInt(9,0);
+		yGen = randomInt(1,0);
 	} else {
-		yGen = randomInt(9,0);
+		yGen = randomInt(9,8);
 	}
 
 	bool goodlocation = false;

@@ -228,6 +228,14 @@ void MainWindow::startGameSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
+	//highlight current player on board
+	if (!currentCharacter.enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(255,77,234));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}
+	}
 }
 
 void MainWindow::attackSlot() {
@@ -261,7 +269,7 @@ void MainWindow::attackSlot() {
 	} 
 	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
 		//set this enemy at targetD
-
+	}
 	/*
 	//if position of target is adjacent to current
 	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
@@ -357,7 +365,6 @@ void MainWindow::stopAttacking() {
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
-	targetD->hide();
 
 	//show action buttons
 	theSitch->show();
@@ -473,6 +480,13 @@ void MainWindow::stopMoving() {
 
 void MainWindow::endTurnSlot() {
 	//put current character back in queue
+	if (!currentCharacter.enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(0,0,0));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}	
+	}
 	turnQueue.enqueue(currentCharacter);
 	console->append("");
 	//get the new guy
@@ -511,6 +525,13 @@ void MainWindow::endTurnSlot() {
 		Enemy *currentEnemy = (Enemy*) &currentCharacter;
 		currentEnemy->makeAMove();
 		endTurnSlot();
+	} else {
+		//hightlight current player on board
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(255,77,234));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}	
 	}
 	show();
 }
