@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <vector>
 #include "Item.h"
+#include "Board.h"
 
 class Human {
 public:
@@ -39,9 +40,10 @@ public:
 class Enemy : public Human {
 public:
 	Enemy();
-	void makeAMove();
+    void makeAMove(Board *b);
 };
 
 int randomInt(int max, int min);
 
 #endif
+
