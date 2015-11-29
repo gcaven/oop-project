@@ -55,6 +55,8 @@ private:
 	QPushButton *targetA;
 	QPushButton *targetB;
 	QPushButton *targetC;
+	QPushButton *attackStop;
+
 	QPushButton *rangedTargetA;
 	QPushButton *rangedTargetB;
 	QPushButton *rangedTargetC;
@@ -90,4 +92,5 @@ private slots:
 	void moveStopSlot();
 
 	void endTurnSlot();
+	void stopAttackingSlot();
 };
