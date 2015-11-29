@@ -25,6 +25,7 @@ public:
 	std::string getTypeAsString();
 	bool isOccupied();
 	bool isOccupiedByPlayer();
+	bool isOccupiedByEnemy();
 	Human* getCharacter();
 	void setCharacter(Human *guy);
 };
