@@ -633,11 +633,8 @@ void MainWindow::endTurnSlot() {
 		}	
 	}
 	show();
-<<<<<<< HEAD
 	//if enemy, makeAmove, disable buttons
 
     Human::makeAmove(&board);
-=======
->>>>>>> b74c49e62fd7060004dd5b6db5b3f6391e12c842
 }
 

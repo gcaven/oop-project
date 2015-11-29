@@ -43,10 +43,7 @@ public:
     void makeAMove(Board *b);
 };
 
-<<<<<<< HEAD
-#endif
-=======
 int randomInt(int max, int min);
 
 #endif
->>>>>>> b74c49e62fd7060004dd5b6db5b3f6391e12c842
+
