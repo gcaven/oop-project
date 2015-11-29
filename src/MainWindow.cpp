@@ -148,8 +148,6 @@ void MainWindow::generate(int width, int height) {
             }
         }
     }
-
-    qsrand(time(NULL));
     //generate some humans
     Ally allies[3];
     Enemy enemies[3];
