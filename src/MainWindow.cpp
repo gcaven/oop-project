@@ -488,13 +488,17 @@ void MainWindow::endTurnSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
-	buttonA->setEnabled(true);
-	buttonR->setEnabled(true);
-	buttonM->setEnabled(true);
-	if (!currentCharacter.enemy)
+	if (!currentCharacter.enemy) {
 		statsString += "\n\nAdventurer";
-	else 
+		buttonA->setEnabled(true);
+		buttonR->setEnabled(true);
+		buttonM->setEnabled(true);
+	} else {
 		statsString += "\n\nBandit";
+		buttonA->setEnabled(false);
+		buttonR->setEnabled(false);
+		buttonM->setEnabled(false);
+	}
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
@@ -506,6 +510,11 @@ void MainWindow::endTurnSlot() {
 		turnOrder->setItem(i-1,0,pushup);
 	}
 	turnOrder->setItem(turnQueue.getSize(),0,old);
+	if (currentCharacter.enemy) {
+		Enemy *currentEnemy = (Enemy*) &currentCharacter;
+		currentEnemy->makeAMove();
+		endTurnSlot();
+	}
 	show();
 	//if enemy, makeAmove, disable buttons
 }
