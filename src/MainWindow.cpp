@@ -56,9 +56,9 @@ void MainWindow::decorate() {
 	buttonMoveStop->hide();
 
 	//attack buttons
-	targetA = new QPushButton("targetA");
-	targetB = new QPushButton("targetB");
-	targetC = new QPushButton("targetC");
+	targetA = new QPushButton();
+	targetB = new QPushButton();
+	targetC = new QPushButton();
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackSlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackSlot()));
@@ -245,7 +245,13 @@ void MainWindow::attackSlot() {
 	buttonR->hide();
 	buttonM->hide();
 	buttonEnd->hide();
-	//show targets within range
+	//show targets buttons
+	QString name1 = QString::fromStdString(humans[0]->name);
+	QString name2 = QString::fromStdString(humans[2]->name);
+	QString name3 = QString::fromStdString(humans[4]->name);
+	targetA->setText(name1);
+	targetB->setText(name2);
+	targetC->setText(name3);
 	targetA->show();
 	targetB->show();
 	targetC->show();
@@ -261,9 +267,6 @@ void MainWindow::attackSlot() {
 	else if(board.tiles[currentCharacter.x][currentCharacter.y + 1].isOccupied()) {
 		//set this enemy at targetC
 	} 
-	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
-		//set this enemy at targetD
->>>>>>> 2fa76110b0aee76ed65eec0d714f641b55ebc97f
 
 	
 	
@@ -362,7 +365,6 @@ void MainWindow::stopAttacking() {
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
-	targetD->hide();
 
 	//show action buttons
 	theSitch->show();
