@@ -47,15 +47,27 @@ std::string Tile::getTypeAsString() {
 bool Tile::isOccupied() {
 	if(character != nullptr) {
 		return true;
+	} else {
+		return false;
 	}
-	return false;
+	
 }
 
 bool Tile::isOccupiedByPlayer() {
 	if (character != nullptr && !character->enemy) {
 		return true;
+	} else {
+		return false;
 	}
-	return false;
+	
+}
+
+bool Tile::isOccupiedByEnemy() {
+	if (character != nullptr && character->enemy) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 Human* Tile::getCharacter() {

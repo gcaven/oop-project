@@ -39,7 +39,7 @@ public:
 class Enemy : public Human {
 public:
 	Enemy();
-    void makeAMove(Board *b);
+    void makeAMove();
 };
 
 int randomInt(int max, int min);

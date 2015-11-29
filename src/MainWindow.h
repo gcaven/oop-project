@@ -29,8 +29,8 @@ private:
 	QTableWidget *table;
 	QTextEdit *console;
 
-	Human *humans[6];
-	Human currentCharacter;
+	Human humans[6];
+	Human *currentCharacter;
 	int moves;
 
 	QVBoxLayout *statsLayout;

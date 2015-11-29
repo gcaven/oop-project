@@ -4,7 +4,7 @@
 class Queue {
 private:
 	struct queueNode{
-		Human human;
+		int index;
 		queueNode *prevPtr;
 	};
 	queueNode *front,*rear;
@@ -12,8 +12,8 @@ private:
 public:
 	Queue();
 	bool emptyQueue();
-	void enqueue(Human human);
-	Human dequeue();
+	void enqueue(int index);
+	int dequeue();
 	int getSize();
 	std::string print();
 };
