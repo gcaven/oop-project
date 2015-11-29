@@ -55,6 +55,7 @@ private:
 	QPushButton *targetA;
 	QPushButton *targetB;
 	QPushButton *targetC;
+	QPushButton *attackStop;
 
 public:
 	MainWindow(QWidget *parent = 0);
@@ -79,4 +80,5 @@ private slots:
 	void moveLeftSlot();
 	void moveStopSlot();
 	void endTurnSlot();
+	void stopAttackingSlot();
 };

@@ -59,15 +59,19 @@ void MainWindow::decorate() {
 	targetA = new QPushButton();
 	targetB = new QPushButton();
 	targetC = new QPushButton();
+	attackStop = new QPushButton("Stop Attacking");
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackTargetASlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackTargetBSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackTargetCSlot()));
+	QObject::connect(attackStop, SIGNAL(clicked()), this, SLOT(stopAttackingSlot()));
 	actionsLayout->addWidget(targetA);
 	actionsLayout->addWidget(targetB);
 	actionsLayout->addWidget(targetC);
+	actionsLayout->addWidget(attackStop);
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
+	attackStop->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -242,8 +246,6 @@ void MainWindow::attackSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is winding up for an attack.";
 	console->append(QString::fromStdString(consoleText));
-
-	Human target;
 	
 	//hide actions buttons
 	theSitch->hide();
@@ -261,41 +263,6 @@ void MainWindow::attackSlot() {
 	targetA->show();
 	targetB->show();
 	targetC->show();
-
-	//if position of target is adjacent to current
-	/*if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
-		if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
-			int damage = currentCharacter.attack - target.defense;
-			if(damage < 0)
-				damage = 0;
-			else{
-				target.health -= damage;
-			}
-
-			consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target.name + ".";
-			console->append(QString::fromStdString(consoleText));
-			
-			//if attack kills target
-			if(target.health <= 0){
-				target.alive = false;
-				consoleText = currentCharacter.name + " has been felled.";
-				console->append(QString::fromStdString(consoleText));
-			}
-			stopAttacking();
-		}
-		else {
-			consoleText = "Cannot attack.";
-			console->append(QString::fromStdString(consoleText));
-			attackSlot();
-		}
-	} 
-	//if not, current cannot attack the specified target
-	else {
-		consoleText = "Cannot attack.";
-		console->append(QString::fromStdString(consoleText));
-		attackSlot();
-	}*/
-	stopAttacking();
 }
 
 void MainWindow::attackTargetASlot() {
@@ -332,7 +299,23 @@ void MainWindow::attackTargetCSlot() {
 }
 
 void MainWindow::attack(int index) {
+	Human *target = humans[index];
+	int damage = currentCharacter.attack - target->defense;
+	if(damage < 0)
+		damage = 0;
+	else 
+		target->health -= damage;
 
+	std::string consoleText = currentCharacter.name + " has dealt " + std::to_string(damage) + " to " + target->name + ".";
+	console->append(QString::fromStdString(consoleText));
+	
+	//if attack kills target
+	if(target->health <= 0){
+		target->alive = false;
+		consoleText = currentCharacter.name + " has been felled.";
+		console->append(QString::fromStdString(consoleText));
+	}
+	stopAttacking();
 }
 
 void MainWindow::rangedSlot() {
@@ -393,7 +376,7 @@ void MainWindow::stopAttacking() {
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
-
+	attackStop->hide();
 	//show action buttons
 	theSitch->show();
 	buttonA->show();
@@ -402,6 +385,21 @@ void MainWindow::stopAttacking() {
 	buttonEnd->show();
 	//disable attack button
 	buttonA->setEnabled(false);
+}
+
+void MainWindow::stopAttackingSlot() {
+	//hide attack buttons
+	targetA->hide();
+	targetB->hide();
+	targetC->hide();
+	attackStop->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
 }
 
 void MainWindow::moveSlot() {
