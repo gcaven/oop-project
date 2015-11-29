@@ -327,7 +327,7 @@ void MainWindow::attack(int index) {
 	else 
 		target->currentHealth -= damage;
 
-	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " damage to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
 	//if attack kills target
@@ -365,48 +365,6 @@ void MainWindow::rangedSlot() {
 		rangedTargetC->show();
 		rangedStop->show();
 	}
-
-		/*bool stop = false;
-		while(!stop) {
-			
-			//if position of target is on a straight x or y path to target
-			if(target.x == currentCharacter->x || target.y == currentCharacter->y) {
-				//if current can reach target with their dexterity stat
-				if( ((abs(target.x - currentCharacter->x)) <= currentCharacter->dexterity) || ((abs(target.y - currentCharacter->y)) <= currentCharacter->dexterity)) {
-					int damage = currentCharacter->attack - target.defense;
-					if(damage < 0)
-						damage = 0;
-					else{
-						target.health -= damage;
-					}
-
-					consoleText = currentCharacter->name + " has dealt " +  std::to_string(damage) + " to " + target.name + ".";
-					console->append(QString::fromStdString(consoleText));
-
-					//if attack kills target
-					if(target.health <= 0){
-						target.alive = false;
-						consoleText = currentCharacter->name + " has been felled.";
-						console->append(QString::fromStdString(consoleText));
-					}
-					stop = true;
-				}
-				else {			
-					consoleText = "Cannot attack this player.";
-					console->append(QString::fromStdString(consoleText));
-				}
-			} 
-			
-			//if position of target is on a diagonal path from current
-			
-
-
-			//if not, current cannot attack the specified target
-			else {
-				consoleText = "Cannot attack this player.";
-				console->append(QString::fromStdString(consoleText));
-			}
-		}*/
 }
 
 void MainWindow::attackRangedTargetASlot() {
