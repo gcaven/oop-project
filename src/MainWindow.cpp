@@ -683,7 +683,7 @@ void MainWindow::endTurnSlot() {
 	//hook for enemy AI
 	if (currentCharacter->enemy) {
 		Enemy *currentEnemy = (Enemy*) &currentCharacter;
-        currentEnemy->makeAMove(board.adjPlayer(currentEnemy->x,currentEnemy->y),&humans);
+        currentEnemy->makeAMove(board.adjPlayer(currentEnemy->x,currentEnemy->y),humans);
 		endTurnSlot();
 	} else {
 		//hightlight current player on board
