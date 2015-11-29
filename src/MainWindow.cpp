@@ -369,8 +369,8 @@ void MainWindow::stopAttacking() {
 	buttonR->show();
 	buttonM->show();
 	buttonEnd->show();
-	//disable move button
-	buttonM->setEnabled(false);
+	//disable attack button
+	buttonA->setEnabled(false);
 }
 
 void MainWindow::moveSlot() {
