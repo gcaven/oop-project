@@ -27,6 +27,9 @@ Human::Human() {
 	attack = randomInt(10,5);
 	defense = randomInt(9,5);
 	dexterity = randomInt(3,0);
+	if (dexterity == 1) {
+		dexterity = 0;
+	}
 	x = -1;
 	y = -1;
 }

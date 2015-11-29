@@ -66,7 +66,6 @@ public:
 	void decorate();
 	void generate(int width, int height);
 	void attack(int index);
-	void attackRanged(int index);
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();

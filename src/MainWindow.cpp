@@ -408,11 +408,11 @@ void MainWindow::attackRangedTargetASlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[0].x > x && humans[0].x <= x+dexterity) || (humans[0].x < x && humans[0].x >= x-dexterity)) 
-		&& ((humans[0].y > y && humans[0].x <= y+dexterity) || (humans[0].y < x && humans[0].y >= y-dexterity))) {
-			attackRanged(0);
+	if (((humans[1].x > x && humans[1].x <= x+dexterity && humans[1].y == y) || (humans[1].x < x && humans[1].x >= x-dexterity && humans[1].y == y)) 
+		|| ((humans[1].y > y && humans[1].x <= y+dexterity && humans[1].x == x) || (humans[1].y < x && humans[1].y >= y-dexterity && humans[1].x == x))) {
+			attack(1);
 	} else {
-		std::string consoleText = humans[0].name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -421,11 +421,11 @@ void MainWindow::attackRangedTargetBSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[2].x > x && humans[2].x <= x+dexterity) || (humans[2].x < x && humans[2].x >= x-dexterity)) 
-		&& ((humans[2].y > y && humans[2].x <= y+dexterity) || (humans[2].y < x && humans[2].y >= y-dexterity))) {
-			attackRanged(2);
+	if (((humans[3].x > x && humans[3].x <= x+dexterity && humans[3].y == y) || (humans[3].x < x && humans[3].x >= x-dexterity && humans[3].y == y)) 
+		|| ((humans[3].y > y && humans[3].x <= y+dexterity && humans[3].x == x) || (humans[3].y < x && humans[3].y >= y-dexterity && humans[3].x == x))) {
+			attack(3);
 	} else {
-		std::string consoleText = humans[2].name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -434,17 +434,13 @@ void MainWindow::attackRangedTargetCSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[4].x > x && humans[4].x <= x+dexterity) || (humans[4].x < x && humans[4].x >= x-dexterity)) 
-		&& ((humans[4].y > y && humans[4].x <= y+dexterity) || (humans[4].y < x && humans[4].y >= y-dexterity))) {
-			attackRanged(4);
+	if (((humans[5].x > x && humans[5].x <= x+dexterity && humans[5].y == y) || (humans[5].x < x && humans[5].x >= x-dexterity && humans[5].y == y)) 
+		|| ((humans[5].y > y && humans[5].x <= y+dexterity && humans[5].x == x) || (humans[5].y < x && humans[5].y >= y-dexterity && humans[5].x == x))) {
+			attack(5);
 	} else {
-		std::string consoleText = humans[4].name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
-}
-
-void MainWindow::attackRanged(int index) {
-
 }
 
 void MainWindow::stopAttacking() {
