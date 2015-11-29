@@ -51,6 +51,13 @@ bool Tile::isOccupied() {
 	return false;
 }
 
+bool Tile::isOccupiedByPlayer() {
+	if (character != nullptr && !character->enemy) {
+		return true;
+	}
+	return false;
+}
+
 Human* Tile::getCharacter() {
 	if(isOccupied()) {
 		return character;

@@ -24,6 +24,7 @@ public:
 	Terrain getType();
 	std::string getTypeAsString();
 	bool isOccupied();
+	bool isOccupiedByPlayer();
 	Human* getCharacter();
 	void setCharacter(Human *guy);
 };

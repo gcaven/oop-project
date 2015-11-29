@@ -60,6 +60,7 @@ public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
+	void attack(int index);
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();
@@ -67,6 +68,9 @@ public:
 private slots:
 	void startGameSlot();
 	void attackSlot();
+	void attackTargetASlot();
+	void attackTargetBSlot();
+	void attackTargetCSlot();
 	void rangedSlot();
 	void moveSlot();
 	void moveUpSlot();

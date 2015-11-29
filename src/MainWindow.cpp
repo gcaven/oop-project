@@ -59,9 +59,9 @@ void MainWindow::decorate() {
 	targetA = new QPushButton("targetA");
 	targetB = new QPushButton("targetB");
 	targetC = new QPushButton("targetC");
-	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackSlot()));
-	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackSlot()));
-	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackSlot()));
+	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackTargetASlot()));
+	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackTargetBSlot()));
+	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackTargetCSlot()));
 	actionsLayout->addWidget(targetA);
 	actionsLayout->addWidget(targetB);
 	actionsLayout->addWidget(targetC);
@@ -256,23 +256,8 @@ void MainWindow::attackSlot() {
 	targetB->show();
 	targetC->show();
 
-	//if there are players adjacent to character
-	if(board.tiles[currentCharacter.x + 1][currentCharacter.y].isOccupied()) {
-		//set this enemy at targetA
-		
-	}
-	else if(board.tiles[currentCharacter.x - 1][currentCharacter.y].isOccupied()) {
-		//set this enemy at targetB
-	}
-	else if(board.tiles[currentCharacter.x][currentCharacter.y + 1].isOccupied()) {
-		//set this enemy at targetC
-	} 
-	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
-		//set this enemy at targetD
-	}
-	/*
 	//if position of target is adjacent to current
-	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
+	/*if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
 		if((target.y == currentCharacter.y - 1 || target.y == currentCharacter.y + 1) || (target.x == currentCharacter.x - 1 || target.x == currentCharacter.x + 1)) {
 			int damage = currentCharacter.attack - target.defense;
 			if(damage < 0)
@@ -305,6 +290,43 @@ void MainWindow::attackSlot() {
 		attackSlot();
 	}*/
 	stopAttacking();
+}
+
+void MainWindow::attackTargetASlot() {
+	int x = currentCharacter.x;
+	int y = currentCharacter.y;
+	if ((humans[2]->x == x+1 || humans[2]->x == x-1) && (humans[2]->y == y+1 || humans[2]->y == y-1)) {
+		attack(2);
+	} else {
+		std::string consoleText = humans[2]->name + " is not close enough to attack!";
+		console->append(QString::fromStdString(consoleText));
+	}
+}
+
+void MainWindow::attackTargetBSlot() {
+	int x = currentCharacter.x;
+	int y = currentCharacter.y;
+	if ((humans[4]->x == x+1 || humans[4]->x == x-1) && (humans[4]->y == y+1 || humans[4]->y == y-1)) {
+		attack(4);
+	} else {
+		std::string consoleText = humans[2]->name + " is not close enough to attack!";
+		console->append(QString::fromStdString(consoleText));
+	}
+}
+
+void MainWindow::attackTargetCSlot() {
+	int x = currentCharacter.x;
+	int y = currentCharacter.y;
+	if ((humans[6]->x == x+1 || humans[6]->x == x-1) && (humans[6]->y == y+1 || humans[6]->y == y-1)) {
+		attack(6);
+	} else {
+		std::string consoleText = humans[2]->name + " is not close enough to attack!";
+		console->append(QString::fromStdString(consoleText));
+	}
+}
+
+void MainWindow::attack(int index) {
+
 }
 
 void MainWindow::rangedSlot() {
