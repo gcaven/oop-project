@@ -317,7 +317,7 @@ void MainWindow::attackTargetCSlot() {
 
 void MainWindow::attack(int index) {
 	Human *target = &humans[index];
-	int damage = currentCharacter->attack - target->defense;
+	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
 	if(damage < 0)
 		damage = 0;
 	else 
