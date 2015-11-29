@@ -31,10 +31,6 @@ Human::Human() {
 	y = -1;
 }
 
-int Human::initiativeRoll() {
-    return qrand()%(20+1);
-}
-
 void Human::useItem(Item item) {
 	return;
 }

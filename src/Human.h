@@ -29,7 +29,6 @@ public:
 	Human();
 	void useItem(Item item);
 	void setId(unsigned int id);
-	int initiativeRoll();
 };
 
 class Ally : public Human {

@@ -157,19 +157,24 @@ void MainWindow::generate(int width, int height) {
     //generate some humans
     Ally allies[3];
     Enemy enemies[3];
-    //place allies(adventurers) on the board, put them into the humans array and the turnqueue
-    for (int i=0; i < 3; i++) {
-    	generateLocation(&board, &allies[i]);
-    	humans[i] = &allies[i];
-    	humans[i]->setId(i);
-        turnQueue.enqueue(allies[i]);
-    }
-    //place enemies(bandits) on the board, put them into the humans array and the turnqueue
-    for (int i=0; i < 3; i++) {
-    	generateLocation(&board, &enemies[i]);
-    	humans[i+3] = &enemies[i];
-    	humans[i]->setId(i+3);
-        turnQueue.enqueue(enemies[i]);
+    //place allies(adventurers) and enemies(bandits) on the board, put them into the humans array and the turnqueue
+    int j = 0;
+    int k = 0;
+    for (int i=0; i < 6; i++) {
+    	if (i%2) {
+    		generateLocation(&board, &enemies[k]);
+    		humans[i] = &enemies[k];
+    		humans[i]->setId(i);
+        	turnQueue.enqueue(enemies[k]);
+        	k++;
+    	} else {
+    		generateLocation(&board, &allies[j]);
+    		humans[i] = &allies[j];
+    		humans[i]->setId(i);
+        	turnQueue.enqueue(allies[j]);
+        	j++;
+    	}
+    	
     }
     //show human locations on the board UI
     QFont font;
