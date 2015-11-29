@@ -17,16 +17,16 @@ Human::Human() {
 		namesVector.push_back(line.toStdString());
 	}
 	file.close();
-	name = namesVector.at(qrand()%namesVector.size());
+	name = namesVector.at(randomInt(namesVector.size()-1,0));
 	alive = true;
 	//generate stuff ((max+1)-min)+min)
 	//change this to min + (rand() % (int)(max - min + 1)) for more even distribution
-	health = qrand()%((30+1) - 10) + 10;
+	health = randomInt(30,10);
 	currentHealth = health;
-	speed = qrand()%((3+1) - 2) + 2;
-	attack = qrand()%((10+1) - 2) + 2;
-	defense = qrand()%((10+1) - 2) + 2;
-	dexterity = qrand()%(3+1);
+	speed = randomInt(3,2);
+	attack = randomInt(10,5);
+	defense = randomInt(10,5);
+	dexterity = randomInt(3,0);
 	x = -1;
 	y = -1;
 }
@@ -50,6 +50,12 @@ Ally::Ally() : Human() {
 
 Enemy::Enemy() : Human() {
 	enemy = true;
+}
+
+int randomInt(int max, int min) {
+	int rando = (min + (qrand() % (int)(max - min + 1)));
+	//classic rando
+	return rando;
 }
 
 

@@ -11,10 +11,9 @@ Board::Board() {
 }
 
 void Board::generate() {
-	qsrand(time(NULL));
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
-            int typenum = qrand()%(5+1);
+            int typenum = randomInt(5,0);
 			Terrain type;
 			switch(typenum) {
 				case 0:
@@ -59,12 +58,12 @@ void Board::destroy() {
 
 void generateLocation(Board *board, Human *human) {
 	//min + (rand() % (int)(max - min + 1))
-	int xGen = 0 + qrand()%(int)(9-0+1);
+	int xGen = randomInt(9,0);
 	int yGen;
 	if (human->enemy) {
-		yGen = 0 + qrand()%(int)(1-0+1);
+		yGen = randomInt(1,0);
 	} else {
-		yGen = 8 + qrand()%(int)(9-8+1);
+		yGen = randomInt(9,8);
 	}
 
 	bool goodlocation = false;
@@ -73,11 +72,11 @@ void generateLocation(Board *board, Human *human) {
 	while (!goodlocation) {
 		goodlocation = checkLocation(board,xGen,yGen);
 		if (!goodlocation) {
-			xGen = 0 + qrand()%(int)(9-0+1);
+			xGen = randomInt(9,0);
 			if (human->enemy) {
-				yGen = 0 + qrand()%(int)(1-0+1);
+				yGen = randomInt(1,0);
 			} else {
-				yGen = 8 + qrand()%(int)(9-8+1);
+				yGen = randomInt(9,8);
 			}
 		}
 	}

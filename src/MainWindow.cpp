@@ -148,8 +148,6 @@ void MainWindow::generate(int width, int height) {
             }
         }
     }
-
-    qsrand(time(NULL));
     //generate some humans
     Ally allies[3];
     Enemy enemies[3];
@@ -230,6 +228,14 @@ void MainWindow::startGameSlot() {
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
+	//highlight current player on board
+	if (!currentCharacter.enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(255,77,234));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}
+	}
 }
 
 void MainWindow::attackSlot() {
@@ -268,8 +274,6 @@ void MainWindow::attackSlot() {
 		//set this enemy at targetC
 	} 
 
-	
-	
 	/*
 	//if position of target is adjacent to current
 	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
@@ -479,32 +483,60 @@ void MainWindow::stopMoving() {
 }
 
 void MainWindow::endTurnSlot() {
+	//put current character back in queue
+	if (!currentCharacter.enemy) {
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(0,0,0));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}	
+	}
 	turnQueue.enqueue(currentCharacter);
 	console->append("");
+	//get the new guy
 	currentCharacter = turnQueue.dequeue();
 	std::string statsString = currentCharacter.name;
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
-	buttonA->setEnabled(true);
-	buttonR->setEnabled(true);
-	buttonM->setEnabled(true);
-	if (!currentCharacter.enemy)
+	//if enemy, disable buttons
+	if (!currentCharacter.enemy) {
 		statsString += "\n\nAdventurer";
-	else 
+		buttonA->setEnabled(true);
+		buttonR->setEnabled(true);
+		buttonM->setEnabled(true);
+	} else {
 		statsString += "\n\nBandit";
+		buttonA->setEnabled(false);
+		buttonR->setEnabled(false);
+		buttonM->setEnabled(false);
+	}
+	//show current stats on UI
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
 	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
 	stats->setText(QString::fromStdString(statsString));
+	//increment the turn order UI
 	QTableWidgetItem *old = turnOrder->takeItem(0,0);
 	for (int i = 1; i < turnQueue.getSize()+1; i++) {
 		QTableWidgetItem *pushup = turnOrder->takeItem(i,0);
 		turnOrder->setItem(i-1,0,pushup);
 	}
 	turnOrder->setItem(turnQueue.getSize(),0,old);
+	//hook for enemy AI
+	if (currentCharacter.enemy) {
+		Enemy *currentEnemy = (Enemy*) &currentCharacter;
+		currentEnemy->makeAMove();
+		endTurnSlot();
+	} else {
+		//hightlight current player on board
+		QTableWidgetItem *item = table->takeItem(currentCharacter.y,currentCharacter.x);
+		if (item != nullptr) {
+			item->setForeground(QColor(255,77,234));
+			table->setItem(currentCharacter.y,currentCharacter.x,item);
+		}	
+	}
 	show();
-	//if enemy, makeAmove, disable buttons
 }
 

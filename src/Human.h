@@ -42,4 +42,6 @@ public:
 	void makeAMove();
 };
 
+int randomInt(int max, int min);
+
 #endif
