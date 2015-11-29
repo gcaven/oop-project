@@ -60,6 +60,7 @@ private:
 	QPushButton *rangedTargetA;
 	QPushButton *rangedTargetB;
 	QPushButton *rangedTargetC;
+	QPushButton *rangedStop;
 
 public:
 	MainWindow(QWidget *parent = 0);
@@ -70,6 +71,7 @@ public:
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();
+	void stopRangedSlot();
 
 private slots:
 	void startGameSlot();
