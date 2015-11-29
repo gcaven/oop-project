@@ -71,7 +71,7 @@ public:
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();
-	void stopRangedSlot();
+	void stopRanged();
 
 private slots:
 	void startGameSlot();
@@ -94,5 +94,6 @@ private slots:
 	void moveStopSlot();
 
 	void endTurnSlot();
-	void stopAttackingSlot();
+	void stopAttackingSlot();	
+	void stopRangedSlot();
 };

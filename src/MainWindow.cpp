@@ -274,9 +274,9 @@ void MainWindow::attackSlot() {
 	buttonM->hide();
 	buttonEnd->hide();
 	//show targets buttons
-	QString name1 = QString::fromStdString(humans[0].name);
-	QString name2 = QString::fromStdString(humans[2].name);
-	QString name3 = QString::fromStdString(humans[4].name);
+	QString name1 = QString::fromStdString(humans[1].name);
+	QString name2 = QString::fromStdString(humans[3].name);
+	QString name3 = QString::fromStdString(humans[5].name);
 	targetA->setText(name1);
 	targetB->setText(name2);
 	targetC->setText(name3);
@@ -289,10 +289,10 @@ void MainWindow::attackSlot() {
 void MainWindow::attackTargetASlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[0].x == x+1 || humans[0].x == x-1) && (humans[0].y == y+1 || humans[0].y == y-1)) {
-		attack(0);
+	if ((humans[1].x == x+1 || humans[1].x == x-1 || humans[1].x == x) && (humans[1].y == y+1 || humans[1].y == y-1 || humans[1].y == y)) {
+		attack(1);
 	} else {
-		std::string consoleText = humans[0].name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -300,10 +300,10 @@ void MainWindow::attackTargetASlot() {
 void MainWindow::attackTargetBSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[2].x == x+1 || humans[2].x == x-1) && (humans[2].y == y+1 || humans[2].y == y-1)) {
-		attack(2);
+	if ((humans[3].x == x+1 || humans[3].x == x-1 || humans[3].x == x) && (humans[3].y == y+1 || humans[3].y == y-1 || humans[3].y == y)) {
+		attack(3);
 	} else {
-		std::string consoleText = humans[2].name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -311,10 +311,10 @@ void MainWindow::attackTargetBSlot() {
 void MainWindow::attackTargetCSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[4].x == x+1 || humans[4].x == x-1) && (humans[4].y == y+1 || humans[4].y == y-1)) {
-		attack(4);
+	if ((humans[5].x == x+1 || humans[5].x == x-1 || humans[5].x == x) && (humans[5].y == y+1 || humans[5].y == y-1 || humans[5].y == y)) {
+		attack(5);
 	} else {
-		std::string consoleText = humans[4].name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -354,9 +354,9 @@ void MainWindow::rangedSlot() {
 		buttonM->hide();
 		buttonEnd->hide();
 		//show targets buttons
-		QString name1 = QString::fromStdString(humans[0].name);
-		QString name2 = QString::fromStdString(humans[2].name);
-		QString name3 = QString::fromStdString(humans[4].name);
+		QString name1 = QString::fromStdString(humans[1].name);
+		QString name2 = QString::fromStdString(humans[3].name);
+		QString name3 = QString::fromStdString(humans[5].name);
 		rangedTargetA->setText(name1);
 		rangedTargetB->setText(name2);
 		rangedTargetC->setText(name3);
@@ -413,11 +413,11 @@ void MainWindow::attackRangedTargetASlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[0].x > x && humans[0].x <= x+dexterity) || (humans[0].x < x && humans[0].x >= x-dexterity)) 
-		&& ((humans[0].y > y && humans[0].x <= y+dexterity) || (humans[0].y < x && humans[0].y >= y-dexterity))) {
-			attackRanged(0);
+	if (((humans[1].x > x && humans[1].x <= x+dexterity && humans[1].y == y) || (humans[1].x < x && humans[1].x >= x-dexterity && humans[1].y == y)) 
+		|| ((humans[1].y > y && humans[1].x <= y+dexterity && humans[1].x == x) || (humans[1].y < x && humans[1].y >= y-dexterity && humans[1].x == x))) {
+			attack(1);
 	} else {
-		std::string consoleText = humans[0].name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -426,11 +426,11 @@ void MainWindow::attackRangedTargetBSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[2].x > x && humans[2].x <= x+dexterity) || (humans[2].x < x && humans[2].x >= x-dexterity)) 
-		&& ((humans[2].y > y && humans[2].x <= y+dexterity) || (humans[2].y < x && humans[2].y >= y-dexterity))) {
-			attackRanged(2);
+	if (((humans[3].x > x && humans[3].x <= x+dexterity && humans[3].y == y) || (humans[3].x < x && humans[3].x >= x-dexterity && humans[3].y == y)) 
+		|| ((humans[3].y > y && humans[3].x <= y+dexterity && humans[3].x == x) || (humans[3].y < x && humans[3].y >= y-dexterity && humans[3].x == x))) {
+			attack(3);
 	} else {
-		std::string consoleText = humans[2].name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -439,13 +439,33 @@ void MainWindow::attackRangedTargetCSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
 	int dexterity = currentCharacter->dexterity;
-	if (((humans[4].x > x && humans[4].x <= x+dexterity) || (humans[4].x < x && humans[4].x >= x-dexterity)) 
-		&& ((humans[4].y > y && humans[4].x <= y+dexterity) || (humans[4].y < x && humans[4].y >= y-dexterity))) {
-			attackRanged(4);
+	if (((humans[5].x > x && humans[5].x <= x+dexterity && humans[5].y == y) || (humans[5].x < x && humans[5].x >= x-dexterity && humans[5].y == y)) 
+		|| ((humans[5].y > y && humans[5].x <= y+dexterity && humans[5].x == x) || (humans[5].y < x && humans[5].y >= y-dexterity && humans[5].x == x))) {
+			attack(5);
 	} else {
-		std::string consoleText = humans[4].name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
+}
+
+void MainWindow::attackRanged(int index) {
+	Human *target = &humans[index];
+	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
+	if(damage < 0)
+		damage = 0;
+	else 
+		target->currentHealth -= damage;
+
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
+	console->append(QString::fromStdString(consoleText));
+	
+	//if attack kills target
+	if(target->currentHealth <= 0){
+		target->alive = false;
+		consoleText = currentCharacter->name + " has been felled.";
+		console->append(QString::fromStdString(consoleText));
+	}
+	stopRanged();
 }
 
 void MainWindow::stopRangedSlot() {
@@ -671,7 +691,5 @@ void MainWindow::endTurnSlot() {
 	}
 	show();
 	//if enemy, makeAmove, disable buttons
-
-    //Human::makeAmove();
 }
 
