@@ -264,7 +264,6 @@ void MainWindow::attackSlot() {
 	else if(board.tiles[currentCharacter.x][currentCharacter.y - 1].isOccupied()) {
 		//set this enemy at targetD
 
-
 	/*
 	//if position of target is adjacent to current
 	if((target.x == currentCharacter.x) || (target.y == currentCharacter.y)) {
@@ -475,13 +474,16 @@ void MainWindow::stopMoving() {
 }
 
 void MainWindow::endTurnSlot() {
+	//put current character back in queue
 	turnQueue.enqueue(currentCharacter);
 	console->append("");
+	//get the new guy
 	currentCharacter = turnQueue.dequeue();
 	std::string statsString = currentCharacter.name;
 	std::string consoleText = currentCharacter.name;
 	consoleText += " is getting ready to act!";
 	console->append(QString::fromStdString(consoleText));
+	//if enemy, disable buttons
 	if (!currentCharacter.enemy) {
 		statsString += "\n\nAdventurer";
 		buttonA->setEnabled(true);
@@ -493,23 +495,25 @@ void MainWindow::endTurnSlot() {
 		buttonR->setEnabled(false);
 		buttonM->setEnabled(false);
 	}
+	//show current stats on UI
 	statsString += "\n\nHP: " + std::to_string(currentCharacter.currentHealth) + "/" + std::to_string(currentCharacter.health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter.attack) + ", DEX: " + std::to_string(currentCharacter.dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter.defense) + ", SPD: " + std::to_string(currentCharacter.speed);
 	statsString += "\n\nX: " + std::to_string(currentCharacter.x) + ", Y: " + std::to_string(currentCharacter.y);
 	stats->setText(QString::fromStdString(statsString));
+	//increment the turn order UI
 	QTableWidgetItem *old = turnOrder->takeItem(0,0);
 	for (int i = 1; i < turnQueue.getSize()+1; i++) {
 		QTableWidgetItem *pushup = turnOrder->takeItem(i,0);
 		turnOrder->setItem(i-1,0,pushup);
 	}
 	turnOrder->setItem(turnQueue.getSize(),0,old);
+	//hook for enemy AI
 	if (currentCharacter.enemy) {
 		Enemy *currentEnemy = (Enemy*) &currentCharacter;
 		currentEnemy->makeAMove();
 		endTurnSlot();
 	}
 	show();
-	//if enemy, makeAmove, disable buttons
 }
 
