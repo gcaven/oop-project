@@ -59,7 +59,7 @@ void MainWindow::decorate() {
 	targetA = new QPushButton();
 	targetB = new QPushButton();
 	targetC = new QPushButton();
-	attackStop = new QPushButton("Stop Attacking");
+	attackStop = new QPushButton("Return");
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackTargetASlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackTargetBSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackTargetCSlot()));
@@ -77,15 +77,19 @@ void MainWindow::decorate() {
 	rangedTargetA = new QPushButton();
 	rangedTargetB = new QPushButton();
 	rangedTargetC = new QPushButton();
+	rangedStop = new QPushButton("Return");
 	QObject::connect(rangedTargetA, SIGNAL(clicked()), this, SLOT(attackRangedTargetASlot()));
 	QObject::connect(rangedTargetB, SIGNAL(clicked()), this, SLOT(attackRangedTargetBSlot()));
 	QObject::connect(rangedTargetC, SIGNAL(clicked()), this, SLOT(attackRangedTargetCSlot()));
+	QObject::connect(rangedStop, SIGNAL(clicked()), this, SLOT(stopRangedSlot()));
 	actionsLayout->addWidget(rangedTargetA);
 	actionsLayout->addWidget(rangedTargetB);
 	actionsLayout->addWidget(rangedTargetC);
+	actionsLayout->addWidget(rangedStop);
 	rangedTargetA->hide();
 	rangedTargetB->hide();
 	rangedTargetC->hide();
+	rangedStop->hide();
 
 	//turn order panel
 	turnOrder = new QTableWidget(6,1);
@@ -323,7 +327,7 @@ void MainWindow::attack(int index) {
 	else 
 		target->currentHealth -= damage;
 
-	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " to " + target->name + ".";
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
 	//if attack kills target
@@ -359,6 +363,7 @@ void MainWindow::rangedSlot() {
 		rangedTargetA->show();
 		rangedTargetB->show();
 		rangedTargetC->show();
+		rangedStop->show();
 	}
 
 		/*bool stop = false;
@@ -441,6 +446,57 @@ void MainWindow::attackRangedTargetCSlot() {
 		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
+}
+
+void MainWindow::attackRanged(int index) {
+	Human *target = &humans[index];
+	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
+	if(damage < 0)
+		damage = 0;
+	else 
+		target->currentHealth -= damage;
+
+	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
+	console->append(QString::fromStdString(consoleText));
+	
+	//if attack kills target
+	if(target->currentHealth <= 0){
+		target->alive = false;
+		consoleText = currentCharacter->name + " has been felled.";
+		console->append(QString::fromStdString(consoleText));
+	}
+	stopRanged();
+}
+
+void MainWindow::stopRangedSlot() {
+	//hide attack buttons
+	rangedTargetA->hide();
+	rangedTargetB->hide();
+	rangedTargetC->hide();
+	rangedStop->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+}
+
+void MainWindow::stopRanged() {
+	//hide attack buttons
+	rangedTargetA->hide();
+	rangedTargetB->hide();
+	rangedTargetC->hide();
+	rangedStop->hide();
+
+	//show action buttons
+	theSitch->show();
+	buttonA->show();
+	buttonR->show();
+	buttonM->show();
+	buttonEnd->show();
+	buttonR->setEnabled(false);
 }
 
 void MainWindow::stopAttacking() {
@@ -627,7 +683,7 @@ void MainWindow::endTurnSlot() {
 	//hook for enemy AI
 	if (currentCharacter->enemy) {
 		Enemy *currentEnemy = (Enemy*) &currentCharacter;
-		currentEnemy->makeAMove();
+        currentEnemy->makeAMove(board.adjPlayer(currentEnemy->x,currentEnemy->y),&humans);
 		endTurnSlot();
 	} else {
 		//hightlight current player on board

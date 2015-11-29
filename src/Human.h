@@ -39,9 +39,15 @@ public:
 class Enemy : public Human {
 public:
 	Enemy();
-    void makeAMove();
-};
+    void makeAMove(int r,Human *h);
 
+    /*Returns the position of the adjacent player. To the right
+     * equals 1, below equals 2, to the left equals 3, and above
+     * equals 4.  If there are no adjacent players, the method
+     * returns 0.
+    */
+
+};
 int randomInt(int max, int min);
 
 #endif
