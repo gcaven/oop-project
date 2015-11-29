@@ -55,24 +55,42 @@ private:
 	QPushButton *targetA;
 	QPushButton *targetB;
 	QPushButton *targetC;
+	QPushButton *attackStop;
+
+	QPushButton *rangedTargetA;
+	QPushButton *rangedTargetB;
+	QPushButton *rangedTargetC;
 
 public:
 	MainWindow(QWidget *parent = 0);
 	void decorate();
 	void generate(int width, int height);
+	void attack(int index);
+	void attackRanged(int index);
 	void move(int x, int y);
 	void stopMoving();
 	void stopAttacking();
 
 private slots:
 	void startGameSlot();
+
 	void attackSlot();
+	void attackTargetASlot();
+	void attackTargetBSlot();
+	void attackTargetCSlot();
+
 	void rangedSlot();
+	void attackRangedTargetASlot();
+	void attackRangedTargetBSlot();
+	void attackRangedTargetCSlot();
+
 	void moveSlot();
 	void moveUpSlot();
 	void moveRightSlot();
 	void moveDownSlot();
 	void moveLeftSlot();
 	void moveStopSlot();
+
 	void endTurnSlot();
+	void stopAttackingSlot();
 };
