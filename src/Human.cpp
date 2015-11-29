@@ -42,22 +42,15 @@ void Human::setId(unsigned int id) {
 void Enemy::makeAMove() {
 	/*enemy AI will live here
 
-    if(player adjacent)
-    {
+    if(player adjacent) {
         //attack that player
-    }
-
-    else if(ranged attack available)
-    {
+    } else if(ranged attack available) {
         //do ranged attack on player
     }
-
-    else
-    {
-        //move towards closest player
-    }
+    //move towards closest player
 	*/
 	return;
+	
 }
 
 Ally::Ally() : Human() {
