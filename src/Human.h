@@ -10,7 +10,6 @@
 #include <QCoreApplication>
 #include <vector>
 #include "Item.h"
-#include "Board.h"
 
 class Human {
 public:
