@@ -448,6 +448,10 @@ void MainWindow::stopAttacking() {
 	targetA->hide();
 	targetB->hide();
 	targetC->hide();
+	rangedTargetA->hide();
+	rangedTargetB->hide();
+	rangedTargetC->hide();
+	//rangedStop->hide();
 	attackStop->hide();
 	//show action buttons
 	theSitch->show();
@@ -543,7 +547,7 @@ void MainWindow::move(int x,int y) {
 	    	if (currentCharacter->enemy)
 	    		item->setForeground(QColor(250, 107, 107));
 	    	else 
-	    		item->setForeground(QColor(0,0,0));
+	    		item->setForeground(QColor(255,77,234));
 	    	item->setTextAlignment(Qt::AlignCenter);
 	    	item->setFont(font);
 	    	table->setItem(yNew,xNew,item);
