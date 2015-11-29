@@ -39,8 +39,24 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-void Enemy::makeAMove() {
+void Enemy::makeAMove(Board *b) {
 	//enemy AI will live here
+
+    if(/*player adjacent*/)
+    {
+        //attack that player
+    }
+
+    else if(/*ranged attack available*/)
+    {
+        //do ranged attack on player
+    }
+
+    else
+    {
+        //move towards closest player
+    }
+
 	return;
 }
 

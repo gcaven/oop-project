@@ -504,5 +504,7 @@ void MainWindow::endTurnSlot() {
 	turnOrder->setItem(turnQueue.getSize(),0,old);
 	show();
 	//if enemy, makeAmove, disable buttons
+
+    Human::makeAmove(&board);
 }
 
