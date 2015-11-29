@@ -21,6 +21,7 @@ public:
 	void put(int x, int y, Tile tile);
 	int index(int x, int y);
 	void destroy();
+    int adjPlayer(int xpos,int ypos);
 };
 
 void generateLocation(Board *board, Human *human);

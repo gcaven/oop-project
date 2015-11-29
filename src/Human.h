@@ -10,7 +10,6 @@
 #include <QCoreApplication>
 #include <vector>
 #include "Item.h"
-#include "Board.h"
 
 class Human {
 public:
@@ -40,13 +39,19 @@ public:
 class Enemy : public Human {
 public:
 	Enemy();
-    void makeAMove(Board *b);
+    void makeAMove(int r,Human *h);
+
+    /*Returns the position of the adjacent player. To the right
+     * equals 1, below equals 2, to the left equals 3, and above
+     * equals 4.  If there are no adjacent players, the method
+     * returns 0.
+    */
+
 };
 
-<<<<<<< HEAD
-#endif
-=======
+
+
 int randomInt(int max, int min);
 
 #endif
->>>>>>> b74c49e62fd7060004dd5b6db5b3f6391e12c842
+

@@ -97,3 +97,17 @@ bool checkLocation(Board *board, int x, int y) {
 	}
 	return goodlocation;
 }
+
+int Board::adjPlayer(int xpos,int ypos){
+
+    if(get(xpos+1,ypos).isOccupiedByPlayer())
+        return 1;
+    else if(get(xpos,ypos+1).isOccupiedByPlayer())
+        return 2;
+    else if(get(xpos-1,ypos).isOccupiedByPlayer())
+        return 3;
+    else if(get(xpos,ypos-1).isOccupiedByPlayer())
+        return 4;
+    else
+        return 0;
+}

@@ -39,15 +39,36 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-void Enemy::makeAMove(Board *b) {
+
+void Enemy::makeAMove(int r,Human *h) {
 	//enemy AI will live here
 
-    if(/*player adjacent*/)
+    //if there is an adjacent player
+    if(r>0)
     {
-        //attack that player
+        //if there is an adjacent player to the right
+        if(r==1){
+            if(h[0].x==x+1&&h[0].y==y){
+                //h[0].health=h[0].health-
+            }
+        }
+
+        //if there is an adjacent player directly below
+        else if(r==2){
+
+        }
+        //if there is an adjacent player to the left
+        else if(r==3){
+
+        }
+        //if there is an adjacent player directly above
+        else{
+
+        }
+
     }
 
-    else if(/*ranged attack available*/)
+    else if()
     {
         //do ranged attack on player
     }
