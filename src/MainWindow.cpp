@@ -56,9 +56,9 @@ void MainWindow::decorate() {
 	buttonMoveStop->hide();
 
 	//attack buttons
-	targetA = new QPushButton("targetA");
-	targetB = new QPushButton("targetB");
-	targetC = new QPushButton("targetC");
+	targetA = new QPushButton();
+	targetB = new QPushButton();
+	targetC = new QPushButton();
 	QObject::connect(targetA, SIGNAL(clicked()), this, SLOT(attackTargetASlot()));
 	QObject::connect(targetB, SIGNAL(clicked()), this, SLOT(attackTargetBSlot()));
 	QObject::connect(targetC, SIGNAL(clicked()), this, SLOT(attackTargetCSlot()));
@@ -251,7 +251,13 @@ void MainWindow::attackSlot() {
 	buttonR->hide();
 	buttonM->hide();
 	buttonEnd->hide();
-	//show targets within range
+	//show targets buttons
+	QString name1 = QString::fromStdString(humans[0]->name);
+	QString name2 = QString::fromStdString(humans[2]->name);
+	QString name3 = QString::fromStdString(humans[4]->name);
+	targetA->setText(name1);
+	targetB->setText(name2);
+	targetC->setText(name3);
 	targetA->show();
 	targetB->show();
 	targetC->show();
