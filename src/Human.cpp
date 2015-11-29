@@ -39,7 +39,7 @@ void Human::setId(unsigned int id) {
 	this->id = id;
 }
 
-void Enemy::makeAMove(Board *b) {
+void Enemy::makeAMove() {
 	//enemy AI will live here
 
     if(/*player adjacent*/)
