@@ -270,9 +270,9 @@ void MainWindow::attackSlot() {
 	buttonM->hide();
 	buttonEnd->hide();
 	//show targets buttons
-	QString name1 = QString::fromStdString(humans[0].name);
-	QString name2 = QString::fromStdString(humans[2].name);
-	QString name3 = QString::fromStdString(humans[4].name);
+	QString name1 = QString::fromStdString(humans[1].name);
+	QString name2 = QString::fromStdString(humans[3].name);
+	QString name3 = QString::fromStdString(humans[5].name);
 	targetA->setText(name1);
 	targetB->setText(name2);
 	targetC->setText(name3);
@@ -284,10 +284,10 @@ void MainWindow::attackSlot() {
 void MainWindow::attackTargetASlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[0].x == x+1 || humans[0].x == x-1) && (humans[0].y == y+1 || humans[0].y == y-1)) {
-		attack(0);
+	if ((humans[1].x == x+1 || humans[1].x == x-1 || humans[1].x == x) && (humans[1].y == y+1 || humans[1].y == y-1 || humans[1].y == y)) {
+		attack(1);
 	} else {
-		std::string consoleText = humans[0].name + " is not close enough to attack!";
+		std::string consoleText = humans[1].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -295,10 +295,10 @@ void MainWindow::attackTargetASlot() {
 void MainWindow::attackTargetBSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[2].x == x+1 || humans[2].x == x-1) && (humans[2].y == y+1 || humans[2].y == y-1)) {
-		attack(2);
+	if ((humans[3].x == x+1 || humans[3].x == x-1 || humans[3].x == x) && (humans[3].y == y+1 || humans[3].y == y-1 || humans[3].y == y)) {
+		attack(3);
 	} else {
-		std::string consoleText = humans[2].name + " is not close enough to attack!";
+		std::string consoleText = humans[3].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -306,10 +306,10 @@ void MainWindow::attackTargetBSlot() {
 void MainWindow::attackTargetCSlot() {
 	int x = currentCharacter->x;
 	int y = currentCharacter->y;
-	if ((humans[4].x == x+1 || humans[4].x == x-1) && (humans[4].y == y+1 || humans[4].y == y-1)) {
-		attack(4);
+	if ((humans[5].x == x+1 || humans[5].x == x-1 || humans[5].x == x) && (humans[5].y == y+1 || humans[5].y == y-1 || humans[5].y == y)) {
+		attack(5);
 	} else {
-		std::string consoleText = humans[4].name + " is not close enough to attack!";
+		std::string consoleText = humans[5].name + " is not close enough to attack!";
 		console->append(QString::fromStdString(consoleText));
 	}
 }
@@ -349,9 +349,9 @@ void MainWindow::rangedSlot() {
 		buttonM->hide();
 		buttonEnd->hide();
 		//show targets buttons
-		QString name1 = QString::fromStdString(humans[0].name);
-		QString name2 = QString::fromStdString(humans[2].name);
-		QString name3 = QString::fromStdString(humans[4].name);
+		QString name1 = QString::fromStdString(humans[1].name);
+		QString name2 = QString::fromStdString(humans[3].name);
+		QString name3 = QString::fromStdString(humans[5].name);
 		rangedTargetA->setText(name1);
 		rangedTargetB->setText(name2);
 		rangedTargetC->setText(name3);
@@ -638,7 +638,5 @@ void MainWindow::endTurnSlot() {
 	}
 	show();
 	//if enemy, makeAmove, disable buttons
-
-    Human::makeAmove(&board);
 }
 
