@@ -98,21 +98,42 @@ bool checkLocation(Board *board, int x, int y) {
 	return goodlocation;
 }
 
-int Board::adjPlayer(int xpos,int ypos){
+Human* Board::adjPlayer(int xpos,int ypos) {
+	return nullptr;
 	if(0 <= xpos && xpos <= 9 && 0 <= ypos && ypos <= 9) {
 		if(xpos < 9)
     		if(get(xpos+1,ypos).isOccupiedByPlayer())
-        		return 1;
+        		return get(xpos+1,ypos).getCharacter();
     	if(ypos < 9)
     		if(get(xpos,ypos+1).isOccupiedByPlayer())
-        		return 2;
+        		return get(xpos,ypos+1).getCharacter();
     	if(xpos > 0)
    			if(get(xpos-1,ypos).isOccupiedByPlayer())
-        		return 3;
+        		return get(xpos-1,ypos).getCharacter();
     	if(ypos > 0)
     		if(get(xpos,ypos-1).isOccupiedByPlayer())
-        		return 4;
-    	return 0;
+        		return get(xpos,ypos-1).getCharacter();
+    	return nullptr;
     }
-    return 0;
+    return nullptr;
+}
+
+Human* Board::closestPlayer(int xpos, int ypos, Human *humans) {
+	//calculate euclidean distance to all other players, choose shortest one
+	//or something faster
+	double minDistance = std::numeric_limits<double>::max();
+	Human *closestPlayer;
+	for (int i = 0; i < 3; i++) {
+		int distancex = xpos - humans[i*2].x;
+		distancex *= distancex;
+  		int distancey = ypos - humans[i*2].y;
+  		distancey *= distancey;
+  		double calcDistance = sqrt(distancex - distancey);
+  		if (calcDistance <= minDistance) {
+  			minDistance = calcDistance;
+  			closestPlayer = &humans[i*2];
+  		}
+	}
+	return closestPlayer;
+	return &humans[0];
 }

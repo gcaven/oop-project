@@ -5,6 +5,8 @@
 #include <string>
 #include <cstdlib>
 #include <qglobal.h>
+#include <limits>
+#include <math.h>
 #include "Human.h"
 #include "Tile.h"
 
@@ -21,7 +23,8 @@ public:
 	void put(int x, int y, Tile tile);
 	int index(int x, int y);
 	void destroy();
-    int adjPlayer(int xpos,int ypos);
+    Human* adjPlayer(int xpos,int ypos);
+    Human* closestPlayer(int xpos, int ypos, Human *humans);
 };
 
 void generateLocation(Board *board, Human *human);

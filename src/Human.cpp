@@ -19,8 +19,6 @@ Human::Human() {
 	file.close();
 	name = namesVector.at(randomInt(namesVector.size()-1,0));
 	alive = true;
-	//generate stuff ((max+1)-min)+min)
-	//change this to min + (rand() % (int)(max - min + 1)) for more even distribution
 	health = randomInt(30,10);
 	currentHealth = health;
 	speed = randomInt(3,2);
@@ -40,35 +38,6 @@ void Human::useItem(Item item) {
 
 void Human::setId(unsigned int id) {
 	this->id = id;
-}
-
-void Enemy::makeAMove(int r,Human *h) {
-	//enemy AI will live here
-
-    //if there is an adjacent player
-    if(r>0)
-    {
-        //if there is an adjacent player to the right
-        if(r==1){
-            if(h[0].x==x+1&&h[0].y==y){
-                //h[0].health=h[0].health-
-            }
-        }
-
-        //if there is an adjacent player directly below
-        else if(r==2){
-
-        }
-        //if there is an adjacent player to the left
-        else if(r==3){
-
-        }
-        //if there is an adjacent player directly above
-        else{
-
-        }
-
-    }	
 }
 
 Ally::Ally() : Human() {

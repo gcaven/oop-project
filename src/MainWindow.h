@@ -72,6 +72,8 @@ public:
 	void stopMoving();
 	void stopAttacking();
 	void stopRanged();
+	bool enemyTurn(Human *adjPlayer, Human *closestPlayer);
+	bool enemyAttack(Human *adjPlayer);
 
 private slots:
 	void startGameSlot();

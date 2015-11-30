@@ -420,7 +420,7 @@ void MainWindow::attackRanged(int index) {
 	//if attack kills target
 	if(target->currentHealth <= 0){
 		target->alive = false;
-		consoleText = currentCharacter->name + " has been felled.";
+		consoleText = target->name + " has been felled.";
 		console->append(QString::fromStdString(consoleText));
 	}
 	stopRanged();
@@ -640,8 +640,11 @@ void MainWindow::endTurnSlot() {
 	turnOrder->setItem(turnQueue.getSize(),0,old);
 	//hook for enemy AI
 	if (currentCharacter->enemy) {
-		Enemy *currentEnemy = (Enemy*) &currentCharacter;
-        currentEnemy->makeAMove(board.adjPlayer(currentEnemy->x,currentEnemy->y),humans);
+        bool hasAttacked = enemyTurn(board.adjPlayer(currentCharacter->x,currentCharacter->y), board.closestPlayer(currentCharacter->x,currentCharacter->y, humans));
+        //bool hasAttacked = true;
+        if (!hasAttacked) {
+        	enemyAttack(board.adjPlayer(currentCharacter->x,currentCharacter->y));
+        }
 		endTurnSlot();
 	} else {
 		//hightlight current player on board
@@ -652,6 +655,95 @@ void MainWindow::endTurnSlot() {
 		}	
 	}
 	show();
-	//if enemy, makeAmove, disable buttons
+}
+
+bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
+	bool hasAttacked = enemyAttack(adjPlayer);
+   	//move up to size of speed tiles
+   	std::string consoleText = currentCharacter->name + " is on the move.";
+	console->append(QString::fromStdString(consoleText));
+
+    int closeX = closestPlayer->x;
+    int closeY = closestPlayer->y;
+
+    int xpos = currentCharacter->x;
+    int ypos = currentCharacter->y;
+
+    for (int i = 0; i < currentCharacter->speed; i++) {
+    	QTableWidgetItem *item = table->takeItem(ypos,xpos);
+    	item->setText("");
+    	table->setItem(ypos,xpos,item);
+
+    	int min = std::min(abs(xpos-closeX),abs(ypos-closeY));
+    	if (min == abs(xpos-closeX)) {
+    		//go towards closeX
+    		if (xpos < closeX) {
+    			xpos++;
+    		} else if (xpos > closeX) {
+    			xpos--;
+    		} else {
+    			if (ypos < closeY && ypos+1 != closeY) {
+    				ypos++;
+    			} else if (ypos > closeY && ypos-1 != closeY) {
+    				ypos--;
+    			}
+    		}
+    	} else {
+    		//go towards closeY
+    		if (ypos < closeY) {
+    			ypos++;
+    		} else if (ypos > closeY) {
+    			ypos--;
+    		} else {
+    			if (xpos < closeX && xpos+1 != closeX) {
+    				xpos++;
+    			} else if (xpos > closeX && xpos-1 != closeX) {
+    				xpos--;
+    			}
+    		}
+    	}
+    }
+
+    currentCharacter->x = xpos;
+    currentCharacter->y = ypos;
+
+    QFont font;
+	font.setBold(true);
+	font.setPointSize(18);
+
+    QTableWidgetItem *item = table->takeItem(ypos,xpos);
+    std::string nameString = currentCharacter->name.substr(0,2);
+    item->setText(QString::fromStdString(nameString));
+    item->setForeground(QColor(250, 107, 107));
+    item->setTextAlignment(Qt::AlignCenter);
+	item->setFont(font);
+   	table->setItem(ypos,xpos,item);
+
+   	//check for targets again
+   	return hasAttacked;
+}
+
+bool MainWindow::enemyAttack(Human *adjPlayer) {
+	bool hasAttacked = false;
+    //if there is an adjacent player
+    if(adjPlayer != nullptr) {
+    	hasAttacked = true;
+        int damage = currentCharacter->attack - (currentCharacter->attack * adjPlayer->defense/10);
+		if(damage < 0)
+			damage = 0;
+		else 
+			adjPlayer->currentHealth -= damage;
+
+		std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " damage to " + adjPlayer->name + ".";
+		console->append(QString::fromStdString(consoleText));
+	
+		//if attack kills target
+		if(adjPlayer->currentHealth <= 0){
+			adjPlayer->alive = false;
+			consoleText = adjPlayer->name + " has been felled.";
+			console->append(QString::fromStdString(consoleText));
+		}
+    }	
+    return hasAttacked;
 }
 
