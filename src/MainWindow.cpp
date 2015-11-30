@@ -5,8 +5,6 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
 void MainWindow::decorate() {
 	//actions panel
-	QLabel *theSitch = new QLabel("In WATER: ATK down, SPD down\nRanged attacks not possible");
-	this->theSitch = theSitch;
 	buttonA = new QPushButton("Attack");
 	buttonR = new QPushButton("Ranged");
 	buttonM = new QPushButton("Move");
@@ -20,7 +18,6 @@ void MainWindow::decorate() {
     QObject::connect(buttonM, SIGNAL(clicked()), this, SLOT(moveSlot()));
     QObject::connect(buttonEnd, SIGNAL(clicked()), this, SLOT(endTurnSlot()));
 	actionsLayout = new QVBoxLayout();
-	actionsLayout->addWidget(theSitch);
 	actionsLayout->addWidget(buttonA);
 	actionsLayout->addWidget(buttonR);
 	actionsLayout->addWidget(buttonM);
@@ -239,7 +236,6 @@ void MainWindow::startGameSlot() {
 	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
-	statsString += "\n\nX: " + std::to_string(currentCharacter->x) + ", Y: " + std::to_string(currentCharacter->y);
 	stats->setText(QString::fromStdString(statsString));
 	statsLayout->removeWidget(buttonStart);
 	delete buttonStart;
@@ -268,7 +264,6 @@ void MainWindow::attackSlot() {
 	console->append(QString::fromStdString(consoleText));
 	
 	//hide actions buttons
-	theSitch->hide();
 	buttonA->hide();
 	buttonR->hide();
 	buttonM->hide();
@@ -348,7 +343,6 @@ void MainWindow::rangedSlot() {
 		console->append(QString::fromStdString(consoleText));
 
 		//hide actions buttons
-		theSitch->hide();
 		buttonA->hide();
 		buttonR->hide();
 		buttonM->hide();
@@ -434,7 +428,6 @@ void MainWindow::stopRangedSlot() {
 	rangedStop->hide();
 
 	//show action buttons
-	theSitch->show();
 	buttonA->show();
 	buttonR->show();
 	buttonM->show();
@@ -449,7 +442,6 @@ void MainWindow::stopRanged() {
 	rangedStop->hide();
 
 	//show action buttons
-	theSitch->show();
 	buttonA->show();
 	buttonR->show();
 	buttonM->show();
@@ -468,7 +460,6 @@ void MainWindow::stopAttacking() {
 	//rangedStop->hide();
 	attackStop->hide();
 	//show action buttons
-	theSitch->show();
 	buttonA->show();
 	buttonR->show();
 	buttonM->show();
@@ -485,7 +476,6 @@ void MainWindow::stopAttackingSlot() {
 	attackStop->hide();
 
 	//show action buttons
-	theSitch->show();
 	buttonA->show();
 	buttonR->show();
 	buttonM->show();
@@ -498,7 +488,6 @@ void MainWindow::moveSlot() {
 	console->append(QString::fromStdString(consoleText));
 	
 	//hide action buttons
-	theSitch->hide();
 	buttonA->hide();
 	buttonR->hide();
 	buttonM->hide();
@@ -585,7 +574,6 @@ void MainWindow::stopMoving() {
 	buttonMoveLeft->hide();
 	buttonMoveStop->hide();
 	//show action buttons
-	theSitch->show();
 	buttonA->show();
 	buttonR->show();
 	buttonM->show();
@@ -629,7 +617,6 @@ void MainWindow::endTurnSlot() {
 	statsString += "\n\nHP: " + std::to_string(currentCharacter->currentHealth) + "/" + std::to_string(currentCharacter->health);
 	statsString += "\n\nATK: " + std::to_string(currentCharacter->attack) + ", DEX: " + std::to_string(currentCharacter->dexterity);
 	statsString += "\n\nDEF: " + std::to_string(currentCharacter->defense) + ", SPD: " + std::to_string(currentCharacter->speed);
-	statsString += "\n\nX: " + std::to_string(currentCharacter->x) + ", Y: " + std::to_string(currentCharacter->y);
 	stats->setText(QString::fromStdString(statsString));
 	//increment the turn order UI
 	QTableWidgetItem *old = turnOrder->takeItem(0,0);

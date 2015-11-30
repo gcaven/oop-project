@@ -38,7 +38,6 @@ private:
 	QHBoxLayout *bottomLayout;
 
 	QLabel *stats;
-	QLabel *theSitch;
 
 	QPushButton *buttonStart;
 	QPushButton *buttonA;
