@@ -102,17 +102,17 @@ Human* Board::adjPlayer(int xpos,int ypos) {
 	return nullptr;
 	if(0 <= xpos && xpos <= 9 && 0 <= ypos && ypos <= 9) {
 		if(xpos < 9)
-    		if(get(xpos+1,ypos).isOccupiedByPlayer())
-        		return get(xpos+1,ypos).getCharacter();
+    		if(tiles[xpos+1][ypos].isOccupiedByPlayer())
+        		return tiles[xpos+1][ypos].getCharacter();
     	if(ypos < 9)
-    		if(get(xpos,ypos+1).isOccupiedByPlayer())
-        		return get(xpos,ypos+1).getCharacter();
+    		if(tiles[xpos][ypos+1].isOccupiedByPlayer())
+        		return tiles[xpos][ypos+1].getCharacter();
     	if(xpos > 0)
-   			if(get(xpos-1,ypos).isOccupiedByPlayer())
-        		return get(xpos-1,ypos).getCharacter();
+   			if(tiles[xpos-1][ypos].isOccupiedByPlayer())
+        		return tiles[xpos-1][ypos].getCharacter();
     	if(ypos > 0)
-    		if(get(xpos,ypos-1).isOccupiedByPlayer())
-        		return get(xpos,ypos-1).getCharacter();
+    		if(tiles[xpos][ypos-1].isOccupiedByPlayer())
+        		return tiles[xpos][ypos-1].getCharacter();
     	return nullptr;
     }
     return nullptr;
@@ -129,7 +129,7 @@ Human* Board::closestPlayer(int xpos, int ypos, Human *humans) {
 			distancex *= distancex;
 	  		int distancey = ypos - humans[i].y;
 	  		distancey *= distancey;
-	  		double calcDistance = sqrt(distancex - distancey);
+	  		double calcDistance = sqrt(distancex + distancey);
 	  		if (calcDistance <= minDistance) {
 	  			minDistance = calcDistance;
 	  			closestPlayer = &humans[i];
