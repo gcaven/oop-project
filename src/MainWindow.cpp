@@ -675,13 +675,8 @@ bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
 	int xpos = currentCharacter->x;
     int ypos = currentCharacter->y;
 
-    if (adjPlayer != nullptr) {
-   		std::string consoleText = adjPlayer->name + " is on the move.";
-   		console->append(QString::fromStdString(consoleText));
-   	} else {
-   		std::string consoleText = currentCharacter->name + " is on the move.";
-   		console->append(QString::fromStdString(consoleText));
-   	}
+   	std::string consoleText = currentCharacter->name + " is on the move.";
+   	console->append(QString::fromStdString(consoleText));
 
     int closeX = closestPlayer->x;
     int closeY = closestPlayer->y;

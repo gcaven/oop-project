@@ -57,7 +57,6 @@ void Board::destroy() {
 }
 
 void generateLocation(Board *board, Human *human) {
-	//min + (rand() % (int)(max - min + 1))
 	int xGen = randomInt(9,0);
 	int yGen;
 	if (human->enemy) {
@@ -89,9 +88,9 @@ void generateLocation(Board *board, Human *human) {
 bool checkLocation(Board *board, int x, int y) {
 	bool goodlocation = true;
 	if (x < 0 || x > 9 || y < 0 || y > 9) {
-			goodlocation = false;
+		goodlocation = false;
 	} else if (board->tiles[x][y].getType() == BOULDER) {
-			goodlocation = false;
+		goodlocation = false;
 	} else if (board->tiles[x][y].isOccupied()) {
 		goodlocation = false;
 	}

@@ -64,6 +64,7 @@ private:
 	QPushButton *rangedStop;
 
 	QSound *attackSound;
+	QSound *deathSound;
 
 public:
 	MainWindow(QWidget *parent = 0);
