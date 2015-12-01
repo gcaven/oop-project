@@ -99,7 +99,6 @@ bool checkLocation(Board *board, int x, int y) {
 }
 
 Human* Board::adjPlayer(int xpos,int ypos) {
-	return nullptr;
 	if(0 <= xpos && xpos <= 9 && 0 <= ypos && ypos <= 9) {
 		if(xpos < 9)
     		if(tiles[xpos+1][ypos].isOccupiedByPlayer())
