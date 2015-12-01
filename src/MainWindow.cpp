@@ -647,16 +647,25 @@ void MainWindow::endTurnSlot() {
 bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
 	bool hasAttacked = enemyAttack(adjPlayer);
    	//move up to size of speed tiles
-   	std::string consoleText = currentCharacter->name + " is on the move.";
-	console->append(QString::fromStdString(consoleText));
+	int xpos = currentCharacter->x;
+    int ypos = currentCharacter->y;
+
+    if (adjPlayer != nullptr) {
+   		std::string consoleText = adjPlayer->name + " is on the move.";
+   		console->append(QString::fromStdString(consoleText));
+   	} else {
+   		std::string consoleText = currentCharacter->name + " is on the move.";
+   		console->append(QString::fromStdString(consoleText));
+   	}
 
     int closeX = closestPlayer->x;
     int closeY = closestPlayer->y;
 
-    int xpos = currentCharacter->x;
-    int ypos = currentCharacter->y;
+    int moves = currentCharacter->speed;
 
-    for (int i = 0; i < currentCharacter->speed; i++) {
+    while (moves >= 0) {
+    	board.tiles[xpos][ypos].setCharacter(nullptr);
+
     	QTableWidgetItem *item = table->takeItem(ypos,xpos);
     	item->setText("");
     	table->setItem(ypos,xpos,item);
@@ -664,35 +673,94 @@ bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
     	int min = std::min(abs(xpos-closeX),abs(ypos-closeY));
     	if (min == abs(xpos-closeX)) {
     		//go towards closeX
-    		if (xpos < closeX) {
+    		if (xpos < closeX && checkLocation(&board,xpos+1,ypos)) {
     			xpos++;
-    		} else if (xpos > closeX) {
+    			moves--;
+    		} else if (xpos > closeX && checkLocation(&board,xpos-1,ypos)) {
     			xpos--;
+    			moves--;
     		} else {
-    			if (ypos < closeY && ypos+1 != closeY) {
+    			if (ypos < closeY && ypos+1 != closeY && checkLocation(&board,xpos,ypos+1)) {
     				ypos++;
-    			} else if (ypos > closeY && ypos-1 != closeY) {
+    				moves--;
+    			} else if (ypos > closeY && ypos-1 != closeY && checkLocation(&board,xpos,ypos-1)) {
     				ypos--;
+    				moves--;
+    			} else {
+    				int rando = randomInt(3,0);
+    				switch(rando) {
+    					case 0:
+    						if (checkLocation(&board,xpos,ypos-1)) {
+    							ypos--;
+    						}
+    						break;
+    					case 1:
+    						if (checkLocation(&board,xpos+1,ypos)) {
+    							xpos++;
+    						}
+    						break;
+    					case 2:
+    						if (checkLocation(&board,xpos,ypos+1)) {
+    							ypos++;
+    						}
+    						break;
+    					case 3:
+    						if (checkLocation(&board,xpos-1,ypos)) {
+    							xpos--;
+    						}
+    						break;
+    				}
+    				moves--;
+    				
     			}
     		}
     	} else {
     		//go towards closeY
-    		if (ypos < closeY) {
+    		if (ypos < closeY && checkLocation(&board,xpos,ypos+1)) {
     			ypos++;
-    		} else if (ypos > closeY) {
+    			moves--;
+    		} else if (ypos > closeY && checkLocation(&board,xpos,ypos-1)) {
     			ypos--;
+    			moves--;
     		} else {
-    			if (xpos < closeX && xpos+1 != closeX) {
+    			if (xpos < closeX && xpos+1 != closeX && checkLocation(&board,xpos+1,ypos)) {
     				xpos++;
-    			} else if (xpos > closeX && xpos-1 != closeX) {
+    				moves--;
+    			} else if (xpos > closeX && xpos-1 != closeX && checkLocation(&board,xpos-1,ypos)) {
     				xpos--;
+    				moves--;
+    			} else {
+    				int rando = randomInt(3,0);
+    				switch(rando) {
+    					case 0:
+    						if (checkLocation(&board,xpos,ypos-1)) {
+    							ypos--;
+    						}
+    						break;
+    					case 1:
+    						if (checkLocation(&board,xpos+1,ypos)) {
+    							xpos++;
+    						}
+    						break;
+    					case 2:
+    						if (checkLocation(&board,xpos,ypos+1)) {
+    							ypos++;
+    						}
+    						break;
+    					case 3:
+    						if (checkLocation(&board,xpos-1,ypos)) {
+    							xpos--;
+    						}
+    						break;
+    				}
+    				moves--;
     			}
     		}
     	}
+    	currentCharacter->x = xpos;
+    	currentCharacter->y = ypos;
+    	board.tiles[xpos][ypos].setCharacter(currentCharacter);
     }
-
-    currentCharacter->x = xpos;
-    currentCharacter->y = ypos;
 
     QFont font;
 	font.setBold(true);
@@ -705,7 +773,7 @@ bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
     item->setTextAlignment(Qt::AlignCenter);
 	item->setFont(font);
    	table->setItem(ypos,xpos,item);
-
+   	
    	//check for targets again
    	return hasAttacked;
 }

@@ -123,16 +123,18 @@ Human* Board::closestPlayer(int xpos, int ypos, Human *humans) {
 	//or something faster
 	double minDistance = std::numeric_limits<double>::max();
 	Human *closestPlayer;
-	for (int i = 0; i < 3; i++) {
-		int distancex = xpos - humans[i*2].x;
-		distancex *= distancex;
-  		int distancey = ypos - humans[i*2].y;
-  		distancey *= distancey;
-  		double calcDistance = sqrt(distancex - distancey);
-  		if (calcDistance <= minDistance) {
-  			minDistance = calcDistance;
-  			closestPlayer = &humans[i*2];
-  		}
+	for (int i = 0; i < 6; i++) {
+		if (!humans[i].enemy) {
+			int distancex = xpos - humans[i].x;
+			distancex *= distancex;
+	  		int distancey = ypos - humans[i].y;
+	  		distancey *= distancey;
+	  		double calcDistance = sqrt(distancex - distancey);
+	  		if (calcDistance <= minDistance) {
+	  			minDistance = calcDistance;
+	  			closestPlayer = &humans[i];
+	  		}
+	  	}
 	}
 	return closestPlayer;
 	return &humans[0];
