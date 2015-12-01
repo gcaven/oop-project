@@ -14,6 +14,7 @@ public:
 	bool emptyQueue();
 	void enqueue(int index);
 	int dequeue();
+	void remove(int index);
 	int getSize();
 	std::string print();
 };

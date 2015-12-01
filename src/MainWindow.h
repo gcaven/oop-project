@@ -16,6 +16,8 @@
 #include <QColor>
 #include <QLayoutItem>
 #include <QTextEdit>
+#include <QSound>
+#include <QDir>
 #include "Board.h"
 #include "Queue.h"
 
@@ -61,9 +63,11 @@ private:
 	QPushButton *rangedTargetC;
 	QPushButton *rangedStop;
 
+	QSound *attackSound;
+
 public:
 	MainWindow(QWidget *parent = 0);
-	void decorate();
+	void decorate(QString dir);
 	void generate(int width, int height);
 	void attack(int index);
 	void attackRanged(int index);
@@ -73,6 +77,7 @@ public:
 	void stopRanged();
 	bool enemyTurn(Human *adjPlayer, Human *closestPlayer);
 	bool enemyAttack(Human *adjPlayer);
+	void removePlayer(int index);
 
 private slots:
 	void startGameSlot();

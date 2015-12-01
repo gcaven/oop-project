@@ -7,6 +7,6 @@ int main(int argc, char *argv[])
     qsrand(time(NULL));
     MainWindow *window = new MainWindow;
     window->setFixedSize(750,750);
-    window->decorate();
+    window->decorate(app.applicationDirPath());
     return app.exec();
 }

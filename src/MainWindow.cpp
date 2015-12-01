@@ -3,7 +3,9 @@
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 };
 
-void MainWindow::decorate() {
+void MainWindow::decorate(QString dir) {
+	attackSound = new QSound(dir + QString("/attack.wav"));
+
 	//actions panel
 	buttonA = new QPushButton("Attack");
 	buttonR = new QPushButton("Ranged");
@@ -315,21 +317,28 @@ void MainWindow::attackTargetCSlot() {
 }
 
 void MainWindow::attack(int index) {
+	if (attackSound->isAvailable()) {
+		attackSound->play();
+	}
 	Human *target = &humans[index];
 	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
 	if(damage < 0)
 		damage = 0;
-	else 
+	else if (damage > target->currentHealth) {
+		target->currentHealth = 0;
+	} else {
 		target->currentHealth -= damage;
+	}
 
 	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " damage to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
 	//if attack kills target
-	if(target->currentHealth <= 0){
+	if(target->currentHealth == 0){
 		target->alive = false;
 		consoleText = currentCharacter->name + " has been felled.";
 		console->append(QString::fromStdString(consoleText));
+		removePlayer(index);
 	}
 	stopAttacking();
 }
@@ -401,13 +410,18 @@ void MainWindow::attackRangedTargetCSlot() {
 }
 
 void MainWindow::attackRanged(int index) {
+	if (attackSound->isAvailable()) {
+		attackSound->play();
+	}
 	Human *target = &humans[index];
 	int damage = currentCharacter->attack - (currentCharacter->attack * target->defense/10);
 	if(damage < 0)
 		damage = 0;
-	else 
+	else if (damage > target->currentHealth) {
+		target->currentHealth = 0;
+	} else {
 		target->currentHealth -= damage;
-
+	}
 	std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + "damage to " + target->name + ".";
 	console->append(QString::fromStdString(consoleText));
 	
@@ -416,6 +430,7 @@ void MainWindow::attackRanged(int index) {
 		target->alive = false;
 		consoleText = target->name + " has been felled.";
 		console->append(QString::fromStdString(consoleText));
+		removePlayer(index);
 	}
 	stopRanged();
 }
@@ -480,6 +495,16 @@ void MainWindow::stopAttackingSlot() {
 	buttonR->show();
 	buttonM->show();
 	buttonEnd->show();
+}
+
+void MainWindow::removePlayer(int index) {
+	Human *corpse = &humans[index];
+	board.tiles[corpse->x][corpse->y].setCharacter(nullptr);
+	QTableWidgetItem *item = table->takeItem(corpse->y, corpse->x);
+	item->setText("");
+	table->setItem(corpse->y, corpse->x, item);
+	//remove from turn queue
+	//win/lose condition
 }
 
 void MainWindow::moveSlot() {
@@ -782,12 +807,18 @@ bool MainWindow::enemyAttack(Human *adjPlayer) {
 	bool hasAttacked = false;
     //if there is an adjacent player
     if(adjPlayer != nullptr) {
+    	if (attackSound->isAvailable()) {
+			attackSound->play();
+		}
     	hasAttacked = true;
         int damage = currentCharacter->attack - (currentCharacter->attack * adjPlayer->defense/10);
 		if(damage < 0)
 			damage = 0;
-		else 
+		else if (damage > adjPlayer->currentHealth) {
+			adjPlayer->currentHealth = 0;
+		} else {
 			adjPlayer->currentHealth -= damage;
+		}
 
 		std::string consoleText = currentCharacter->name + " has dealt " + std::to_string(damage) + " damage to " + adjPlayer->name + ".";
 		console->append(QString::fromStdString(consoleText));
@@ -797,6 +828,7 @@ bool MainWindow::enemyAttack(Human *adjPlayer) {
 			adjPlayer->alive = false;
 			consoleText = adjPlayer->name + " has been felled.";
 			console->append(QString::fromStdString(consoleText));
+			removePlayer(adjPlayer->id);
 		}
     }	
     return hasAttacked;

@@ -117,13 +117,20 @@ Human* Board::adjPlayer(int xpos,int ypos) {
     return nullptr;
 }
 
+Human* Board::rangedTargetPlayer(int xpos, int ypos, int dexterity) {
+	/*if(0 <= xpos && xpos <= 9 && 0 <= ypos && ypos <= 9) {
+		for
+	}*/
+	return nullptr;
+}
+
 Human* Board::closestPlayer(int xpos, int ypos, Human *humans) {
 	//calculate euclidean distance to all other players, choose shortest one
 	//or something faster
 	double minDistance = std::numeric_limits<double>::max();
 	Human *closestPlayer;
 	for (int i = 0; i < 6; i++) {
-		if (!humans[i].enemy) {
+		if (!humans[i].enemy && humans[i].alive) {
 			int distancex = xpos - humans[i].x;
 			distancex *= distancex;
 	  		int distancey = ypos - humans[i].y;

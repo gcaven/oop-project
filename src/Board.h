@@ -24,6 +24,7 @@ public:
 	int index(int x, int y);
 	void destroy();
     Human* adjPlayer(int xpos,int ypos);
+    Human* rangedTargetPlayer(int xpos, int ypos, int dexterity);
     Human* closestPlayer(int xpos, int ypos, Human *humans);
 };
 

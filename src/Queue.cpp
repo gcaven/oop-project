@@ -49,6 +49,11 @@ int Queue::dequeue() {
 	}
 }
 
+void Queue::remove(int index) {
+	//remove at index;
+	return;
+}
+
 int Queue::getSize() {
 	return size;
 }
