@@ -671,7 +671,7 @@ void MainWindow::endTurnSlot() {
 
 bool MainWindow::enemyTurn(Human *adjPlayer, Human *closestPlayer) {
 	bool hasAttacked = enemyAttack(adjPlayer);
-   	//move up to size of speed tiles
+	
 	int xpos = currentCharacter->x;
     int ypos = currentCharacter->y;
 

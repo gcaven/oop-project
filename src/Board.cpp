@@ -125,7 +125,6 @@ Human* Board::rangedTargetPlayer(int xpos, int ypos, int dexterity) {
 
 Human* Board::closestPlayer(int xpos, int ypos, Human *humans) {
 	//calculate euclidean distance to all other players, choose shortest one
-	//or something faster
 	double minDistance = std::numeric_limits<double>::max();
 	Human *closestPlayer;
 	for (int i = 0; i < 6; i++) {
